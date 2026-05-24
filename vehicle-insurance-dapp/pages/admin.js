@@ -7,6 +7,7 @@ import ClaimManagement from "../components/Admin/ClaimManagement";
 import GarageManagement from "../components/Admin/GarageManagement";
 import ContractControls from "../components/Admin/ContractControls";
 import DocumentManagement from "../components/Admin/DocumentManagement";
+import PlanManagement from "../components/Admin/PlanManagement";
 import { contractService } from "../services/contract";
 import {
   FiShield,
@@ -19,6 +20,7 @@ import {
   FiRefreshCw,
   FiTruck,
   FiCpu,
+  FiList,
 } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 
@@ -123,6 +125,13 @@ export default function Admin() {
       visibleTo: "owner", // chỉ owner
     },
     {
+      id: "plans",
+      name: "Gói Bảo Hiểm",
+      icon: FiList,
+      color: "blue",
+      visibleTo: "owner",
+    },
+    {
       id: "ai-documents",
       name: "Tài Liệu AI",
       icon: FiCpu,
@@ -139,6 +148,10 @@ export default function Admin() {
     blue: {
       active: "bg-gradient-to-r from-red-600 to-orange-500 text-white",
       inactive: "text-white/60 hover:text-red-400",
+    },
+    teal: {
+      active: "bg-gradient-to-r from-teal-500 to-cyan-500 text-white",
+      inactive: "text-white/60 hover:text-teal-400",
     },
     purple: {
       active: "bg-gradient-to-r from-purple-500 to-pink-500 text-white",
@@ -394,6 +407,11 @@ export default function Admin() {
               loading={loading}
               onRefresh={loadAdminData}
             />
+          )}
+
+          {/* Tab: Gói Bảo Hiểm — chỉ owner */}
+          {activeTab === "plans" && isOwner && (
+            <PlanManagement />
           )}
 
           {/* Tab: Tài Liệu AI — chỉ owner */}
