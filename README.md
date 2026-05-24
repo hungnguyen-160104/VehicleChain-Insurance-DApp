@@ -10,7 +10,7 @@
 **Hệ thống quản lý bảo hiểm xe cơ giới trên nền tảng Blockchain**  
 **tích hợp lưu trữ phi tập trung IPFS và trợ lý ảo AI (RAG)**
 
-*Đồ án tốt nghiệp — HUST 2025*
+*Đồ án tốt nghiệp — HUST kỳ 2025.2*
 
 </div>
 
@@ -350,7 +350,7 @@ OpenZeppelin: ReentrancyGuard + Ownable + Pausable
 
 ## 👨‍💻 Tác giả
 
-**Nguyễn Hùng** — Sinh viên HUST 2025  
+**Phạm Nguyễn Hùng Nguyên** — Sinh viên HUST 2025.2  
 Email: hungnguyen16012004@gmail.com  
 GitHub: [@hungnguyen-160104](https://github.com/hungnguyen-160104)
 
@@ -358,4 +358,4 @@ GitHub: [@hungnguyen-160104](https://github.com/hungnguyen-160104)
 
 ## 📄 Giấy phép
 
-Dự án được phát triển phục vụ mục đích học thuật — Đồ án tốt nghiệp HUST 2025.
+Dự án được phát triển phục vụ mục đích học thuật — Đồ án tốt nghiệp HUST kỳ 2025.2.
