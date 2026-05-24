@@ -1,0 +1,44 @@
+# ============================================================
+# ai-service .gitignore (Python FastAPI)
+# ============================================================
+
+# ─── ENV — QUAN TRỌNG: chứa Gemini API key ───────────────────
+.env
+.env.*
+!.env.example
+
+# ─── Data runtime (sinh ra lúc chạy) ─────────────────────────
+data/
+# ChromaDB files
+chroma_db/
+# PDF uploads
+uploads/
+# Document metadata JSON
+documents.json
+
+# ─── Python cache ─────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# ─── Virtual environment ──────────────────────────────────────
+venv/
+.venv/
+env/
+ENV/
+
+# ─── Build / dist ─────────────────────────────────────────────
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ─── IDE ──────────────────────────────────────────────────────
+.vscode/
+.idea/
+
+# ─── OS ───────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db

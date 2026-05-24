@@ -1,0 +1,22 @@
+# .gitignore
+node_modules
+.env
+coverage
+coverage.json
+typechain
+typechain-types
+
+# Hardhat files
+cache
+artifacts
+
+# IDE
+.vscode
+.idea
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Deployment files (optional - you might want to commit these)
+deployments/

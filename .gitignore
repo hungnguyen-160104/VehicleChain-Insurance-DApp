@@ -1,0 +1,95 @@
+# ============================================================
+# ROOT .gitignore — VehicleChain Insurance DApp
+# ============================================================
+
+# ─── macOS junk ───────────────────────────────────────────────
+__MACOSX/
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# ─── Windows ──────────────────────────────────────────────────
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ─── IDE ──────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ============================================================
+# AI SERVICE (Python FastAPI)
+# ============================================================
+
+# QUAN TRỌNG: chứa Gemini API key
+ai-service/.env
+
+# ChromaDB data + PDF uploads (sinh ra lúc runtime)
+ai-service/data/
+
+# Python cache
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Python virtual environment
+ai-service/venv/
+ai-service/.venv/
+ai-service/env/
+
+# ============================================================
+# FRONTEND — vehicle-insurance-dapp (Next.js)
+# ============================================================
+
+# QUAN TRỌNG: chứa Pinata JWT + WalletConnect key
+vehicle-insurance-dapp/.env.local
+vehicle-insurance-dapp/.env*.local
+
+# Dependencies
+vehicle-insurance-dapp/node_modules/
+
+# Next.js build output
+vehicle-insurance-dapp/.next/
+vehicle-insurance-dapp/out/
+
+# ============================================================
+# SMART CONTRACTS — web3/ (Hardhat)
+# ============================================================
+
+# QUAN TRỌNG: có thể chứa private key deployer
+vehicle-insurance-dapp/web3/.env
+
+# Compiled artifacts (tự generate khi chạy npx hardhat compile)
+vehicle-insurance-dapp/web3/artifacts/
+vehicle-insurance-dapp/web3/cache/
+
+# Hardhat dependencies
+vehicle-insurance-dapp/web3/node_modules/
+
+# TypeChain
+vehicle-insurance-dapp/web3/typechain/
+vehicle-insurance-dapp/web3/typechain-types/
+
+# Coverage
+vehicle-insurance-dapp/web3/coverage/
+vehicle-insurance-dapp/web3/coverage.json
+
+# ============================================================
+# LOGS
+# ============================================================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
