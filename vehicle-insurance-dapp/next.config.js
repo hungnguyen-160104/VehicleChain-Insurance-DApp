@@ -56,11 +56,6 @@ const nextConfig = {
 
     return config;
   },
-  // If you're using static export
-  trailingSlash: true,
-  images: {
-    unoptimized: true,
-  },
 };
 
 module.exports = nextConfig;
