@@ -1,0 +1,46 @@
+version: "3.9"
+
+# ================================================================
+# VehicleChain Insurance DApp - Docker Compose
+# ================================================================
+# Chi containerize AI Service (Python FastAPI)
+# Blockchain va Frontend chay tren may host truc tiep
+#
+# Su dung:
+#   docker compose up --build          # Khoi dong
+#   docker compose up -d               # Chay nen
+#   docker compose down                # Dung
+#   docker compose logs -f ai-service  # Xem log
+# ================================================================
+
+services:
+  ai-service:
+    build:
+      context: ./ai-service
+      dockerfile: Dockerfile
+    container_name: vehiclechain-ai-service
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      # Persist ChromaDB data + uploaded PDFs ra ngoai container
+      - ./ai-service/data:/app/data
+    env_file:
+      - ./ai-service/.env
+    environment:
+      - CHROMA_DB_PATH=/app/data/chroma_db
+      - UPLOADS_PATH=/app/data/uploads
+      - DOCUMENTS_JSON=/app/data/documents.json
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+# ================================================================
+# Blockchain (Hardhat) va Frontend (Next.js) KHONG dung Docker
+# Chay tren may host:
+#   Terminal 1: cd vehicle-insurance-dapp/web3 && npx hardhat node
+#   Terminal 2: cd vehicle-insurance-dapp && npm run dev
+# ================================================================
