@@ -82,7 +82,8 @@ async function main() {
 
 const VehicleInsuranceABI = ${JSON.stringify(artifact.abi, null, 2)};
 
-module.exports = { VehicleInsuranceABI };
+const VEHICLE_INSURANCE_ABI = VehicleInsuranceABI;
+module.exports = { VehicleInsuranceABI, VEHICLE_INSURANCE_ABI };
 `;
 
       // Lưu vào web3/deployments/

@@ -1,4 +1,4 @@
-﻿import {
+import {
   FiCheck,
   FiStar,
   FiShield,
@@ -22,51 +22,51 @@ const PlanCard = ({
   const getColorClasses = (type, popular) => {
     if (popular) {
       return {
-        border: "border-purple-400/50 ring-2 ring-purple-500/30 shadow-purple-500/20",
+        border: "border-purple-300 ring-2 ring-purple-400/30 shadow-purple-200",
         gradient: "from-purple-500 to-violet-600",
-        bgGradient: "from-purple-900/25 to-violet-900/15",
+        bgGradient: "from-purple-50 to-violet-50",
         button: "from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700",
         badge: "from-purple-500 to-violet-600",
-        accent: "text-purple-400",
+        accent: "text-purple-600",
         iconBg: "from-purple-500 to-violet-600",
       };
     }
 
     const colorMap = {
       [INSURANCE_TYPES.TNDS_BAT_BUOC]: {
-        border: "border-red-500/20 hover:border-red-400/30",
+        border: "border-red-200 hover:border-red-300",
         gradient: "from-red-600 to-orange-600",
-        bgGradient: "from-red-900/25 to-orange-900/15",
+        bgGradient: "from-red-50 to-orange-50",
         button: "from-red-700 to-orange-600 hover:from-red-600 hover:to-orange-500",
         badge: "from-red-600 to-orange-600",
-        accent: "text-red-400",
+        accent: "text-red-600",
         iconBg: "from-red-600 to-orange-600",
       },
       [INSURANCE_TYPES.VAT_CHAT_XE]: {
-        border: "border-red-500/20 hover:border-red-400/30",
+        border: "border-red-200 hover:border-red-300",
         gradient: "from-red-500 to-red-700",
-        bgGradient: "from-red-900/25 to-red-800/15",
+        bgGradient: "from-red-50 to-red-100",
         button: "from-red-600 to-red-700 hover:from-red-500 hover:to-red-600",
         badge: "from-red-500 to-red-700",
-        accent: "text-red-400",
+        accent: "text-red-600",
         iconBg: "from-red-500 to-red-700",
       },
       [INSURANCE_TYPES.NGUOI_TREN_XE]: {
-        border: "border-emerald-500/20 hover:border-emerald-400/30",
+        border: "border-emerald-200 hover:border-emerald-300",
         gradient: "from-emerald-500 to-green-600",
-        bgGradient: "from-emerald-900/25 to-green-900/15",
+        bgGradient: "from-emerald-50 to-green-50",
         button: "from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500",
         badge: "from-emerald-500 to-green-600",
-        accent: "text-emerald-400",
+        accent: "text-emerald-600",
         iconBg: "from-emerald-500 to-green-600",
       },
       [INSURANCE_TYPES.TAI_NAN_LAI_XE]: {
-        border: "border-amber-500/20 hover:border-amber-400/30",
+        border: "border-amber-200 hover:border-amber-300",
         gradient: "from-amber-500 to-orange-500",
-        bgGradient: "from-amber-900/25 to-orange-900/15",
+        bgGradient: "from-amber-50 to-orange-50",
         button: "from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400",
         badge: "from-amber-500 to-orange-500",
-        accent: "text-amber-400",
+        accent: "text-amber-700",
         iconBg: "from-amber-500 to-orange-500",
       },
     };
@@ -89,25 +89,15 @@ const PlanCard = ({
     <div className="group relative">
       {/* Glow effect on hover */}
       <div
-        className={`absolute -inset-1 bg-gradient-to-r ${colorClasses.gradient} rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-300`}
+        className={`absolute -inset-1 bg-gradient-to-r ${colorClasses.gradient} rounded-2xl blur opacity-10 group-hover:opacity-20 transition duration-300`}
       ></div>
 
       <div
-        className={`relative backdrop-blur-xl rounded-2xl shadow-xl ${colorClasses.border} border p-8 transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] overflow-hidden`}
-        style={{ background: "rgba(255,255,255,0.07)" }}
+        className={`relative bg-white rounded-2xl shadow-sm ${colorClasses.border} border p-8 transition-all duration-300 hover:shadow-md hover:scale-[1.02] overflow-hidden`}
       >
         {/* Background Pattern */}
         <div
-          className={`absolute inset-0 bg-gradient-to-br ${colorClasses.bgGradient} opacity-60`}
-        ></div>
-        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full blur-2xl"></div>
-
-        {/* Floating particles */}
-        <div className="absolute top-6 right-6 w-1 h-1 bg-white/40 rounded-full animate-pulse"></div>
-        <div
-          className="absolute bottom-8 right-8 w-1.5 h-1.5 bg-white/30 rounded-full animate-pulse"
-          style={{ animationDelay: "2s" }}
+          className={`absolute inset-0 bg-gradient-to-br ${colorClasses.bgGradient} opacity-40`}
         ></div>
 
         {/* Popular Badge */}
@@ -131,43 +121,43 @@ const PlanCard = ({
               <FiTruck className="h-8 w-8 text-white drop-shadow-sm" />
             </div>
 
-            <h3 className="text-2xl font-bold text-white mb-2">
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">
               {label}
             </h3>
 
-            <p className="text-white/60 leading-relaxed max-w-sm text-sm">
+            <p className="text-gray-500 leading-relaxed max-w-sm text-sm">
               {description}
             </p>
           </div>
 
           {/* Pricing Section */}
-          <div className="mb-8 p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-white/12">
+          <div className="mb-8 p-6 bg-white rounded-xl border border-gray-100 shadow-sm">
             {isVatChat ? (
               <div className="text-center">
                 <p className={`text-2xl font-bold ${colorClasses.accent}`}>
                   Theo giá trị xe
                 </p>
-                <p className="text-sm text-white/50 mt-1">
+                <p className="text-sm text-gray-400 mt-1">
                   Phí tính theo % giá trị xe được bảo hiểm
                 </p>
               </div>
             ) : (
               <>
                 <div className="flex items-center justify-center space-x-2 mb-3">
-                  <span className="text-3xl font-bold text-white">
+                  <span className="text-3xl font-bold text-gray-900">
                     {price !== undefined ? parseFloat(price).toFixed(4) : "—"}
                   </span>
                   <div className="flex flex-col items-start">
-                    <span className="text-lg font-semibold text-white/60">ETH</span>
-                    <span className="text-xs text-white/50">một lần/năm</span>
+                    <span className="text-lg font-semibold text-gray-500">ETH</span>
+                    <span className="text-xs text-gray-400">một lần/năm</span>
                   </div>
                 </div>
 
                 {priceMonthly !== undefined && (
-                  <div className="flex items-center justify-center space-x-1 text-sm text-white/60">
+                  <div className="flex items-center justify-center space-x-1 text-sm text-gray-500">
                     <FiZap className="h-3 w-3" />
                     <span>hoặc</span>
-                    <span className="font-semibold">
+                    <span className="font-semibold text-gray-700">
                       {parseFloat(priceMonthly).toFixed(4)} ETH
                     </span>
                     <span>/tháng</span>
@@ -178,20 +168,20 @@ const PlanCard = ({
           </div>
 
           {/* Coverage Info */}
-          <div className="mb-8 p-4 bg-gradient-to-r from-emerald-900/20 to-green-900/15 rounded-xl border border-emerald-500/25">
+          <div className="mb-8 p-4 bg-emerald-50 rounded-xl border border-emerald-200">
             <div className="flex items-center justify-center space-x-2">
-              <FiShield className="h-4 w-4 text-emerald-400" />
-              <span className="text-sm font-semibold text-emerald-300">
+              <FiShield className="h-4 w-4 text-emerald-600" />
+              <span className="text-sm font-semibold text-emerald-600">
                 Bảo hiểm xe cơ giới trên Blockchain
               </span>
-              <FiTrendingUp className="h-4 w-4 text-emerald-400" />
+              <FiTrendingUp className="h-4 w-4 text-emerald-600" />
             </div>
           </div>
 
           {/* Features List */}
           <div className="mb-8 text-left">
-            <h4 className="font-semibold text-white mb-4 text-center flex items-center justify-center space-x-2">
-              <FiLock className="h-4 w-4" />
+            <h4 className="font-semibold text-gray-900 mb-4 text-center flex items-center justify-center space-x-2">
+              <FiLock className="h-4 w-4 text-gray-600" />
               <span>Quyền lợi bảo hiểm</span>
             </h4>
 
@@ -203,7 +193,7 @@ const PlanCard = ({
                   >
                     <FiCheck className="w-3 h-3 text-white" />
                   </div>
-                  <span className="text-white/80 text-sm group-hover/item:text-white transition-colors">
+                  <span className="text-gray-600 text-sm group-hover/item:text-gray-900 transition-colors">
                     {feature}
                   </span>
                 </li>
@@ -232,7 +222,7 @@ const PlanCard = ({
           </button>
 
           {/* Bottom Info */}
-          <div className="mt-4 flex items-center justify-center space-x-4 text-xs text-white/50">
+          <div className="mt-4 flex items-center justify-center space-x-4 text-xs text-gray-400">
             <div className="flex items-center space-x-1">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
               <span>Smart Contract xác thực</span>
@@ -243,18 +233,9 @@ const PlanCard = ({
             </div>
           </div>
         </div>
-
-        {/* Hover Border Glow */}
-        <div
-          className={`absolute inset-0 rounded-2xl bg-gradient-to-r ${colorClasses.gradient} opacity-0 group-hover:opacity-20 transition-all duration-300 pointer-events-none`}
-        ></div>
       </div>
     </div>
   );
 };
 
 export default PlanCard;
-
-
-
-

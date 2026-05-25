@@ -1,4 +1,4 @@
-﻿import {
+import {
   AreaChart,
   Area,
   XAxis,
@@ -24,37 +24,28 @@ import {
 const RevenueAnalytics = ({ data, loading, timeRange }) => {
   if (loading) {
     return (
-      <div className="relative bg-white/8 backdrop-blur-xl border border-white/12 shadow-xl rounded-2xl p-8">
-        {/* Background Elements */}
-        <div className="absolute inset-0 overflow-hidden rounded-2xl">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl animate-pulse"></div>
-          <div
-            className="absolute bottom-0 left-0 w-24 h-24 bg-green-500/10 rounded-full blur-xl animate-pulse"
-            style={{ animationDelay: "2s" }}
-          ></div>
-        </div>
-
+      <div className="relative bg-white shadow-sm border border-gray-100 rounded-2xl p-8">
         <div className="relative">
           <div className="flex items-center space-x-4 mb-8">
             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-100 to-green-100 flex items-center justify-center">
-              <FiDollarSign className="h-6 w-6 text-emerald-400" />
+              <FiDollarSign className="h-6 w-6 text-emerald-600" />
             </div>
-            <h3 className="text-2xl font-bold text-white">
+            <h3 className="text-2xl font-bold text-gray-900">
               Revenue Analytics
             </h3>
           </div>
 
           <div className="animate-pulse space-y-6">
-            <div className="h-96 bg-gradient-to-r from-white/10 to-white/15 rounded-2xl"></div>
+            <div className="h-96 bg-gray-100 rounded-2xl"></div>
             <div className="grid grid-cols-3 gap-6">
               {[...Array(3)].map((_, i) => (
                 <div
                   key={i}
-                  className="h-40 bg-gradient-to-r from-white/10 to-white/15 rounded-2xl"
+                  className="h-40 bg-gray-100 rounded-2xl"
                 ></div>
               ))}
             </div>
-            <div className="h-32 bg-gradient-to-r from-white/10 to-white/15 rounded-2xl"></div>
+            <div className="h-32 bg-gray-100 rounded-2xl"></div>
           </div>
         </div>
       </div>
@@ -72,8 +63,8 @@ const RevenueAnalytics = ({ data, loading, timeRange }) => {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white/10 backdrop-blur-xl border border-white/12 shadow-2xl rounded-xl p-4">
-          <p className="font-bold text-white mb-2">{label}</p>
+        <div className="bg-white border border-gray-200 shadow-lg rounded-xl p-4">
+          <p className="font-bold text-gray-900 mb-2">{label}</p>
           {payload.map((pld, index) => (
             <p
               key={index}
@@ -100,25 +91,18 @@ const RevenueAnalytics = ({ data, loading, timeRange }) => {
   };
 
   return (
-    <div className="relative bg-white/8 backdrop-blur-xl border border-white/12 shadow-xl rounded-2xl p-8">
-      {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden rounded-2xl">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-green-500/5 rounded-full blur-2xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-orange-500/5 rounded-full blur-xl"></div>
-      </div>
-
+    <div className="relative bg-white shadow-sm border border-gray-100 rounded-2xl p-8">
       <div className="relative">
         {/* Header */}
         <div className="flex items-center space-x-4 mb-8">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-100 to-green-100 flex items-center justify-center">
-            <FiDollarSign className="h-6 w-6 text-emerald-400" />
+            <FiDollarSign className="h-6 w-6 text-emerald-600" />
           </div>
           <div>
-            <h3 className="text-2xl font-bold text-white">
+            <h3 className="text-2xl font-bold text-gray-900">
               Revenue Analytics
             </h3>
-            <p className="text-white/60">
+            <p className="text-gray-500">
               Track and analyze your revenue performance
             </p>
           </div>
@@ -127,12 +111,12 @@ const RevenueAnalytics = ({ data, loading, timeRange }) => {
         <div className="space-y-8">
           {/* Monthly Revenue Trend */}
           {monthlyData.length > 0 && (
-            <div className="bg-white/6 backdrop-blur-sm border border-white/12 rounded-2xl p-6">
+            <div className="bg-gray-50 border border-gray-100 rounded-2xl p-6">
               <div className="flex items-center space-x-3 mb-6">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-100 to-green-100 flex items-center justify-center">
-                  <FiTrendingUp className="h-5 w-5 text-emerald-400" />
+                  <FiTrendingUp className="h-5 w-5 text-emerald-600" />
                 </div>
-                <h4 className="text-xl font-bold text-white">
+                <h4 className="text-xl font-bold text-gray-900">
                   Revenue Trend
                 </h4>
               </div>
@@ -195,12 +179,12 @@ const RevenueAnalytics = ({ data, loading, timeRange }) => {
 
           {/* Revenue by Plan */}
           {revenueByInsuranceTypeData.length > 0 && (
-            <div className="bg-white/6 backdrop-blur-sm border border-white/12 rounded-2xl p-6">
+            <div className="bg-gray-50 border border-gray-100 rounded-2xl p-6">
               <div className="flex items-center space-x-3 mb-6">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-100 to-purple-100 flex items-center justify-center">
-                  <FiBarChart className="h-5 w-5 text-red-400" />
+                  <FiBarChart className="h-5 w-5 text-red-600" />
                 </div>
-                <h4 className="text-xl font-bold text-white">
+                <h4 className="text-xl font-bold text-gray-900">
                   Revenue by Plan Type
                 </h4>
               </div>
@@ -303,12 +287,12 @@ const RevenueAnalytics = ({ data, loading, timeRange }) => {
           </div>
 
           {/* Revenue Breakdown by Plan */}
-          <div className="bg-white/6 backdrop-blur-sm border border-white/12 rounded-2xl p-6">
+          <div className="bg-gray-50 border border-gray-100 rounded-2xl p-6">
             <div className="flex items-center space-x-3 mb-6">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
-                <FiPieChart className="h-5 w-5 text-purple-400" />
+                <FiPieChart className="h-5 w-5 text-purple-600" />
               </div>
-              <h4 className="text-xl font-bold text-white">
+              <h4 className="text-xl font-bold text-gray-900">
                 Revenue Breakdown
               </h4>
             </div>
@@ -342,7 +326,7 @@ const RevenueAnalytics = ({ data, loading, timeRange }) => {
                   return (
                     <div
                       key={plan}
-                      className="relative bg-white/8 backdrop-blur-xl border border-white/12 shadow-lg rounded-2xl p-4 group hover:shadow-xl transition-all duration-300"
+                      className="relative bg-white border border-gray-100 shadow-sm rounded-2xl p-4 group hover:shadow-md transition-all duration-300"
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-4">
@@ -350,24 +334,24 @@ const RevenueAnalytics = ({ data, loading, timeRange }) => {
                             className={`w-4 h-4 rounded-full ${colorScheme.dot}`}
                           ></div>
                           <div className="flex items-center space-x-2">
-                            <FiShield className="h-4 w-4 text-white/50" />
-                            <span className="font-bold text-white">
+                            <FiShield className="h-4 w-4 text-gray-400" />
+                            <span className="font-bold text-gray-900">
                               {plan} Plan
                             </span>
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="font-bold text-white text-lg">
+                          <div className="font-bold text-gray-900 text-lg">
                             {parseFloat(revenue).toFixed(4)} ETH
                           </div>
-                          <div className="text-sm font-medium text-white/60">
+                          <div className="text-sm font-medium text-gray-500">
                             {percentage.toFixed(1)}% of total
                           </div>
                         </div>
                       </div>
 
                       {/* Progress Bar */}
-                      <div className="mt-3 bg-white/10 rounded-full h-2 overflow-hidden">
+                      <div className="mt-3 bg-gray-100 rounded-full h-2 overflow-hidden">
                         <div
                           className={`h-full bg-gradient-to-r ${colorScheme.bg} rounded-full transition-all duration-1000 ease-out`}
                           style={{ width: `${Math.min(percentage, 100)}%` }}
@@ -381,27 +365,27 @@ const RevenueAnalytics = ({ data, loading, timeRange }) => {
           </div>
 
           {/* Revenue Insights */}
-          <div className="bg-gradient-to-br from-gray-50 to-white/8 backdrop-blur-xl border border-white/12 rounded-2xl p-8">
+          <div className="bg-white border border-gray-100 shadow-sm rounded-2xl p-8">
             <div className="flex items-center space-x-3 mb-6">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-100 to-red-100 flex items-center justify-center">
-                <FiZap className="h-5 w-5 text-orange-400" />
+                <FiZap className="h-5 w-5 text-orange-600" />
               </div>
-              <h4 className="text-xl font-bold text-white">
+              <h4 className="text-xl font-bold text-gray-900">
                 Revenue Insights
               </h4>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="relative bg-white/8 backdrop-blur-xl border border-white/12 shadow-lg rounded-2xl p-6 group hover:shadow-xl transition-all duration-300">
+              <div className="relative bg-gray-50 border border-gray-100 shadow-sm rounded-2xl p-6 group hover:shadow-md transition-all duration-300">
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-100 to-purple-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <FiTarget className="h-6 w-6 text-red-400" />
+                    <FiTarget className="h-6 w-6 text-red-600" />
                   </div>
                   <div>
-                    <h5 className="font-bold text-white mb-1">
+                    <h5 className="font-bold text-gray-900 mb-1">
                       Top Performing Plan
                     </h5>
-                    <p className="text-2xl font-bold text-red-400">
+                    <p className="text-2xl font-bold text-red-600">
                       {
                         Object.entries(data.revenueByInsuranceType || {}).reduce(
                           (a, b) =>
@@ -410,7 +394,7 @@ const RevenueAnalytics = ({ data, loading, timeRange }) => {
                         )[0]
                       }
                     </p>
-                    <p className="text-sm font-medium text-white/60">
+                    <p className="text-sm font-medium text-gray-500">
                       {(
                         (Object.entries(data.revenueByInsuranceType || {}).reduce(
                           (a, b) =>
@@ -426,22 +410,22 @@ const RevenueAnalytics = ({ data, loading, timeRange }) => {
                 </div>
               </div>
 
-              <div className="relative bg-white/8 backdrop-blur-xl border border-white/12 shadow-lg rounded-2xl p-6 group hover:shadow-xl transition-all duration-300">
+              <div className="relative bg-gray-50 border border-gray-100 shadow-sm rounded-2xl p-6 group hover:shadow-md transition-all duration-300">
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-100 to-green-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <FiActivity className="h-6 w-6 text-emerald-400" />
+                    <FiActivity className="h-6 w-6 text-emerald-600" />
                   </div>
                   <div>
-                    <h5 className="font-bold text-white mb-1">
+                    <h5 className="font-bold text-gray-900 mb-1">
                       Revenue Efficiency
                     </h5>
-                    <p className="text-2xl font-bold text-emerald-400">
+                    <p className="text-2xl font-bold text-emerald-600">
                       {data.totalRevenue && monthlyData.length > 0
                         ? (data.totalRevenue / monthlyData.length).toFixed(4)
                         : "0.0000"}{" "}
                       ETH
                     </p>
-                    <p className="text-sm font-medium text-white/60">
+                    <p className="text-sm font-medium text-gray-500">
                       Average per period
                     </p>
                   </div>
@@ -456,7 +440,3 @@ const RevenueAnalytics = ({ data, loading, timeRange }) => {
 };
 
 export default RevenueAnalytics;
-
-
-
-

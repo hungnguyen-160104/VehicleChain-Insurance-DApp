@@ -12,11 +12,9 @@ import {
 import { CLAIM_STATUS } from "../../services/contract";
 
 const glassCard = {
-  background: "rgba(255,255,255,0.05)",
-  backdropFilter: "blur(24px)",
-  WebkitBackdropFilter: "blur(24px)",
-  border: "1px solid rgba(255,255,255,0.10)",
-  boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
+  background: "#fff",
+  border: "1px solid #f3f4f6",
+  boxShadow: "0 4px 16px rgba(0,0,0,0.06)",
 };
 
 const RecentActivity = ({ policies = [], claims = [], loading = false }) => {
@@ -97,38 +95,33 @@ const RecentActivity = ({ policies = [], claims = [], loading = false }) => {
 
   const getColorClasses = (color) => {
     const colors = {
-      indigo: { bg: "rgba(200,16,46,0.15)", border: "rgba(200,16,46,0.25)", text: "text-red-300" },
-      green: { bg: "rgba(16,185,129,0.15)", border: "rgba(16,185,129,0.25)", text: "text-emerald-300" },
-      yellow: { bg: "rgba(245,158,11,0.15)", border: "rgba(245,158,11,0.25)", text: "text-amber-300" },
-      red: { bg: "rgba(239,68,68,0.15)", border: "rgba(239,68,68,0.25)", text: "text-red-300" },
-      purple: { bg: "rgba(139,92,246,0.15)", border: "rgba(139,92,246,0.25)", text: "text-purple-300" },
+      indigo: { bg: "rgba(200,16,46,0.08)", border: "rgba(200,16,46,0.15)", text: "text-red-600" },
+      green: { bg: "rgba(16,185,129,0.08)", border: "rgba(16,185,129,0.15)", text: "text-emerald-600" },
+      yellow: { bg: "rgba(245,158,11,0.08)", border: "rgba(245,158,11,0.15)", text: "text-amber-700" },
+      red: { bg: "rgba(239,68,68,0.08)", border: "rgba(239,68,68,0.15)", text: "text-red-600" },
+      purple: { bg: "rgba(139,92,246,0.08)", border: "rgba(139,92,246,0.15)", text: "text-purple-600" },
     };
     return colors[color] || colors.indigo;
   };
 
   return (
     <div className="relative overflow-hidden rounded-2xl" style={glassCard}>
-      {/* Background glows */}
-      <div className="absolute top-0 left-0 w-40 h-40 bg-slate-800/30 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute bottom-0 right-0 w-32 h-32 bg-red-900/15 rounded-full blur-2xl pointer-events-none"></div>
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent"></div>
-
       <div className="relative px-6 py-6 sm:p-8">
         {/* Header */}
         <div className="flex items-center space-x-3 mb-6">
           <div className="relative">
-            <div className="w-10 h-10 bg-gradient-to-br from-slate-600 to-slate-800 rounded-xl flex items-center justify-center shadow-lg shadow-black/30">
+            <div className="w-10 h-10 bg-gradient-to-br from-slate-500 to-slate-700 rounded-xl flex items-center justify-center shadow-lg shadow-slate-200">
               <FiActivity className="h-5 w-5 text-white" />
             </div>
             {activities.length > 0 && (
-              <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-600 rounded-full border-2 border-black/50 flex items-center justify-center shadow-sm">
+              <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-600 rounded-full border-2 border-white flex items-center justify-center shadow-sm">
                 <span className="text-xs font-bold text-white">{Math.min(activities.length, 9)}</span>
               </div>
             )}
           </div>
           <div>
-            <h3 className="text-lg font-bold text-white">Hoạt Động Gần Đây</h3>
-            <p className="text-sm text-white/50">Lịch sử giao dịch blockchain của bạn</p>
+            <h3 className="text-lg font-bold text-gray-900">Hoạt Động Gần Đây</h3>
+            <p className="text-sm text-gray-500">Lịch sử giao dịch blockchain của bạn</p>
           </div>
         </div>
 
@@ -136,14 +129,14 @@ const RecentActivity = ({ policies = [], claims = [], loading = false }) => {
           <div className="space-y-5">
             {[...Array(5)].map((_, i) => (
               <div key={i} className="flex space-x-4 animate-pulse">
-                <div className="h-11 w-11 bg-white/10 rounded-xl flex-shrink-0"></div>
+                <div className="h-11 w-11 bg-gray-200 rounded-xl flex-shrink-0"></div>
                 <div className="flex-1 space-y-2 pt-1">
                   <div className="flex justify-between">
-                    <div className="h-4 bg-white/10 rounded-lg w-1/3"></div>
-                    <div className="h-3 bg-white/6 rounded w-16"></div>
+                    <div className="h-4 bg-gray-200 rounded-lg w-1/3"></div>
+                    <div className="h-3 bg-gray-100 rounded w-16"></div>
                   </div>
-                  <div className="h-3 bg-white/6 rounded-lg w-1/2"></div>
-                  <div className="h-3 bg-white/4 rounded-lg w-1/4"></div>
+                  <div className="h-3 bg-gray-100 rounded-lg w-1/2"></div>
+                  <div className="h-3 bg-gray-100 rounded-lg w-1/4"></div>
                 </div>
               </div>
             ))}
@@ -151,18 +144,18 @@ const RecentActivity = ({ policies = [], claims = [], loading = false }) => {
         ) : activities.length === 0 ? (
           <div className="text-center py-12">
             <div className="relative inline-block mb-6">
-              <div className="w-20 h-20 bg-white/5 rounded-2xl flex items-center justify-center shadow-lg border border-white/10">
-                <FiActivity className="h-10 w-10 text-white/30" />
+              <div className="w-20 h-20 bg-gray-50 rounded-2xl flex items-center justify-center shadow-lg border border-gray-200">
+                <FiActivity className="h-10 w-10 text-gray-300" />
               </div>
               <div className="absolute -top-2 -right-2 w-7 h-7 bg-gradient-to-r from-red-600 to-orange-600 rounded-full flex items-center justify-center shadow-lg">
                 <FiZap className="h-3.5 w-3.5 text-white" />
               </div>
             </div>
-            <h3 className="text-base font-bold text-white mb-2">Chưa Có Hoạt Động</h3>
-            <p className="text-white/40 mb-6 text-sm max-w-xs mx-auto">
+            <h3 className="text-base font-bold text-gray-900 mb-2">Chưa Có Hoạt Động</h3>
+            <p className="text-gray-400 mb-6 text-sm max-w-xs mx-auto">
               Các hoạt động bảo hiểm blockchain của bạn sẽ xuất hiện tại đây.
             </p>
-            <button className="group inline-flex items-center text-sm text-red-400 hover:text-red-300 font-semibold transition-colors">
+            <button className="group inline-flex items-center text-sm text-red-600 hover:text-red-700 font-semibold transition-colors">
               <span>Khám phá gói bảo hiểm</span>
               <svg className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -178,23 +171,23 @@ const RecentActivity = ({ policies = [], claims = [], loading = false }) => {
                   <li key={activity.id}>
                     <div className="relative pb-6">
                       {activityIdx !== activities.length - 1 && (
-                        <span className="absolute top-6 left-5 -ml-px h-full w-px bg-gradient-to-b from-white/15 via-white/8 to-transparent" aria-hidden="true" />
+                        <span className="absolute top-6 left-5 -ml-px h-full w-px bg-gradient-to-b from-gray-200 via-gray-100 to-transparent" aria-hidden="true" />
                       )}
 
                       <div className="relative flex space-x-4">
                         {/* Icon */}
                         <div className="relative flex-shrink-0">
                           <div
-                            className={`h-10 w-10 rounded-xl flex items-center justify-center shadow-lg ${colorStyle.text}`}
+                            className={`h-10 w-10 rounded-xl flex items-center justify-center shadow-sm ${colorStyle.text}`}
                             style={{ background: colorStyle.bg, border: `1px solid ${colorStyle.border}` }}
                           >
-                            <activity.icon className="h-4.5 w-4.5 drop-shadow-sm" aria-hidden="true" />
+                            <activity.icon className="h-4.5 w-4.5" aria-hidden="true" />
                           </div>
-                          <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center shadow-sm" style={{ background: "rgba(255,255,255,0.10)", border: "1px solid rgba(255,255,255,0.15)" }}>
-                            {activity.type === "policy_created" && <FiShield className="h-2 w-2 text-red-400" />}
-                            {activity.type === "premium_paid" && <FiCreditCard className="h-2 w-2 text-emerald-400" />}
-                            {activity.type === "claim_submitted" && <FiClock className="h-2 w-2 text-amber-400" />}
-                            {activity.type === "claim_processed" && <FiCheck className="h-2 w-2 text-emerald-400" />}
+                          <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center shadow-sm bg-white border border-gray-200">
+                            {activity.type === "policy_created" && <FiShield className="h-2 w-2 text-red-500" />}
+                            {activity.type === "premium_paid" && <FiCreditCard className="h-2 w-2 text-emerald-500" />}
+                            {activity.type === "claim_submitted" && <FiClock className="h-2 w-2 text-amber-600" />}
+                            {activity.type === "claim_processed" && <FiCheck className="h-2 w-2 text-emerald-500" />}
                           </div>
                         </div>
 
@@ -202,24 +195,24 @@ const RecentActivity = ({ policies = [], claims = [], loading = false }) => {
                         <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1">
                           <div className="flex-1">
                             <div className="flex items-center space-x-2 mb-0.5">
-                              <p className="text-sm font-bold text-white">{activity.title}</p>
+                              <p className="text-sm font-bold text-gray-900">{activity.title}</p>
                               <FiTrendingUp className="h-3 w-3 text-red-400" />
                             </div>
-                            <p className="text-xs text-white/40 truncate max-w-xs mb-2">{activity.description}</p>
+                            <p className="text-xs text-gray-500 truncate max-w-xs mb-2">{activity.description}</p>
                             {activity.amount && (
-                              <div className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-lg" style={{ background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.20)" }}>
-                                <FiZap className="h-3 w-3 text-emerald-400" />
-                                <span className="text-xs font-bold text-emerald-300">{activity.amount}</span>
+                              <div className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-lg" style={{ background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.15)" }}>
+                                <FiZap className="h-3 w-3 text-emerald-600" />
+                                <span className="text-xs font-bold text-emerald-600">{activity.amount}</span>
                               </div>
                             )}
                           </div>
                           <div className="flex flex-col items-end space-y-1 flex-shrink-0">
-                            <time className="text-xs font-medium text-white/35" dateTime={new Date(activity.timestamp * 1000).toISOString()}>
+                            <time className="text-xs font-medium text-gray-400" dateTime={new Date(activity.timestamp * 1000).toISOString()}>
                               {formatDate(activity.timestamp)}
                             </time>
                             <div className="flex items-center space-x-1">
                               <div className="w-1.5 h-1.5 bg-green-400 rounded-full shadow-sm shadow-green-400/50"></div>
-                              <span className="text-[10px] text-white/25">On-chain</span>
+                              <span className="text-[10px] text-gray-400">On-chain</span>
                             </div>
                           </div>
                         </div>
@@ -233,13 +226,13 @@ const RecentActivity = ({ policies = [], claims = [], loading = false }) => {
         )}
 
         {activities.length > 0 && (
-          <div className="mt-6 pt-4" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+          <div className="mt-6 pt-4" style={{ borderTop: "1px solid #f3f4f6" }}>
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2 text-xs text-white/40">
+              <div className="flex items-center space-x-2 text-xs text-gray-400">
                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse shadow-sm shadow-green-400/50"></div>
                 <span>Tất cả giao dịch đã được xác thực blockchain</span>
               </div>
-              <button className="group inline-flex items-center text-xs text-red-400 hover:text-red-300 font-semibold transition-colors">
+              <button className="group inline-flex items-center text-xs text-red-600 hover:text-red-700 font-semibold transition-colors">
                 <span>Xem toàn bộ</span>
                 <svg className="ml-1 h-3 w-3 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

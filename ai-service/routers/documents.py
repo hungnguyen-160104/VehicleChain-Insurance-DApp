@@ -66,7 +66,20 @@ async def upload_document(
         raise HTTPException(status_code=422, detail="PDF không có nội dung văn bản")
 
     # Thêm vào ChromaDB
-    chunks_count = rag_service.add_documents(doc_id, file.filename, chunks)
+    try:
+        chunks_count = rag_service.add_documents(doc_id, file.filename, chunks)
+    except Exception as e:
+        # Dọn sạch file và ChromaDB nếu embed thất bại
+        if file_path.exists():
+            os.remove(file_path)
+        try:
+            rag_service.delete_documents(doc_id)  # Xóa partial chunks
+        except Exception:
+            pass
+        err_msg = str(e)
+        if "429" in err_msg or "QUOTA" in err_msg.upper() or "EXHAUSTED" in err_msg.upper():
+            raise HTTPException(status_code=429, detail="Gemini API rate limit. Vui lòng chờ 1-2 phút rồi thử lại.")
+        raise HTTPException(status_code=500, detail=f"Lỗi tạo embedding: {err_msg[:200]}")
 
     # Lưu metadata
     docs = _load_documents()

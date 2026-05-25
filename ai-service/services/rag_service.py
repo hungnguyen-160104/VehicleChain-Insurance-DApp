@@ -52,9 +52,9 @@ class RAGService:
         self._setup()
 
     def _setup(self):
-        print("[RAG] Khoi tao Gemini Embeddings...")
+        print("[RAG] Khoi tao Gemini Embeddings (gemini-embedding-001)...")
         self.embeddings = GoogleGenerativeAIEmbeddings(
-            model="models/text-embedding-004",
+            model="models/gemini-embedding-001",
             google_api_key=settings.GEMINI_API_KEY
         )
 
@@ -65,12 +65,14 @@ class RAGService:
             collection_name="insurance_documents"
         )
 
-        print("[RAG] Khoi tao Gemini Flash LLM...")
+        print("[RAG] Khoi tao Gemini Flash LLM (gemini-2.5-flash)...")
         self.llm = ChatGoogleGenerativeAI(
-            model="gemini-1.5-flash",
+            model="gemini-2.5-flash",
             google_api_key=settings.GEMINI_API_KEY,
             temperature=0.2,
-            max_tokens=2048
+            max_tokens=2048,
+            timeout=25,       # max 25 giây cho mỗi response
+            max_retries=0     # không để LangChain tự retry — chat() tự xử lý retry
         )
 
         self.retriever = self.vectorstore.as_retriever(
@@ -89,18 +91,35 @@ class RAGService:
         print("[RAG] Khoi tao thanh cong!")
 
     def add_documents(self, doc_id: str, filename: str, chunks: List[str]) -> int:
-        """Embed và lưu chunks vào ChromaDB"""
-        documents = [
-            Document(
-                page_content=chunk,
-                metadata={"doc_id": doc_id, "filename": filename, "chunk_index": i}
-            )
-            for i, chunk in enumerate(chunks)
-        ]
-        ids = [f"{doc_id}_chunk_{i}" for i in range(len(chunks))]
-        self.vectorstore.add_documents(documents=documents, ids=ids)
-        print(f"[RAG] Da them {len(chunks)} chunks cho '{filename}'")
-        return len(chunks)
+        """Embed và lưu chunks vào ChromaDB (batch để tránh rate limit)"""
+        import time
+        BATCH_SIZE = 5    # số chunks mỗi lần gửi Gemini (nhỏ để tránh rate limit)
+        BATCH_DELAY = 4.0  # giây chờ giữa các batch
+
+        total_added = 0
+        for batch_start in range(0, len(chunks), BATCH_SIZE):
+            batch = chunks[batch_start : batch_start + BATCH_SIZE]
+            batch_idx_start = batch_start
+
+            documents = [
+                Document(
+                    page_content=chunk,
+                    metadata={"doc_id": doc_id, "filename": filename, "chunk_index": batch_idx_start + i}
+                )
+                for i, chunk in enumerate(batch)
+            ]
+            ids = [f"{doc_id}_chunk_{batch_idx_start + i}" for i in range(len(batch))]
+
+            self.vectorstore.add_documents(documents=documents, ids=ids)
+            total_added += len(batch)
+            print(f"[RAG] Batch {batch_start//BATCH_SIZE + 1}: added {len(batch)} chunks ({total_added}/{len(chunks)})")
+
+            # Chờ giữa các batch (tránh rate limit Gemini)
+            if batch_start + BATCH_SIZE < len(chunks):
+                time.sleep(BATCH_DELAY)
+
+        print(f"[RAG] Da them tong {total_added} chunks cho '{filename}'")
+        return total_added
 
     def delete_documents(self, doc_id: str):
         """Xóa tất cả chunks của tài liệu"""
@@ -111,7 +130,9 @@ class RAGService:
             print(f"[RAG] Da xoa {len(results['ids'])} chunks cua doc '{doc_id}'")
 
     def chat(self, question: str) -> Dict[str, Any]:
-        """RAG pipeline: embed query → search → generate"""
+        """RAG pipeline: embed query → search → generate (1 embedding call, với retry)"""
+        import time
+
         doc_count = self.vectorstore._collection.count()
         if doc_count == 0:
             return {
@@ -120,20 +141,54 @@ class RAGService:
                 "has_context": False
             }
 
-        # Lấy context docs để trả về sources
-        context_docs = self.retriever.invoke(question)
-        answer = self.rag_chain.invoke(question)
+        # Retry tối đa 1 lần (chờ 8s) nếu gặp rate limit
+        MAX_RETRIES = 1
+        RETRY_DELAY = 8  # giây
 
-        sources = []
-        seen = set()
-        for doc in context_docs:
-            fname = doc.metadata.get("filename", "unknown")
-            if fname not in seen:
-                seen.add(fname)
-                excerpt = doc.page_content[:150] + "..." if len(doc.page_content) > 150 else doc.page_content
-                sources.append({"filename": fname, "excerpt": excerpt})
+        for attempt in range(MAX_RETRIES + 1):
+            try:
+                # Bước 1: Embed query + tìm context — CHỈ 1 lần gọi Embedding API
+                context_docs = self.retriever.invoke(question)
+                context_str = _format_docs(context_docs)
 
-        return {"answer": answer, "sources": sources, "has_context": True}
+                # Bước 2: Gọi LLM trực tiếp với context đã có
+                # (KHÔNG dùng self.rag_chain.invoke để tránh gọi retriever lần 2)
+                messages = PROMPT.format_messages(context=context_str, question=question)
+                llm_response = self.llm.invoke(messages)
+                answer = llm_response.content if hasattr(llm_response, "content") else str(llm_response)
+
+                # Tổng hợp sources từ context_docs
+                sources = []
+                seen = set()
+                for doc in context_docs:
+                    fname = doc.metadata.get("filename", "unknown")
+                    if fname not in seen:
+                        seen.add(fname)
+                        excerpt = doc.page_content[:150] + "..." if len(doc.page_content) > 150 else doc.page_content
+                        sources.append({"filename": fname, "excerpt": excerpt})
+
+                return {"answer": answer, "sources": sources, "has_context": True}
+
+            except Exception as e:
+                err_str = str(e)
+                is_rate_limit = any(
+                    kw in err_str.upper()
+                    for kw in ["429", "QUOTA", "EXHAUSTED", "RESOURCE_EXHAUSTED", "RATE_LIMIT"]
+                )
+
+                if is_rate_limit:
+                    if attempt < MAX_RETRIES:
+                        print(f"[RAG] Rate limit (lần {attempt + 1}), thử lại sau {RETRY_DELAY}s...")
+                        time.sleep(RETRY_DELAY)
+                        continue
+                    # Hết lần retry
+                    return {
+                        "answer": "⚠️ Gemini API đang bị giới hạn lưu lượng. Vui lòng thử lại sau 1-2 phút.",
+                        "sources": [],
+                        "has_context": False,
+                        "error": "rate_limit"
+                    }
+                raise
 
     def get_document_count(self) -> int:
         return self.vectorstore._collection.count()

@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import {
   FiShield,
   FiCalendar,
@@ -38,12 +38,12 @@ const PolicyCard = ({
 
   const getStatusColor = (status) => {
     const colors = {
-      0: "bg-gradient-to-r from-emerald-900/20 to-green-900/15 text-emerald-300 border-emerald-500/25",
-      1: "bg-gradient-to-r from-red-50 to-rose-50 text-red-300 border-red-500/25",
-      2: "bg-gradient-to-r from-white/5 to-white/5 text-white/50 border-white/10",
-      3: "bg-gradient-to-r from-amber-50 to-yellow-50 text-amber-300 border-amber-500/20/50",
+      0: "bg-emerald-50 text-emerald-700 border-emerald-200",
+      1: "bg-red-50 text-red-600 border-red-200",
+      2: "bg-gray-100 text-gray-500 border-gray-200",
+      3: "bg-amber-50 text-amber-700 border-amber-200",
     };
-    return colors[policy.status] || "bg-white/8 text-white/90 border-white/12";
+    return colors[policy.status] || "bg-gray-100 text-gray-700 border-gray-200";
   };
 
   const getStatusIndicator = (status) => {
@@ -96,14 +96,9 @@ const PolicyCard = ({
   const gradient = getInsuranceTypeGradient(policy.insuranceType);
 
   return (
-    <div className="group relative bg-white/8 backdrop-blur-xl rounded-2xl shadow-xl border border-white/12 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-[1.01]">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 bg-gradient-to-br from-red-50/30 via-white/5 to-orange-50/30"></div>
-      <div className="absolute top-0 right-0 w-32 h-32 bg-red-600/5 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 w-24 h-24 bg-orange-500/5 rounded-full blur-2xl"></div>
-
+    <div className="group relative bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300 hover:scale-[1.01]">
       {/* Header */}
-      <div className="relative p-6 border-b border-white/10">
+      <div className="relative p-6 border-b border-gray-100">
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center space-x-4">
             <div className="relative">
@@ -118,18 +113,18 @@ const PolicyCard = ({
             </div>
 
             <div>
-              <h3 className="text-xl font-bold text-white">
+              <h3 className="text-xl font-bold text-gray-900">
                 {policy.vehicleBienSo || "Biển số N/A"}
               </h3>
               <div className="flex items-center space-x-2 mt-0.5">
-                <p className="text-sm text-white/60">
+                <p className="text-sm text-gray-500">
                   {policy.insuranceTypeLabel || "N/A"}
                 </p>
-                <span className="text-white/40">·</span>
-                <p className="text-xs text-white/50">HĐ #{policy.policyId}</p>
+                <span className="text-gray-300">·</span>
+                <p className="text-xs text-gray-400">HĐ #{policy.policyId}</p>
                 <div className="flex items-center space-x-1">
-                  <FiLock className="h-3 w-3 text-green-400" />
-                  <span className="text-xs text-green-400 font-medium">
+                  <FiLock className="h-3 w-3 text-emerald-500" />
+                  <span className="text-xs text-emerald-600 font-medium">
                     Blockchain
                   </span>
                 </div>
@@ -146,13 +141,13 @@ const PolicyCard = ({
 
         {/* Expiring Soon Warning */}
         {isExpiringSoon() && policy.status === POLICY_STATUS.ACTIVE && (
-          <div className="mb-5 p-4 bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-500/20 rounded-xl">
+          <div className="mb-5 p-4 bg-amber-50 border border-amber-200 rounded-xl">
             <div className="flex items-start space-x-3">
               <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center flex-shrink-0">
                 <FiClock className="h-4 w-4 text-white" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-amber-300 mb-1">
+                <h3 className="text-sm font-bold text-amber-700 mb-1">
                   Sắp hết hạn
                 </h3>
                 <p className="text-sm text-amber-700">
@@ -164,21 +159,21 @@ const PolicyCard = ({
         )}
 
         {/* Coverage Progress Bar */}
-        <div className="mb-5 p-4 bg-white/6 backdrop-blur-sm rounded-xl border border-white/12">
+        <div className="mb-5 p-4 bg-gray-50 rounded-xl border border-gray-100">
           <div className="flex justify-between items-center mb-3">
             <div className="flex items-center space-x-2">
-              <FiTrendingUp className="h-4 w-4 text-red-400" />
-              <span className="text-sm font-semibold text-white/80">
+              <FiTrendingUp className="h-4 w-4 text-red-500" />
+              <span className="text-sm font-semibold text-gray-700">
                 Hạn mức bảo hiểm đã dùng
               </span>
             </div>
-            <span className="text-sm font-bold text-white">
+            <span className="text-sm font-bold text-gray-900">
               {parseFloat(policy.claimsUsed || 0).toFixed(4)} /{" "}
               {parseFloat(policy.coverageAmount || 0).toFixed(4)} ETH
             </span>
           </div>
 
-          <div className="relative w-full bg-white/10 rounded-full h-3 overflow-hidden">
+          <div className="relative w-full bg-gray-200 rounded-full h-3 overflow-hidden">
             <div
               className={`h-full rounded-full transition-all duration-500 ${
                 getCoveragePercentage() > 80
@@ -188,18 +183,16 @@ const PolicyCard = ({
                   : "bg-gradient-to-r from-emerald-500 to-green-500"
               }`}
               style={{ width: `${Math.min(getCoveragePercentage(), 100)}%` }}
-            >
-              <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
-            </div>
+            ></div>
           </div>
 
           <div className="flex justify-between items-center mt-2">
-            <p className="text-xs font-medium text-white/60">
+            <p className="text-xs font-medium text-gray-500">
               {getCoveragePercentage().toFixed(1)}% đã sử dụng
             </p>
             <div className="flex items-center space-x-1 text-xs">
               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-              <span className="text-white/60">
+              <span className="text-gray-500">
                 Còn lại: {remaining.toFixed(4)} ETH
               </span>
             </div>
@@ -208,97 +201,97 @@ const PolicyCard = ({
 
         {/* Info Grid */}
         <div className="grid grid-cols-2 gap-4">
-          <div className="p-3 bg-red-900/15 rounded-lg border border-red-200/30">
+          <div className="p-3 bg-red-50 rounded-lg border border-red-200">
             <div className="flex items-center space-x-2 mb-1">
-              <FiCalendar className="h-4 w-4 text-red-400" />
-              <span className="text-xs font-semibold text-red-300">Ngày bắt đầu</span>
+              <FiCalendar className="h-4 w-4 text-red-500" />
+              <span className="text-xs font-semibold text-red-600">Ngày bắt đầu</span>
             </div>
-            <p className="text-sm font-bold text-white">{formatDate(policy.startDate)}</p>
+            <p className="text-sm font-bold text-gray-900">{formatDate(policy.startDate)}</p>
           </div>
 
-          <div className="p-3 bg-gradient-to-r from-red-50/50 to-rose-50/50 rounded-lg border border-red-200/30">
+          <div className="p-3 bg-red-50 rounded-lg border border-red-200">
             <div className="flex items-center space-x-2 mb-1">
-              <FiCalendar className="h-4 w-4 text-red-400" />
-              <span className="text-xs font-semibold text-red-300">Ngày hết hạn</span>
+              <FiCalendar className="h-4 w-4 text-red-500" />
+              <span className="text-xs font-semibold text-red-600">Ngày hết hạn</span>
             </div>
-            <p className="text-sm font-bold text-white">{formatDate(policy.endDate)}</p>
+            <p className="text-sm font-bold text-gray-900">{formatDate(policy.endDate)}</p>
           </div>
 
-          <div className="p-3 bg-emerald-900/15 rounded-lg border border-emerald-500/25/30">
+          <div className="p-3 bg-emerald-50 rounded-lg border border-emerald-200">
             <div className="flex items-center space-x-2 mb-1">
-              <FiDollarSign className="h-4 w-4 text-emerald-400" />
-              <span className="text-xs font-semibold text-emerald-300">Phí bảo hiểm</span>
+              <FiDollarSign className="h-4 w-4 text-emerald-600" />
+              <span className="text-xs font-semibold text-emerald-600">Phí bảo hiểm</span>
             </div>
-            <p className="text-sm font-bold text-white">
+            <p className="text-sm font-bold text-gray-900">
               {parseFloat(policy.premium || 0).toFixed(4)} ETH
             </p>
           </div>
 
-          <div className="p-3 bg-purple-900/15 rounded-lg border border-purple-200/30">
+          <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
             <div className="flex items-center space-x-2 mb-1">
-              <FiFileText className="h-4 w-4 text-purple-400" />
-              <span className="text-xs font-semibold text-purple-300">Số yêu cầu</span>
+              <FiFileText className="h-4 w-4 text-purple-600" />
+              <span className="text-xs font-semibold text-purple-600">Số yêu cầu</span>
             </div>
-            <p className="text-sm font-bold text-white">{claimsCount}</p>
+            <p className="text-sm font-bold text-gray-900">{claimsCount}</p>
           </div>
         </div>
       </div>
 
       {/* Expandable Details */}
       {expanded && (
-        <div className="relative px-6 py-6 bg-gradient-to-r from-white/5 to-slate-50/50 border-b border-white/10">
-          <h4 className="text-lg font-bold text-white mb-4 flex items-center space-x-2">
-            <FiZap className="h-5 w-5 text-red-400" />
+        <div className="relative px-6 py-6 bg-gray-50 border-b border-gray-100">
+          <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center space-x-2">
+            <FiZap className="h-5 w-5 text-red-500" />
             <span>Chi Tiết Hợp Đồng</span>
           </h4>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-4 bg-white/6 backdrop-blur-sm rounded-xl border border-white/12">
-              <p className="text-xs font-semibold text-white/60 mb-1 uppercase tracking-wide">
+            <div className="p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
+              <p className="text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">
                 Hình thức thanh toán
               </p>
-              <p className="text-sm font-bold text-white">
+              <p className="text-sm font-bold text-gray-900">
                 {policy.paymentType === PAYMENT_TYPES.MONTHLY
                   ? "Hàng tháng"
                   : "Một lần/Năm"}
               </p>
             </div>
 
-            <div className="p-4 bg-white/6 backdrop-blur-sm rounded-xl border border-white/12">
-              <p className="text-xs font-semibold text-white/60 mb-1 uppercase tracking-wide">
+            <div className="p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
+              <p className="text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">
                 Hạn mức bảo hiểm
               </p>
-              <p className="text-sm font-bold text-red-400">
+              <p className="text-sm font-bold text-red-600">
                 {parseFloat(policy.coverageAmount || 0).toFixed(4)} ETH
               </p>
             </div>
 
-            <div className="p-4 bg-white/6 backdrop-blur-sm rounded-xl border border-white/12">
-              <p className="text-xs font-semibold text-white/60 mb-1 uppercase tracking-wide">
+            <div className="p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
+              <p className="text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">
                 Tổng phí đã đóng
               </p>
-              <p className="text-sm font-bold text-emerald-400">
+              <p className="text-sm font-bold text-emerald-600">
                 {parseFloat(policy.totalPaid || 0).toFixed(4)} ETH
               </p>
             </div>
 
-            <div className="p-4 bg-white/6 backdrop-blur-sm rounded-xl border border-white/12">
-              <p className="text-xs font-semibold text-white/60 mb-1 uppercase tracking-wide">
+            <div className="p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
+              <p className="text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">
                 Trạng thái hợp đồng
               </p>
               <div className="flex items-center space-x-2">
                 <FiCheckCircle
                   className={`h-4 w-4 ${
                     policy.status === POLICY_STATUS.ACTIVE
-                      ? "text-green-400"
-                      : "text-red-400"
+                      ? "text-emerald-500"
+                      : "text-red-500"
                   }`}
                 />
                 <p
                   className={`text-sm font-bold ${
                     policy.status === POLICY_STATUS.ACTIVE
-                      ? "text-green-400"
-                      : "text-red-400"
+                      ? "text-emerald-600"
+                      : "text-red-600"
                   }`}
                 >
                   {policy.statusLabel || "N/A"}
@@ -315,7 +308,7 @@ const PolicyCard = ({
           {/* Expand/Collapse Button */}
           <button
             onClick={() => setExpanded(!expanded)}
-            className="group/btn inline-flex items-center px-4 py-2.5 border border-white/10 shadow-sm text-sm font-semibold rounded-xl text-white/80 bg-white/8 backdrop-blur-sm hover:bg-white/8 hover:shadow-lg hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500/50 transition-all duration-200"
+            className="group/btn inline-flex items-center px-4 py-2.5 border border-gray-200 shadow-sm text-sm font-semibold rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:shadow-md hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500/50 transition-all duration-200"
           >
             {expanded ? (
               <>
@@ -357,7 +350,7 @@ const PolicyCard = ({
           {policy.status === POLICY_STATUS.ACTIVE && (
             <button
               onClick={onCancel}
-              className="group/btn inline-flex items-center px-4 py-2.5 border border-red-500/25 shadow-sm text-sm font-semibold rounded-xl text-red-400 bg-white/8 backdrop-blur-sm hover:bg-red-50 hover:shadow-lg hover:border-red-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200"
+              className="group/btn inline-flex items-center px-4 py-2.5 border border-red-200 shadow-sm text-sm font-semibold rounded-xl text-red-600 bg-white hover:bg-red-50 hover:shadow-md hover:border-red-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200"
             >
               <FiX className="h-4 w-4 mr-2" />
               Hủy HĐ
@@ -366,29 +359,21 @@ const PolicyCard = ({
         </div>
 
         {/* Blockchain Status Footer */}
-        <div className="mt-4 pt-4 border-t border-white/10">
+        <div className="mt-4 pt-4 border-t border-gray-100">
           <div className="flex items-center justify-between text-xs">
-            <div className="flex items-center space-x-2 text-white/60">
+            <div className="flex items-center space-x-2 text-gray-500">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
               <span>Smart contract đã xác thực</span>
             </div>
-            <div className="flex items-center space-x-2 text-red-400">
+            <div className="flex items-center space-x-2 text-red-500">
               <FiLock className="h-3 w-3" />
               <span>Bảo mật Blockchain</span>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Hover Border Glow */}
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-red-600/0 via-orange-500/0 to-red-600/0 group-hover:from-red-600/10 group-hover:via-orange-500/10 group-hover:to-red-600/10 transition-all duration-300 pointer-events-none"></div>
     </div>
   );
 };
 
 export default PolicyCard;
-
-
-
-
-

@@ -1,4 +1,4 @@
-﻿import {
+import {
   PieChart,
   Pie,
   Cell,
@@ -25,37 +25,28 @@ import {
 const ClaimsAnalytics = ({ data, loading }) => {
   if (loading) {
     return (
-      <div className="relative bg-white/8 backdrop-blur-xl border border-white/12 shadow-xl rounded-2xl p-8">
-        {/* Background Elements */}
-        <div className="absolute inset-0 overflow-hidden rounded-2xl">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-red-600/10 rounded-full blur-2xl animate-pulse"></div>
-          <div
-            className="absolute bottom-0 left-0 w-24 h-24 bg-orange-500/10 rounded-full blur-xl animate-pulse"
-            style={{ animationDelay: "2s" }}
-          ></div>
-        </div>
-
+      <div className="relative bg-white shadow-sm border border-gray-100 rounded-2xl p-8">
         <div className="relative">
           <div className="flex items-center space-x-4 mb-8">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-900/40 to-orange-900/30 flex items-center justify-center">
-              <FiBarChart className="h-6 w-6 text-red-400" />
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-100 to-orange-100 flex items-center justify-center">
+              <FiBarChart className="h-6 w-6 text-red-600" />
             </div>
-            <h3 className="text-2xl font-bold text-white">
+            <h3 className="text-2xl font-bold text-gray-900">
               Claims Analytics
             </h3>
           </div>
 
           <div className="animate-pulse space-y-6">
-            <div className="h-80 bg-gradient-to-r from-white/10 to-white/15 rounded-2xl"></div>
+            <div className="h-80 bg-gray-100 rounded-2xl"></div>
             <div className="grid grid-cols-2 gap-6">
-              <div className="h-40 bg-gradient-to-r from-white/10 to-white/15 rounded-2xl"></div>
-              <div className="h-40 bg-gradient-to-r from-white/10 to-white/15 rounded-2xl"></div>
+              <div className="h-40 bg-gray-100 rounded-2xl"></div>
+              <div className="h-40 bg-gray-100 rounded-2xl"></div>
             </div>
             <div className="grid grid-cols-4 gap-4">
               {[...Array(4)].map((_, i) => (
                 <div
                   key={i}
-                  className="h-24 bg-gradient-to-r from-white/10 to-white/15 rounded-xl"
+                  className="h-24 bg-gray-100 rounded-xl"
                 ></div>
               ))}
             </div>
@@ -89,8 +80,8 @@ const ClaimsAnalytics = ({ data, loading }) => {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white/10 backdrop-blur-xl border border-white/12 shadow-2xl rounded-xl p-4">
-          <p className="font-bold text-white mb-2">{label}</p>
+        <div className="bg-white border border-gray-200 shadow-lg rounded-xl p-4">
+          <p className="font-bold text-gray-900 mb-2">{label}</p>
           {payload.map((pld, index) => (
             <p
               key={index}
@@ -107,25 +98,18 @@ const ClaimsAnalytics = ({ data, loading }) => {
   };
 
   return (
-    <div className="relative bg-white/8 backdrop-blur-xl border border-white/12 shadow-xl rounded-2xl p-8">
-      {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden rounded-2xl">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-red-600/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-orange-500/5 rounded-full blur-2xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-purple-500/5 rounded-full blur-xl"></div>
-      </div>
-
+    <div className="relative bg-white shadow-sm border border-gray-100 rounded-2xl p-8">
       <div className="relative">
         {/* Header */}
         <div className="flex items-center space-x-4 mb-8">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-900/40 to-orange-900/30 flex items-center justify-center">
-            <FiBarChart className="h-6 w-6 text-red-400" />
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-100 to-orange-100 flex items-center justify-center">
+            <FiBarChart className="h-6 w-6 text-red-600" />
           </div>
           <div>
-            <h3 className="text-2xl font-bold text-white">
+            <h3 className="text-2xl font-bold text-gray-900">
               Claims Analytics
             </h3>
-            <p className="text-white/60">
+            <p className="text-gray-500">
               Comprehensive insights into your claims data
             </p>
           </div>
@@ -133,12 +117,12 @@ const ClaimsAnalytics = ({ data, loading }) => {
 
         <div className="space-y-8">
           {/* Claims Status Distribution */}
-          <div className="bg-white/6 backdrop-blur-sm border border-white/12 rounded-2xl p-6">
+          <div className="bg-gray-50 border border-gray-100 rounded-2xl p-6">
             <div className="flex items-center space-x-3 mb-6">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
-                <FiPieChart className="h-5 w-5 text-purple-400" />
+                <FiPieChart className="h-5 w-5 text-purple-600" />
               </div>
-              <h4 className="text-xl font-bold text-white">
+              <h4 className="text-xl font-bold text-gray-900">
                 Claims Status Distribution
               </h4>
             </div>
@@ -175,10 +159,10 @@ const ClaimsAnalytics = ({ data, loading }) => {
             ) : (
               <div className="h-80 flex items-center justify-center">
                 <div className="text-center">
-                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center mx-auto mb-4">
-                    <FiPieChart className="h-10 w-10 text-white/40" />
+                  <div className="w-20 h-20 rounded-2xl bg-gray-100 flex items-center justify-center mx-auto mb-4">
+                    <FiPieChart className="h-10 w-10 text-gray-300" />
                   </div>
-                  <p className="text-white/50 font-medium">
+                  <p className="text-gray-500 font-medium">
                     No claims data available
                   </p>
                 </div>
@@ -188,12 +172,12 @@ const ClaimsAnalytics = ({ data, loading }) => {
 
           {/* Monthly Claims Trend */}
           {monthlyData.length > 0 && (
-            <div className="bg-white/6 backdrop-blur-sm border border-white/12 rounded-2xl p-6">
+            <div className="bg-gray-50 border border-gray-100 rounded-2xl p-6">
               <div className="flex items-center space-x-3 mb-6">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-100 to-green-100 flex items-center justify-center">
-                  <FiTrendingUp className="h-5 w-5 text-emerald-400" />
+                  <FiTrendingUp className="h-5 w-5 text-emerald-600" />
                 </div>
-                <h4 className="text-xl font-bold text-white">
+                <h4 className="text-xl font-bold text-gray-900">
                   Monthly Claims Trend
                 </h4>
               </div>
@@ -242,34 +226,32 @@ const ClaimsAnalytics = ({ data, loading }) => {
 
           {/* Claims Key Metrics */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="relative bg-gradient-to-br from-red-50 to-orange-50 border border-red-200 rounded-2xl p-6 group hover:shadow-xl transition-all duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-red-600/5 to-orange-500/5 rounded-2xl"></div>
+            <div className="relative bg-gradient-to-br from-red-50 to-orange-50 border border-red-200 rounded-2xl p-6 group hover:shadow-md transition-all duration-300">
               <div className="relative flex items-center space-x-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-900/40 to-orange-900/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <FiDollarSign className="h-6 w-6 text-red-400" />
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-100 to-orange-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <FiDollarSign className="h-6 w-6 text-red-600" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-red-400">
+                  <div className="text-2xl font-bold text-red-600">
                     {(data.averageClaimAmount || 0).toFixed(4)} ETH
                   </div>
-                  <div className="text-sm font-medium text-red-400">
+                  <div className="text-sm font-medium text-red-600">
                     Average Claim Amount
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="relative bg-gradient-to-br from-emerald-900/20 to-green-900/15 border border-emerald-500/25 rounded-2xl p-6 group hover:shadow-xl transition-all duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-green-500/5 rounded-2xl"></div>
+            <div className="relative bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-200 rounded-2xl p-6 group hover:shadow-md transition-all duration-300">
               <div className="relative flex items-center space-x-4">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-100 to-green-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <FiClock className="h-6 w-6 text-emerald-400" />
+                  <FiClock className="h-6 w-6 text-emerald-600" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-emerald-400">
+                  <div className="text-2xl font-bold text-emerald-600">
                     {(data.averageProcessingTime || 0).toFixed(1)} days
                   </div>
-                  <div className="text-sm font-medium text-emerald-400">
+                  <div className="text-sm font-medium text-emerald-600">
                     Avg Processing Time
                   </div>
                 </div>
@@ -279,18 +261,17 @@ const ClaimsAnalytics = ({ data, loading }) => {
 
           {/* Total Claims Value - Featured Card */}
           <div className="relative bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-purple-200 rounded-2xl p-8 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-pink-500/10"></div>
-            <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl"></div>
-            <div className="absolute bottom-0 left-0 w-24 h-24 bg-pink-500/10 rounded-full blur-xl"></div>
+            <div className="absolute top-0 right-0 w-32 h-32 bg-purple-100 rounded-full blur-2xl"></div>
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-pink-100 rounded-full blur-xl"></div>
 
             <div className="relative text-center">
               <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center mx-auto mb-4">
-                <FiTarget className="h-8 w-8 text-purple-400" />
+                <FiTarget className="h-8 w-8 text-purple-600" />
               </div>
               <div className="text-4xl font-bold text-purple-700 mb-2">
                 {(data.totalClaimsValue || 0).toFixed(4)} ETH
               </div>
-              <div className="text-lg font-semibold text-purple-400">
+              <div className="text-lg font-semibold text-purple-600">
                 Total Claims Value
               </div>
               <p className="text-purple-500 mt-2">
@@ -317,10 +298,10 @@ const ClaimsAnalytics = ({ data, loading }) => {
                 return (
                   <div
                     key={status}
-                    className="relative bg-white/8 backdrop-blur-xl border border-white/12 shadow-lg rounded-2xl p-4 group hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                    className="relative bg-white border border-gray-100 shadow-sm rounded-2xl p-4 group hover:shadow-md transition-all duration-300 transform hover:scale-105"
                   >
                     <div
-                      className="absolute inset-0 rounded-2xl opacity-10"
+                      className="absolute inset-0 rounded-2xl opacity-5"
                       style={{ backgroundColor: getColorForStatus(status) }}
                     ></div>
                     <div className="relative text-center">
@@ -344,7 +325,7 @@ const ClaimsAnalytics = ({ data, loading }) => {
                       >
                         {count}
                       </div>
-                      <div className="text-sm font-medium text-white/60">
+                      <div className="text-sm font-medium text-gray-500">
                         {status}
                       </div>
                     </div>
@@ -360,9 +341,3 @@ const ClaimsAnalytics = ({ data, loading }) => {
 };
 
 export default ClaimsAnalytics;
-
-
-
-
-
-

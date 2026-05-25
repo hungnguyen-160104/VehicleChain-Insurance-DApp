@@ -17,10 +17,10 @@ const INSURANCE_TYPES = [
       "Bảo hiểm trách nhiệm dân sự bắt buộc theo quy định pháp luật. Bồi thường thiệt hại cho bên thứ ba bị tai nạn.",
     icon: FiShield,
     color: "blue",
-    bg: "from-red-900/40 to-orange-900/30",
-    text: "text-red-400",
+    bg: "from-red-50 to-orange-50",
+    text: "text-red-600",
     border: "border-red-200",
-    glow: "from-red-600/10 to-orange-500/10",
+    glow: "from-red-600/5 to-orange-500/5",
     headerBg: "from-red-600 to-orange-600",
     pricing: [
       { loaiXe: "Xe máy (dưới 50cc)", gia: "0.001 ETH/năm" },
@@ -47,9 +47,9 @@ const INSURANCE_TYPES = [
     icon: FiTruck,
     color: "purple",
     bg: "from-purple-100 to-pink-100",
-    text: "text-purple-400",
+    text: "text-purple-600",
     border: "border-purple-200",
-    glow: "from-purple-500/10 to-pink-500/10",
+    glow: "from-purple-500/5 to-pink-500/5",
     headerBg: "from-purple-500 to-pink-600",
     pricing: [
       { loaiXe: "Xe máy", gia: "1.5% giá trị xe/năm" },
@@ -76,9 +76,9 @@ const INSURANCE_TYPES = [
     icon: FiUsers,
     color: "emerald",
     bg: "from-emerald-100 to-green-100",
-    text: "text-emerald-400",
-    border: "border-emerald-500/25",
-    glow: "from-emerald-500/10 to-green-500/10",
+    text: "text-emerald-600",
+    border: "border-emerald-200",
+    glow: "from-emerald-500/5 to-green-500/5",
     headerBg: "from-emerald-500 to-green-600",
     pricing: [
       { loaiXe: "Tất cả loại xe", gia: "0.002 ETH/người/năm" },
@@ -105,9 +105,9 @@ const INSURANCE_TYPES = [
     icon: FiActivity,
     color: "orange",
     bg: "from-orange-100 to-yellow-100",
-    text: "text-orange-400",
+    text: "text-orange-600",
     border: "border-orange-200",
-    glow: "from-orange-500/10 to-yellow-500/10",
+    glow: "from-orange-500/5 to-yellow-500/5",
     headerBg: "from-orange-500 to-yellow-600",
     pricing: [
       { loaiXe: "Lái xe xe máy", gia: "0.001 ETH/năm" },
@@ -130,35 +130,35 @@ const INSURANCE_TYPES = [
 const getColorClasses = (color) => {
   const map = {
     blue: {
-      bg: "from-red-900/40 to-orange-900/30",
-      text: "text-red-400",
+      bg: "from-red-50 to-orange-50",
+      text: "text-red-600",
       border: "border-red-200",
-      glow: "from-red-600/10 to-orange-500/10",
-      badge: "bg-red-50 text-red-400 border-red-200",
+      glow: "from-red-600/5 to-orange-500/5",
+      badge: "bg-red-50 text-red-600 border-red-200",
       headerBg: "from-red-600 to-orange-600",
     },
     purple: {
-      bg: "from-purple-100 to-pink-100",
-      text: "text-purple-400",
+      bg: "from-purple-50 to-pink-50",
+      text: "text-purple-600",
       border: "border-purple-200",
-      glow: "from-purple-500/10 to-pink-500/10",
+      glow: "from-purple-500/5 to-pink-500/5",
       badge: "bg-purple-50 text-purple-700 border-purple-200",
       headerBg: "from-purple-500 to-pink-600",
     },
     emerald: {
-      bg: "from-emerald-100 to-green-100",
-      text: "text-emerald-400",
-      border: "border-emerald-500/25",
-      glow: "from-emerald-500/10 to-green-500/10",
-      badge: "bg-emerald-50 text-emerald-400 border-emerald-500/25",
+      bg: "from-emerald-50 to-green-50",
+      text: "text-emerald-600",
+      border: "border-emerald-200",
+      glow: "from-emerald-500/5 to-green-500/5",
+      badge: "bg-emerald-50 text-emerald-700 border-emerald-200",
       headerBg: "from-emerald-500 to-green-600",
     },
     orange: {
-      bg: "from-orange-100 to-yellow-100",
-      text: "text-orange-400",
+      bg: "from-orange-50 to-yellow-50",
+      text: "text-orange-600",
       border: "border-orange-200",
-      glow: "from-orange-500/10 to-yellow-500/10",
-      badge: "bg-orange-50 text-orange-400 border-orange-200",
+      glow: "from-orange-500/5 to-yellow-500/5",
+      badge: "bg-orange-50 text-orange-700 border-orange-200",
       headerBg: "from-orange-500 to-yellow-600",
     },
   };
@@ -171,10 +171,10 @@ const PlanManagement = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-white">
+          <h2 className="text-2xl font-bold text-gray-900">
             Thông Tin Sản Phẩm Bảo Hiểm
           </h2>
-          <p className="text-white/60">
+          <p className="text-gray-500">
             Danh mục các loại bảo hiểm xe cơ giới — giá và phạm vi bảo hiểm
           </p>
         </div>
@@ -188,7 +188,7 @@ const PlanManagement = () => {
           return (
             <div
               key={type.id}
-              className={`relative bg-white/8 backdrop-blur-xl border ${colors.border} shadow-lg rounded-2xl p-4 overflow-hidden group hover:shadow-xl transition-all duration-300 transform hover:scale-105`}
+              className={`relative bg-white border ${colors.border} shadow-sm rounded-2xl p-4 overflow-hidden group hover:shadow-md transition-all duration-300 transform hover:scale-105`}
             >
               <div className="absolute inset-0 overflow-hidden rounded-2xl">
                 <div
@@ -205,7 +205,7 @@ const PlanManagement = () => {
                   <p className={`text-sm font-bold ${colors.text}`}>
                     Loại {type.id}
                   </p>
-                  <p className="text-xs font-semibold text-white/80 leading-tight">
+                  <p className="text-xs font-semibold text-gray-700 leading-tight">
                     {type.shortName}
                   </p>
                 </div>
@@ -231,7 +231,7 @@ const PlanManagement = () => {
           return (
             <div
               key={type.id}
-              className="relative bg-white/8 backdrop-blur-xl border border-white/12 shadow-xl rounded-2xl overflow-hidden"
+              className="relative bg-white border border-gray-100 shadow-sm rounded-2xl overflow-hidden"
               style={{ animationDelay: `${index * 100}ms` }}
             >
               {/* Background Elements */}
@@ -288,9 +288,9 @@ const PlanManagement = () => {
                 <div className="mb-8">
                   <div className="flex items-center space-x-2 mb-3">
                     <FiInfo className={`h-5 w-5 ${colors.text}`} />
-                    <h4 className="font-bold text-white/90">Mô Tả</h4>
+                    <h4 className="font-bold text-gray-900">Mô Tả</h4>
                   </div>
-                  <p className="text-white/60 leading-relaxed font-medium">
+                  <p className="text-gray-600 leading-relaxed font-medium">
                     {type.description}
                   </p>
                 </div>
@@ -300,15 +300,15 @@ const PlanManagement = () => {
                   <div>
                     <div className="flex items-center space-x-2 mb-4">
                       <FiDollarSign className={`h-5 w-5 ${colors.text}`} />
-                      <h4 className="font-bold text-white/90">Bảng Phí Bảo Hiểm</h4>
+                      <h4 className="font-bold text-gray-900">Bảng Phí Bảo Hiểm</h4>
                     </div>
                     <div className="space-y-2">
                       {type.pricing.map((item, pIdx) => (
                         <div
                           key={pIdx}
-                          className={`flex items-center justify-between p-3 bg-white/6 backdrop-blur-sm border ${colors.border} rounded-xl hover:shadow-sm transition-all duration-200`}
+                          className={`flex items-center justify-between p-3 bg-gray-50 border ${colors.border} rounded-xl hover:shadow-sm transition-all duration-200`}
                         >
-                          <span className="text-sm font-semibold text-white/80">
+                          <span className="text-sm font-semibold text-gray-700">
                             {item.loaiXe}
                           </span>
                           <span className={`text-sm font-bold ${colors.text}`}>
@@ -317,7 +317,7 @@ const PlanManagement = () => {
                         </div>
                       ))}
                     </div>
-                    <p className="text-xs text-white/50 mt-3 italic">
+                    <p className="text-xs text-gray-400 mt-3 italic">
                       * Phí có thể thay đổi theo từng đợt cập nhật hợp đồng
                     </p>
                   </div>
@@ -326,13 +326,13 @@ const PlanManagement = () => {
                   <div>
                     <div className="flex items-center space-x-2 mb-4">
                       <FiShield className={`h-5 w-5 ${colors.text}`} />
-                      <h4 className="font-bold text-white/90">Phạm Vi Bảo Hiểm</h4>
+                      <h4 className="font-bold text-gray-900">Phạm Vi Bảo Hiểm</h4>
                     </div>
                     <div className="space-y-2">
                       {type.coverage.map((item, cIdx) => (
                         <div
                           key={cIdx}
-                          className="flex items-start space-x-3 p-3 bg-white/5 backdrop-blur-sm border border-white/60 rounded-xl"
+                          className={`flex items-start space-x-3 p-3 bg-gray-50 border ${colors.border} rounded-xl`}
                         >
                           <div className="flex-shrink-0 mt-0.5">
                             <div
@@ -341,7 +341,7 @@ const PlanManagement = () => {
                               <FiCheck className={`h-3 w-3 ${colors.text}`} />
                             </div>
                           </div>
-                          <span className="text-sm font-medium text-white/80">
+                          <span className="text-sm font-medium text-gray-700">
                             {item}
                           </span>
                         </div>
@@ -356,21 +356,18 @@ const PlanManagement = () => {
       </div>
 
       {/* Information Panel */}
-      <div className="relative bg-gradient-to-br from-red-50 to-orange-50 border-2 border-red-200 rounded-2xl p-8 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-red-600/5 to-orange-500/5"></div>
-        <div className="absolute top-0 right-0 w-32 h-32 bg-red-600/10 rounded-full blur-2xl"></div>
-
-        <div className="relative flex items-start space-x-4">
+      <div className="bg-red-50 border border-red-100 rounded-2xl p-8 overflow-hidden">
+        <div className="flex items-start space-x-4">
           <div className="flex-shrink-0">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-900/40 to-orange-900/30 flex items-center justify-center">
-              <FiInfo className="h-6 w-6 text-red-400" />
+            <div className="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center">
+              <FiInfo className="h-6 w-6 text-red-600" />
             </div>
           </div>
           <div>
-            <h3 className="text-xl font-bold text-red-300 mb-4">
+            <h3 className="text-xl font-bold text-red-700 mb-4">
               Thông Tin Quan Trọng
             </h3>
-            <div className="text-sm font-medium text-red-300 space-y-2">
+            <div className="text-sm font-medium text-red-700 space-y-2">
               {[
                 "Giá phí bảo hiểm được lập trình trong hợp đồng thông minh và không thể thay đổi tùy tiện",
                 "TNDS Bắt buộc là loại bảo hiểm bắt buộc theo quy định pháp luật Việt Nam",

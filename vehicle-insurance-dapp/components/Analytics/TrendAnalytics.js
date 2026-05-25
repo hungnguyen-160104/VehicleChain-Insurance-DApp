@@ -1,4 +1,4 @@
-﻿import {
+import {
   LineChart,
   Line,
   XAxis,
@@ -25,35 +25,26 @@ import {
 const TrendAnalytics = ({ data, loading, timeRange }) => {
   if (loading) {
     return (
-      <div className="relative bg-white/8 backdrop-blur-xl border border-white/12 shadow-xl rounded-2xl p-8">
-        {/* Background Elements */}
-        <div className="absolute inset-0 overflow-hidden rounded-2xl">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-red-600/10 rounded-full blur-2xl animate-pulse"></div>
-          <div
-            className="absolute bottom-0 left-0 w-24 h-24 bg-orange-500/10 rounded-full blur-xl animate-pulse"
-            style={{ animationDelay: "2s" }}
-          ></div>
-        </div>
-
+      <div className="relative bg-white shadow-sm border border-gray-100 rounded-2xl p-8">
         <div className="relative">
           <div className="flex items-center space-x-4 mb-8">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-900/40 to-orange-900/30 flex items-center justify-center">
-              <FiTrendingUp className="h-6 w-6 text-red-400" />
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-100 to-orange-100 flex items-center justify-center">
+              <FiTrendingUp className="h-6 w-6 text-red-600" />
             </div>
-            <h3 className="text-2xl font-bold text-white">Trend Analysis</h3>
+            <h3 className="text-2xl font-bold text-gray-900">Trend Analysis</h3>
           </div>
 
           <div className="animate-pulse">
-            <div className="h-96 bg-gradient-to-r from-white/10 to-white/15 rounded-2xl mb-8"></div>
+            <div className="h-96 bg-gray-100 rounded-2xl mb-8"></div>
             <div className="grid grid-cols-2 gap-6 mb-8">
-              <div className="h-32 bg-gradient-to-r from-white/10 to-white/15 rounded-2xl"></div>
-              <div className="h-32 bg-gradient-to-r from-white/10 to-white/15 rounded-2xl"></div>
+              <div className="h-32 bg-gray-100 rounded-2xl"></div>
+              <div className="h-32 bg-gray-100 rounded-2xl"></div>
             </div>
             <div className="grid grid-cols-4 gap-4">
               {[...Array(4)].map((_, i) => (
                 <div
                   key={i}
-                  className="h-24 bg-gradient-to-r from-white/10 to-white/15 rounded-xl"
+                  className="h-24 bg-gray-100 rounded-xl"
                 ></div>
               ))}
             </div>
@@ -99,8 +90,8 @@ const TrendAnalytics = ({ data, loading, timeRange }) => {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white/10 backdrop-blur-xl border border-white/12 shadow-2xl rounded-xl p-4">
-          <p className="font-bold text-white mb-2">
+        <div className="bg-white border border-gray-200 shadow-lg rounded-xl p-4">
+          <p className="font-bold text-gray-900 mb-2">
             {new Date(label).toLocaleDateString()}
           </p>
           {payload.map((pld, index) => (
@@ -184,46 +175,39 @@ const TrendAnalytics = ({ data, loading, timeRange }) => {
     switch (trend) {
       case "increasing":
         return {
-          bg: "from-emerald-900/20 to-green-900/15",
-          text: "text-emerald-400",
-          border: "border-emerald-500/25",
-          icon: "text-emerald-400",
+          bg: "from-emerald-50 to-green-50",
+          text: "text-emerald-600",
+          border: "border-emerald-200",
+          icon: "text-emerald-600",
         };
       case "decreasing":
         return {
           bg: "from-red-50 to-pink-50",
-          text: "text-red-400",
+          text: "text-red-600",
           border: "border-red-200",
-          icon: "text-red-400",
+          icon: "text-red-600",
         };
       default:
         return {
-          bg: "from-gray-50 to-white/8",
-          text: "text-white/80",
-          border: "border-white/12",
-          icon: "text-white/60",
+          bg: "from-gray-50 to-white",
+          text: "text-gray-700",
+          border: "border-gray-200",
+          icon: "text-gray-500",
         };
     }
   };
 
   return (
-    <div className="relative bg-white/8 backdrop-blur-xl border border-white/12 shadow-xl rounded-2xl p-8">
-      {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden rounded-2xl">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-red-600/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-orange-500/5 rounded-full blur-2xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-purple-500/5 rounded-full blur-xl"></div>
-      </div>
-
+    <div className="relative bg-white shadow-sm border border-gray-100 rounded-2xl p-8">
       <div className="relative">
         {/* Header */}
         <div className="flex items-center space-x-4 mb-8">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-900/40 to-orange-900/30 flex items-center justify-center">
-            <FiTrendingUp className="h-6 w-6 text-red-400" />
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-100 to-orange-100 flex items-center justify-center">
+            <FiTrendingUp className="h-6 w-6 text-red-600" />
           </div>
           <div>
-            <h3 className="text-2xl font-bold text-white">Trend Analysis</h3>
-            <p className="text-white/60">
+            <h3 className="text-2xl font-bold text-gray-900">Trend Analysis</h3>
+            <p className="text-gray-500">
               Track policy and claims trends over time
             </p>
           </div>
@@ -232,12 +216,12 @@ const TrendAnalytics = ({ data, loading, timeRange }) => {
         <div className="space-y-8">
           {/* Trend Chart */}
           {sortedData.length > 0 ? (
-            <div className="bg-white/6 backdrop-blur-sm border border-white/12 rounded-2xl p-6">
+            <div className="bg-gray-50 border border-gray-100 rounded-2xl p-6">
               <div className="flex items-center space-x-3 mb-6">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
-                  <FiBarChart className="h-5 w-5 text-purple-400" />
+                  <FiBarChart className="h-5 w-5 text-purple-600" />
                 </div>
-                <h4 className="text-xl font-bold text-white">
+                <h4 className="text-xl font-bold text-gray-900">
                   Policy & Claims Trends
                 </h4>
               </div>
@@ -303,12 +287,12 @@ const TrendAnalytics = ({ data, loading, timeRange }) => {
               </div>
             </div>
           ) : (
-            <div className="bg-white/6 backdrop-blur-sm border border-white/12 rounded-2xl p-12">
+            <div className="bg-gray-50 border border-gray-100 rounded-2xl p-12">
               <div className="text-center">
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center mx-auto mb-4">
-                  <FiBarChart className="h-10 w-10 text-white/40" />
+                <div className="w-20 h-20 rounded-2xl bg-gray-100 flex items-center justify-center mx-auto mb-4">
+                  <FiBarChart className="h-10 w-10 text-gray-300" />
                 </div>
-                <p className="text-white/50 font-medium">
+                <p className="text-gray-500 font-medium">
                   No trend data available for the selected time period
                 </p>
               </div>
@@ -337,15 +321,15 @@ const TrendAnalytics = ({ data, loading, timeRange }) => {
               return (
                 <div
                   key={key}
-                  className={`relative bg-gradient-to-br ${colorScheme.bg} border ${colorScheme.border} rounded-2xl p-6 group hover:shadow-xl transition-all duration-300`}
+                  className={`relative bg-gradient-to-br ${colorScheme.bg} border ${colorScheme.border} rounded-2xl p-6 group hover:shadow-md transition-all duration-300`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 rounded-xl bg-white/8 backdrop-blur-sm border border-white/12 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <div className="w-12 h-12 rounded-xl bg-white border border-gray-200 shadow-sm flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                         <Icon className={`h-6 w-6 ${colorScheme.icon}`} />
                       </div>
                       <div>
-                        <h4 className="font-bold text-white text-lg">
+                        <h4 className="font-bold text-gray-900 text-lg">
                           {name}
                         </h4>
                         <p
@@ -354,13 +338,13 @@ const TrendAnalytics = ({ data, loading, timeRange }) => {
                           {stats.trend.charAt(0).toUpperCase() +
                             stats.trend.slice(1)}
                         </p>
-                        <p className="text-sm font-medium text-white/60 mt-1">
+                        <p className="text-sm font-medium text-gray-500 mt-1">
                           {stats.percentage.toFixed(1)}% change
                         </p>
                       </div>
                     </div>
                     <div
-                      className={`w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center ${colorScheme.icon}`}
+                      className={`w-10 h-10 rounded-xl bg-white/70 flex items-center justify-center ${colorScheme.icon}`}
                     >
                       <TrendIcon className="h-5 w-5" />
                     </div>
@@ -371,12 +355,12 @@ const TrendAnalytics = ({ data, loading, timeRange }) => {
           </div>
 
           {/* Detailed Trend Analysis */}
-          <div className="bg-gradient-to-br from-gray-50 to-white/8 backdrop-blur-xl border border-white/12 rounded-2xl p-8">
+          <div className="bg-white border border-gray-100 shadow-sm rounded-2xl p-8">
             <div className="flex items-center space-x-3 mb-6">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-100 to-red-100 flex items-center justify-center">
-                <FiCalendar className="h-5 w-5 text-orange-400" />
+                <FiCalendar className="h-5 w-5 text-orange-600" />
               </div>
-              <h4 className="text-xl font-bold text-white">
+              <h4 className="text-xl font-bold text-gray-900">
                 Trend Insights
               </h4>
             </div>
@@ -441,22 +425,22 @@ const TrendAnalytics = ({ data, loading, timeRange }) => {
                 const colorSchemes = {
                   indigo: {
                     bg: "from-red-100 to-purple-100",
-                    text: "text-red-400",
+                    text: "text-red-600",
                     border: "border-red-200",
                   },
                   yellow: {
                     bg: "from-yellow-100 to-orange-100",
-                    text: "text-yellow-400",
+                    text: "text-amber-700",
                     border: "border-yellow-200",
                   },
                   blue: {
-                    bg: "from-red-900/40 to-orange-900/30",
-                    text: "text-red-400",
+                    bg: "from-red-50 to-orange-50",
+                    text: "text-red-600",
                     border: "border-red-200",
                   },
                   orange: {
                     bg: "from-orange-100 to-red-100",
-                    text: "text-orange-400",
+                    text: "text-orange-600",
                     border: "border-orange-200",
                   },
                 };
@@ -465,7 +449,7 @@ const TrendAnalytics = ({ data, loading, timeRange }) => {
                 return (
                   <div
                     key={index}
-                    className={`relative bg-white/8 backdrop-blur-xl border ${scheme.border} shadow-lg rounded-2xl p-6 group hover:shadow-xl transition-all duration-300`}
+                    className={`relative bg-white border ${scheme.border} shadow-sm rounded-2xl p-6 group hover:shadow-md transition-all duration-300`}
                   >
                     <div className="flex items-center space-x-3 mb-4">
                       <div
@@ -473,7 +457,7 @@ const TrendAnalytics = ({ data, loading, timeRange }) => {
                       >
                         <insight.icon className={`h-5 w-5 ${scheme.text}`} />
                       </div>
-                      <h5 className="font-bold text-white text-sm">
+                      <h5 className="font-bold text-gray-900 text-sm">
                         {insight.title}
                       </h5>
                     </div>
@@ -486,7 +470,7 @@ const TrendAnalytics = ({ data, loading, timeRange }) => {
                           ? new Date(insight.value.date).toLocaleDateString()
                           : "N/A"}
                       </p>
-                      <p className="text-sm font-medium text-white/60">
+                      <p className="text-sm font-medium text-gray-500">
                         {insight.type === "policies"
                           ? `${insight.value.policies} policies`
                           : insight.type === "claims"
@@ -501,12 +485,12 @@ const TrendAnalytics = ({ data, loading, timeRange }) => {
           </div>
 
           {/* Correlation Analysis */}
-          <div className="bg-gradient-to-br from-red-50 to-red-50 backdrop-blur-xl border border-red-200 rounded-2xl p-8">
+          <div className="bg-gradient-to-br from-red-50 to-pink-50 border border-red-200 rounded-2xl p-8">
             <div className="flex items-center space-x-3 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-100 to-red-100 flex items-center justify-center">
-                <FiPieChart className="h-5 w-5 text-red-400" />
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-100 to-pink-100 flex items-center justify-center">
+                <FiPieChart className="h-5 w-5 text-red-600" />
               </div>
-              <h4 className="text-xl font-bold text-white">
+              <h4 className="text-xl font-bold text-gray-900">
                 Correlation Analysis
               </h4>
             </div>
@@ -569,17 +553,17 @@ const TrendAnalytics = ({ data, loading, timeRange }) => {
                 const colorSchemes = {
                   purple: {
                     bg: "from-purple-100 to-pink-100",
-                    text: "text-purple-400",
+                    text: "text-purple-600",
                     border: "border-purple-200",
                   },
                   green: {
                     bg: "from-emerald-100 to-green-100",
-                    text: "text-emerald-400",
-                    border: "border-emerald-500/25",
+                    text: "text-emerald-600",
+                    border: "border-emerald-200",
                   },
                   blue: {
-                    bg: "from-red-900/40 to-orange-900/30",
-                    text: "text-red-400",
+                    bg: "from-red-50 to-orange-50",
+                    text: "text-red-600",
                     border: "border-red-200",
                   },
                 };
@@ -588,7 +572,7 @@ const TrendAnalytics = ({ data, loading, timeRange }) => {
                 return (
                   <div
                     key={index}
-                    className={`relative bg-white/8 backdrop-blur-xl border ${scheme.border} shadow-lg rounded-2xl p-6 group hover:shadow-xl transition-all duration-300`}
+                    className={`relative bg-white border ${scheme.border} shadow-sm rounded-2xl p-6 group hover:shadow-md transition-all duration-300`}
                   >
                     <div className="flex items-center space-x-3 mb-4">
                       <div
@@ -596,7 +580,7 @@ const TrendAnalytics = ({ data, loading, timeRange }) => {
                       >
                         <analysis.icon className={`h-5 w-5 ${scheme.text}`} />
                       </div>
-                      <h5 className="font-bold text-white">
+                      <h5 className="font-bold text-gray-900">
                         {analysis.title}
                       </h5>
                     </div>
@@ -605,7 +589,7 @@ const TrendAnalytics = ({ data, loading, timeRange }) => {
                       <p className={`text-2xl font-bold ${scheme.text} mb-1`}>
                         {analysis.value}
                       </p>
-                      <p className="text-sm font-medium text-white/60">
+                      <p className="text-sm font-medium text-gray-500">
                         {analysis.subtitle}
                       </p>
                     </div>
@@ -621,9 +605,3 @@ const TrendAnalytics = ({ data, loading, timeRange }) => {
 };
 
 export default TrendAnalytics;
-
-
-
-
-
-

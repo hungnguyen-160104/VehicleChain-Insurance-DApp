@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useEthersSigner } from "../../provider/hooks";
 import { contractService } from "../../services/contract";
 import {
@@ -191,8 +191,8 @@ const GarageManagement = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-white">Quản Lý Garage</h2>
-          <p className="text-white/60">
+          <h2 className="text-2xl font-bold text-gray-900">Quản Lý Garage</h2>
+          <p className="text-gray-500">
             Cấp quyền và quản lý các garage giám định xe
           </p>
         </div>
@@ -205,44 +205,36 @@ const GarageManagement = () => {
             icon: FiTruck,
             title: "Tổng Garage",
             value: garages.length,
-            bg: "from-red-900/40 to-orange-900/30",
-            text: "text-red-400",
-            glow: "from-red-600/10 to-orange-500/10",
+            bg: "from-red-50 to-orange-50",
+            text: "text-red-600",
           },
           {
             icon: FiCheck,
             title: "Đang Hoạt Động",
             value: activeGarages.length,
             bg: "from-emerald-100 to-green-100",
-            text: "text-emerald-400",
-            glow: "from-emerald-500/10 to-green-500/10",
+            text: "text-emerald-600",
           },
           {
             icon: FiUserX,
             title: "Đã Thu Hồi",
             value: inactiveGarages.length,
             bg: "from-red-100 to-pink-100",
-            text: "text-red-400",
-            glow: "from-red-500/10 to-pink-500/10",
+            text: "text-red-600",
           },
         ].map((stat, index) => (
           <div
             key={index}
-            className="relative bg-white/8 backdrop-blur-xl border border-white/12 shadow-xl rounded-2xl p-6 overflow-hidden group hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+            className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6 overflow-hidden group hover:shadow-md transition-all duration-300 transform hover:scale-105"
           >
-            <div className="absolute inset-0 overflow-hidden rounded-2xl">
-              <div
-                className={`absolute top-0 right-0 w-20 h-20 bg-gradient-to-br ${stat.glow} rounded-full blur-xl opacity-50`}
-              ></div>
-            </div>
-            <div className="relative flex items-center">
+            <div className="flex items-center">
               <div
                 className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.bg} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
               >
                 <stat.icon className={`h-6 w-6 ${stat.text}`} />
               </div>
               <div className="ml-4">
-                <div className="text-sm font-bold text-white/60">{stat.title}</div>
+                <div className="text-sm font-bold text-gray-500">{stat.title}</div>
                 <div className={`text-2xl font-bold ${stat.text}`}>{stat.value}</div>
               </div>
             </div>
@@ -251,16 +243,13 @@ const GarageManagement = () => {
       </div>
 
       {/* Add Garage */}
-      <div className="bg-white/8 backdrop-blur-xl border border-white/12 shadow-xl rounded-2xl p-8 relative">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-red-50 rounded-full opacity-50"></div>
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-50 rounded-full opacity-30"></div>
-
+      <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-8 relative overflow-hidden">
         <div className="relative z-10">
           <div className="flex items-center space-x-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
-              <FiUserPlus className="h-5 w-5 text-red-400" />
+            <div className="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center">
+              <FiUserPlus className="h-5 w-5 text-red-600" />
             </div>
-            <h3 className="text-xl font-bold text-white">
+            <h3 className="text-xl font-bold text-gray-900">
               Cấp Quyền Garage Mới
             </h3>
           </div>
@@ -273,7 +262,7 @@ const GarageManagement = () => {
                 value={garageAddress}
                 onChange={(e) => setGarageAddress(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleCapQuyen()}
-                className="w-full px-4 py-3 bg-white/8 border border-white/15 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 font-medium transition-all duration-300"
+                className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 font-medium transition-all duration-300"
               />
             </div>
             <button
@@ -285,7 +274,7 @@ const GarageManagement = () => {
               {authorizing ? "Đang Cấp Quyền..." : "Cấp Quyền"}
             </button>
           </div>
-          <p className="text-sm font-medium text-white/60 mt-4">
+          <p className="text-sm font-medium text-gray-500 mt-4">
             Nhập địa chỉ ví Ethereum của garage. Garage được cấp quyền có thể
             cập nhật trạng thái giám định cho yêu cầu bồi thường.
           </p>
@@ -293,126 +282,121 @@ const GarageManagement = () => {
       </div>
 
       {/* Garage List */}
-      <div className="bg-white/8 backdrop-blur-xl border border-white/12 shadow-xl rounded-2xl overflow-hidden relative">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-red-50 to-purple-50 rounded-full opacity-30"></div>
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-br from-orange-50 to-red-50 rounded-full opacity-20"></div>
-
-        <div className="relative z-10">
-          <div className="px-8 py-6 border-b border-white/12">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-xl bg-orange-500/20 flex items-center justify-center">
-                <FiTruck className="h-5 w-5 text-orange-400" />
-              </div>
-              <h3 className="text-xl font-bold text-white">
-                Danh Sách Garage ({garages.length})
-              </h3>
+      <div className="bg-white shadow-sm border border-gray-100 rounded-2xl overflow-hidden">
+        <div className="px-8 py-6 border-b border-gray-100">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center">
+              <FiTruck className="h-5 w-5 text-orange-600" />
             </div>
+            <h3 className="text-xl font-bold text-gray-900">
+              Danh Sách Garage ({garages.length})
+            </h3>
           </div>
+        </div>
 
-          {garages.length === 0 ? (
-            <div className="p-12 text-center">
-              <div className="w-20 h-20 rounded-2xl bg-white/8 flex items-center justify-center mx-auto mb-6">
-                <FiTruck className="h-10 w-10 text-white/40" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-2">
-                Chưa có garage nào
-              </h3>
-              <p className="text-white/60">
-                Bắt đầu bằng cách cấp quyền cho garage đầu tiên.
-              </p>
+        {garages.length === 0 ? (
+          <div className="p-12 text-center">
+            <div className="w-20 h-20 rounded-2xl bg-gray-100 flex items-center justify-center mx-auto mb-6">
+              <FiTruck className="h-10 w-10 text-gray-300" />
             </div>
-          ) : (
-            <div className="divide-y divide-gray-100">
-              {garages.map((garage, index) => {
-                const isRevoking = revokingAddress === garage.address;
-                return (
-                  <div
-                    key={garage.address}
-                    className="p-6 hover:bg-white/5 transition-all duration-300"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
-                        <div
-                          className={`h-12 w-12 rounded-2xl flex items-center justify-center shadow-lg ${
+            <h3 className="text-xl font-bold text-gray-900 mb-2">
+              Chưa có garage nào
+            </h3>
+            <p className="text-gray-500">
+              Bắt đầu bằng cách cấp quyền cho garage đầu tiên.
+            </p>
+          </div>
+        ) : (
+          <div className="divide-y divide-gray-100">
+            {garages.map((garage, index) => {
+              const isRevoking = revokingAddress === garage.address;
+              return (
+                <div
+                  key={garage.address}
+                  className="p-6 hover:bg-gray-50 transition-all duration-300"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <div
+                        className={`h-12 w-12 rounded-2xl flex items-center justify-center shadow-lg ${
+                          garage.isActive
+                            ? "bg-gradient-to-r from-red-600 to-purple-600"
+                            : "bg-gradient-to-r from-gray-400 to-gray-500"
+                        }`}
+                      >
+                        <FiTruck className="h-6 w-6 text-white" />
+                      </div>
+                      <div>
+                        <h4 className="text-lg font-bold text-gray-900 mb-0.5">
+                          Garage #{index + 1}
+                        </h4>
+                        <p className="font-mono text-sm text-gray-500 font-semibold">
+                          {formatAddress(garage.address)}
+                        </p>
+                        <p className="text-xs text-gray-400 font-mono mt-0.5">
+                          {garage.address}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center space-x-4">
+                      <div className="text-right mr-2">
+                        <span
+                          className={`inline-flex items-center px-3 py-1 rounded-xl text-sm font-semibold border ${
                             garage.isActive
-                              ? "bg-gradient-to-r from-red-600 to-purple-600"
-                              : "bg-gradient-to-r from-gray-400 to-gray-500"
+                              ? "bg-green-50 text-green-600 border-green-200"
+                              : "bg-red-50 text-red-600 border-red-200"
                           }`}
                         >
-                          <FiTruck className="h-6 w-6 text-white" />
-                        </div>
-                        <div>
-                          <h4 className="text-lg font-bold text-white mb-0.5">
-                            Garage #{index + 1}
-                          </h4>
-                          <p className="font-mono text-sm text-white/60 font-semibold">
-                            {formatAddress(garage.address)}
-                          </p>
-                          <p className="text-xs text-white/40 font-mono mt-0.5">
-                            {garage.address}
-                          </p>
+                          {garage.isActive ? "Hoạt Động" : "Đã Thu Hồi"}
+                        </span>
+                        <div className="text-xs text-gray-400 mt-1">
+                          {garage.isActive
+                            ? `Cấp: ${new Date(garage.authorizedDate).toLocaleDateString("vi-VN")}`
+                            : garage.revokedDate
+                            ? `Thu hồi: ${new Date(garage.revokedDate).toLocaleDateString("vi-VN")}`
+                            : ""}
                         </div>
                       </div>
 
-                      <div className="flex items-center space-x-4">
-                        <div className="text-right mr-2">
-                          <span
-                            className={`inline-flex items-center px-3 py-1 rounded-xl text-sm font-semibold border ${
-                              garage.isActive
-                                ? "bg-green-50 text-green-400 border-green-500/25"
-                                : "bg-red-50 text-red-400 border-red-200"
-                            }`}
+                      <div className="flex space-x-2">
+                        {garage.isActive ? (
+                          <button
+                            onClick={() => handleThuHoi(garage.address)}
+                            disabled={isRevoking}
+                            className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-red-600 to-pink-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:transform-none"
                           >
-                            {garage.isActive ? "Hoạt Động" : "Đã Thu Hồi"}
-                          </span>
-                          <div className="text-xs text-white/50 mt-1">
-                            {garage.isActive
-                              ? `Cấp: ${new Date(garage.authorizedDate).toLocaleDateString("vi-VN")}`
-                              : garage.revokedDate
-                              ? `Thu hồi: ${new Date(garage.revokedDate).toLocaleDateString("vi-VN")}`
-                              : ""}
-                          </div>
-                        </div>
-
-                        <div className="flex space-x-2">
-                          {garage.isActive ? (
+                            <FiUserX className="w-4 h-4 mr-1.5" />
+                            {isRevoking ? "Đang xử lý..." : "Thu Hồi"}
+                          </button>
+                        ) : (
+                          <>
                             <button
-                              onClick={() => handleThuHoi(garage.address)}
+                              onClick={() => handleCapLai(garage.address)}
                               disabled={isRevoking}
-                              className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-red-600 to-pink-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:transform-none"
+                              className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:transform-none"
                             >
-                              <FiUserX className="w-4 h-4 mr-1.5" />
-                              {isRevoking ? "Đang xử lý..." : "Thu Hồi"}
+                              <FiCheck className="w-4 h-4 mr-1.5" />
+                              {isRevoking ? "Đang xử lý..." : "Cấp Lại"}
                             </button>
-                          ) : (
-                            <>
-                              <button
-                                onClick={() => handleCapLai(garage.address)}
-                                disabled={isRevoking}
-                                className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:transform-none"
-                              >
-                                <FiCheck className="w-4 h-4 mr-1.5" />
-                                {isRevoking ? "Đang xử lý..." : "Cấp Lại"}
-                              </button>
-                              <button
-                                onClick={() =>
-                                  handleRemoveFromList(garage.address)
-                                }
-                                className="inline-flex items-center px-4 py-2 bg-white/8 text-white/60 border border-white/12 font-semibold rounded-xl hover:bg-white/10 transition-all duration-300"
-                              >
-                                Xóa
-                              </button>
-                            </>
-                          )}
-                        </div>
+                            <button
+                              onClick={() =>
+                                handleRemoveFromList(garage.address)
+                              }
+                              className="inline-flex items-center px-4 py-2 bg-white text-gray-600 border border-gray-200 font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300"
+                            >
+                              Xóa
+                            </button>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* Guidelines */}
@@ -422,7 +406,7 @@ const GarageManagement = () => {
         <div className="relative z-10 flex items-start space-x-4">
           <div className="flex-shrink-0">
             <div className="w-12 h-12 rounded-xl bg-yellow-500/20 flex items-center justify-center">
-              <FiShield className="h-6 w-6 text-yellow-400" />
+              <FiShield className="h-6 w-6 text-yellow-600" />
             </div>
           </div>
           <div>
@@ -452,10 +436,3 @@ const GarageManagement = () => {
 };
 
 export default GarageManagement;
-
-
-
-
-
-
-

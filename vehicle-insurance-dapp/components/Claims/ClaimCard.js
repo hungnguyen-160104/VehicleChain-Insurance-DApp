@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import {
   FiFileText,
   FiCalendar,
@@ -28,15 +28,15 @@ const ClaimCard = ({ claim, onProcess }) => {
   // 7 trạng thái: 0=Chờ xử lý, 1=Đang giám định, 2=Chờ hồ sơ, 3=Đang thẩm định, 4=Đã duyệt, 5=Từ chối, 6=Đã chi trả
   const getStatusColor = (status) => {
     const colors = {
-      0: "bg-gradient-to-r from-gray-50 to-slate-50 text-white/80 border-white/10",
-      1: "bg-gradient-to-r from-red-50 to-orange-50 text-red-300 border-red-500/25",
-      2: "bg-gradient-to-r from-yellow-50 to-amber-50 text-yellow-800 border-yellow-500/20",
-      3: "bg-gradient-to-r from-orange-50 to-amber-50 text-orange-300 border-orange-500/20",
-      4: "bg-gradient-to-r from-emerald-900/20 to-green-900/15 text-emerald-300 border-emerald-500/25",
-      5: "bg-gradient-to-r from-red-50 to-rose-50 text-red-300 border-red-500/25",
-      6: "bg-gradient-to-r from-emerald-900/25 to-teal-900/20 text-emerald-300 border-emerald-300/50",
+      0: "bg-gray-100 text-gray-500 border-gray-200",
+      1: "bg-red-50 text-red-600 border-red-200",
+      2: "bg-yellow-50 text-yellow-800 border-yellow-200",
+      3: "bg-orange-50 text-orange-600 border-orange-200",
+      4: "bg-emerald-50 text-emerald-700 border-emerald-200",
+      5: "bg-red-50 text-red-600 border-red-200",
+      6: "bg-emerald-50 text-emerald-700 border-emerald-200",
     };
-    return colors[claim.status] || "bg-white/8 text-white/90 border-white/12";
+    return colors[claim.status] || "bg-gray-100 text-gray-700 border-gray-200";
   };
 
   const getStatusLabel = (status) => {
@@ -148,14 +148,9 @@ const ClaimCard = ({ claim, onProcess }) => {
   const statusGradient = getStatusGradient(claim.status);
 
   return (
-    <div className="group relative bg-white/8 backdrop-blur-xl rounded-2xl shadow-xl border border-white/12 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-[1.01]">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 bg-gradient-to-br from-red-50/30 via-white/5 to-orange-50/30"></div>
-      <div className="absolute top-0 right-0 w-32 h-32 bg-red-600/5 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 w-24 h-24 bg-orange-500/5 rounded-full blur-2xl"></div>
-
+    <div className="group relative bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300 hover:scale-[1.01]">
       {/* Header */}
-      <div className="relative p-6 border-b border-white/10">
+      <div className="relative p-6 border-b border-gray-100">
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center space-x-4">
             <div className="relative">
@@ -170,23 +165,23 @@ const ClaimCard = ({ claim, onProcess }) => {
             </div>
 
             <div>
-              <h3 className="text-xl font-bold text-white">
+              <h3 className="text-xl font-bold text-gray-900">
                 Yêu cầu #{claim.claimId}
               </h3>
               <div className="flex items-center space-x-2 mt-0.5">
-                <p className="text-sm text-white/60">HĐ #{claim.policyId}</p>
+                <p className="text-sm text-gray-500">HĐ #{claim.policyId}</p>
                 {claim.vehicleBienSo && (
                   <>
-                    <span className="text-white/40">·</span>
-                    <div className="flex items-center space-x-1 text-sm text-white/60">
+                    <span className="text-gray-300">·</span>
+                    <div className="flex items-center space-x-1 text-sm text-gray-500">
                       <FiTruck className="h-3 w-3" />
                       <span>{claim.vehicleBienSo}</span>
                     </div>
                   </>
                 )}
                 <div className="flex items-center space-x-1">
-                  <FiShield className="h-3 w-3 text-green-400" />
-                  <span className="text-xs text-green-400 font-medium">
+                  <FiShield className="h-3 w-3 text-emerald-500" />
+                  <span className="text-xs text-emerald-600 font-medium">
                     Blockchain
                   </span>
                 </div>
@@ -203,9 +198,9 @@ const ClaimCard = ({ claim, onProcess }) => {
 
         {/* 5-Step Progress Indicator */}
         {claim.status !== CLAIM_STATUS.REJECTED && (
-          <div className="mb-5 p-4 bg-white/6 backdrop-blur-sm rounded-xl border border-white/12">
+          <div className="mb-5 p-4 bg-gray-50 rounded-xl border border-gray-100">
             <div className="flex items-center justify-between relative">
-              <div className="absolute top-4 left-0 right-0 h-1 bg-white/10 rounded-full">
+              <div className="absolute top-4 left-0 right-0 h-1 bg-gray-200 rounded-full">
                 <div
                   className="h-full bg-gradient-to-r from-red-600 to-emerald-500 rounded-full transition-all duration-500"
                   style={{ width: `${(progressIndex / 4) * 100}%` }}
@@ -217,7 +212,7 @@ const ClaimCard = ({ claim, onProcess }) => {
                     className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
                       index <= progressIndex
                         ? "bg-red-600 border-red-600 text-white"
-                        : "bg-white border-gray-300 text-white/40"
+                        : "bg-white border-gray-300 text-gray-400"
                     }`}
                   >
                     {index < progressIndex ? (
@@ -228,7 +223,7 @@ const ClaimCard = ({ claim, onProcess }) => {
                   </div>
                   <span
                     className={`mt-1 text-xs font-medium ${
-                      index <= progressIndex ? "text-red-400" : "text-white/40"
+                      index <= progressIndex ? "text-red-600" : "text-gray-400"
                     }`}
                   >
                     {step.label}
@@ -247,11 +242,11 @@ const ClaimCard = ({ claim, onProcess }) => {
                 <FiXCircle className="h-4 w-4 text-white" />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-red-300 mb-1">
+                <h4 className="text-sm font-bold text-red-600 mb-1">
                   Yêu cầu bị từ chối
                 </h4>
                 {claim.lyDoTuChoi && (
-                  <p className="text-sm text-red-400">
+                  <p className="text-sm text-red-600">
                     <span className="font-semibold">Lý do:</span> {claim.lyDoTuChoi}
                   </p>
                 )}
@@ -263,14 +258,14 @@ const ClaimCard = ({ claim, onProcess }) => {
         {/* Description */}
         {claim.description && (
           <div className="mb-5">
-            <div className="p-4 bg-white/6 backdrop-blur-sm rounded-xl border border-white/12">
+            <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
               <div className="flex items-start space-x-3">
-                <FiFileText className="h-5 w-5 text-red-400 mt-0.5 flex-shrink-0" />
+                <FiFileText className="h-5 w-5 text-red-500 mt-0.5 flex-shrink-0" />
                 <div>
-                  <h4 className="text-sm font-semibold text-white/90 mb-1">
+                  <h4 className="text-sm font-semibold text-gray-800 mb-1">
                     Mô tả vụ việc
                   </h4>
-                  <p className="text-sm text-white/80 leading-relaxed line-clamp-3">
+                  <p className="text-sm text-gray-700 leading-relaxed line-clamp-3">
                     {claim.description}
                   </p>
                 </div>
@@ -281,27 +276,27 @@ const ClaimCard = ({ claim, onProcess }) => {
 
         {/* Amount Display */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
-          <div className="p-4 bg-gradient-to-r from-red-50/80 to-orange-50/80 rounded-xl border border-red-500/25 text-center">
+          <div className="p-4 bg-gradient-to-r from-red-50 to-orange-50 rounded-xl border border-red-200 text-center">
             <div className="flex items-center justify-center space-x-2 mb-2">
-              <FiDollarSign className="h-4 w-4 text-red-400" />
-              <span className="text-sm font-semibold text-red-300">
+              <FiDollarSign className="h-4 w-4 text-red-500" />
+              <span className="text-sm font-semibold text-red-600">
                 Số tiền yêu cầu
               </span>
             </div>
-            <p className="text-2xl font-bold text-red-300">
+            <p className="text-2xl font-bold text-red-600">
               {formatAmount(claim.claimAmount)} ETH
             </p>
           </div>
 
           {(claim.status === 4 || claim.status === 6) && (
-            <div className="p-4 bg-gradient-to-r from-emerald-50/80 to-green-50/80 rounded-xl border border-emerald-500/25 text-center">
+            <div className="p-4 bg-gradient-to-r from-emerald-50 to-green-50 rounded-xl border border-emerald-200 text-center">
               <div className="flex items-center justify-center space-x-2 mb-2">
-                <FiCheckCircle className="h-4 w-4 text-emerald-400" />
-                <span className="text-sm font-semibold text-emerald-300">
+                <FiCheckCircle className="h-4 w-4 text-emerald-600" />
+                <span className="text-sm font-semibold text-emerald-600">
                   Số tiền được duyệt
                 </span>
               </div>
-              <p className="text-2xl font-bold text-emerald-900">
+              <p className="text-2xl font-bold text-emerald-700">
                 {formatAmount(claim.approvedAmount)} ETH
               </p>
             </div>
@@ -310,27 +305,27 @@ const ClaimCard = ({ claim, onProcess }) => {
 
         {/* Basic Info */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="p-3 bg-purple-900/15 rounded-lg border border-purple-200/30">
+          <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
             <div className="flex items-center space-x-2 mb-1">
-              <FiCalendar className="h-4 w-4 text-purple-400" />
-              <span className="text-xs font-semibold text-purple-300">
+              <FiCalendar className="h-4 w-4 text-purple-600" />
+              <span className="text-xs font-semibold text-purple-600">
                 Ngày nộp
               </span>
             </div>
-            <p className="text-sm font-bold text-white">
+            <p className="text-sm font-bold text-gray-900">
               {formatDate(claim.submissionDate)}
             </p>
           </div>
 
           {claim.tenGarage && (
-            <div className="p-3 bg-gradient-to-r from-amber-50/50 to-orange-50/50 rounded-lg border border-amber-500/20/30">
+            <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
               <div className="flex items-center space-x-2 mb-1">
-                <FiShield className="h-4 w-4 text-amber-400" />
-                <span className="text-xs font-semibold text-amber-300">
+                <FiShield className="h-4 w-4 text-amber-600" />
+                <span className="text-xs font-semibold text-amber-700">
                   Garage sửa chữa
                 </span>
               </div>
-              <p className="text-sm font-bold text-white">{claim.tenGarage}</p>
+              <p className="text-sm font-bold text-gray-900">{claim.tenGarage}</p>
             </div>
           )}
         </div>
@@ -338,40 +333,40 @@ const ClaimCard = ({ claim, onProcess }) => {
 
       {/* Expandable Details */}
       {expanded && (
-        <div className="relative px-6 py-6 bg-gradient-to-r from-white/5 to-slate-50/50 border-b border-white/10">
-          <h4 className="text-lg font-bold text-white mb-4 flex items-center space-x-2">
-            <FiZap className="h-5 w-5 text-red-400" />
+        <div className="relative px-6 py-6 bg-gray-50 border-b border-gray-100">
+          <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center space-x-2">
+            <FiZap className="h-5 w-5 text-red-500" />
             <span>Chi Tiết Yêu Cầu</span>
           </h4>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <div className="p-4 bg-white/6 backdrop-blur-sm rounded-xl border border-white/12">
-              <p className="text-xs font-semibold text-white/60 mb-1 uppercase tracking-wide">
+            <div className="p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
+              <p className="text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">
                 Mã yêu cầu
               </p>
-              <p className="text-sm font-bold text-white">#{claim.claimId}</p>
+              <p className="text-sm font-bold text-gray-900">#{claim.claimId}</p>
             </div>
-            <div className="p-4 bg-white/6 backdrop-blur-sm rounded-xl border border-white/12">
-              <p className="text-xs font-semibold text-white/60 mb-1 uppercase tracking-wide">
+            <div className="p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
+              <p className="text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">
                 Mã hợp đồng
               </p>
-              <p className="text-sm font-bold text-white">#{claim.policyId}</p>
+              <p className="text-sm font-bold text-gray-900">#{claim.policyId}</p>
             </div>
           </div>
 
           {claim.ipfsDocuments && (
-            <div className="p-4 bg-white/6 backdrop-blur-sm rounded-xl border border-white/12 mb-4">
-              <p className="text-xs font-semibold text-white/60 mb-2 uppercase tracking-wide">
+            <div className="p-4 bg-white rounded-xl border border-gray-100 shadow-sm mb-4">
+              <p className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">
                 Hồ sơ trên IPFS
               </p>
               <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-white/80 truncate mr-3">
+                <p className="text-sm font-medium text-gray-700 truncate mr-3">
                   {claim.ipfsDocuments}
                 </p>
                 <button
                   onClick={handleViewDocuments}
                   disabled={viewingDocuments}
-                  className="inline-flex items-center text-red-400 hover:text-red-400 font-semibold text-sm transition-colors whitespace-nowrap"
+                  className="inline-flex items-center text-red-600 hover:text-red-700 font-semibold text-sm transition-colors whitespace-nowrap"
                 >
                   <FiEye className="h-4 w-4 mr-1" />
                   {viewingDocuments ? "Đang tải..." : "Xem hồ sơ"}
@@ -382,16 +377,16 @@ const ClaimCard = ({ claim, onProcess }) => {
 
           {/* Paid status info */}
           {claim.status === 6 && (
-            <div className="p-4 bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-500/25 rounded-xl">
+            <div className="p-4 bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-xl">
               <div className="flex items-start space-x-3">
                 <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center flex-shrink-0">
                   <FiCheckCircle className="h-4 w-4 text-white" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-emerald-300 mb-1">
+                  <h4 className="text-sm font-bold text-emerald-700 mb-1">
                     Đã chi trả bồi thường
                   </h4>
-                  <p className="text-sm text-emerald-400">
+                  <p className="text-sm text-emerald-600">
                     Đã thanh toán {formatAmount(claim.approvedAmount)} ETH vào ví của bạn.
                   </p>
                 </div>
@@ -407,7 +402,7 @@ const ClaimCard = ({ claim, onProcess }) => {
           {/* Expand/Collapse Button */}
           <button
             onClick={() => setExpanded(!expanded)}
-            className="group/btn inline-flex items-center px-4 py-2.5 border border-white/10 shadow-sm text-sm font-semibold rounded-xl text-white/80 bg-white/8 backdrop-blur-sm hover:bg-white/8 hover:shadow-lg hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500/50 transition-all duration-200"
+            className="group/btn inline-flex items-center px-4 py-2.5 border border-gray-200 shadow-sm text-sm font-semibold rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:shadow-md hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500/50 transition-all duration-200"
           >
             {expanded ? (
               <>
@@ -427,7 +422,7 @@ const ClaimCard = ({ claim, onProcess }) => {
             <button
               onClick={handleViewDocuments}
               disabled={viewingDocuments}
-              className="group/btn inline-flex items-center px-4 py-2.5 border border-white/10 shadow-sm text-sm font-semibold rounded-xl text-white/80 bg-white/8 backdrop-blur-sm hover:bg-white/8 hover:shadow-lg hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500/50 disabled:opacity-50 transition-all duration-200"
+              className="group/btn inline-flex items-center px-4 py-2.5 border border-gray-200 shadow-sm text-sm font-semibold rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:shadow-md hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500/50 disabled:opacity-50 transition-all duration-200"
             >
               <FiEye className="h-4 w-4 mr-2" />
               {viewingDocuments ? "Đang tải..." : "Xem hồ sơ IPFS"}
@@ -457,7 +452,7 @@ const ClaimCard = ({ claim, onProcess }) => {
                 "_blank"
               )
             }
-            className="group/btn inline-flex items-center px-4 py-2.5 border border-white/10 shadow-sm text-sm font-semibold rounded-xl text-white/80 bg-white/8 backdrop-blur-sm hover:bg-white/8 hover:shadow-lg hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500/50 transition-all duration-200"
+            className="group/btn inline-flex items-center px-4 py-2.5 border border-gray-200 shadow-sm text-sm font-semibold rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:shadow-md hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500/50 transition-all duration-200"
           >
             <FiExternalLink className="h-4 w-4 mr-2" />
             Blockchain Explorer
@@ -465,31 +460,21 @@ const ClaimCard = ({ claim, onProcess }) => {
         </div>
 
         {/* Blockchain Status Footer */}
-        <div className="mt-4 pt-4 border-t border-white/10">
+        <div className="mt-4 pt-4 border-t border-gray-100">
           <div className="flex items-center justify-between text-xs">
-            <div className="flex items-center space-x-2 text-white/60">
+            <div className="flex items-center space-x-2 text-gray-500">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
               <span>Smart contract đã xác thực</span>
             </div>
-            <div className="flex items-center space-x-2 text-red-400">
+            <div className="flex items-center space-x-2 text-red-500">
               <FiLock className="h-3 w-3" />
               <span>IPFS bảo mật</span>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Hover Border Glow */}
-      <div
-        className={`absolute inset-0 rounded-2xl bg-gradient-to-r ${statusGradient} opacity-0 group-hover:opacity-10 transition-all duration-300 pointer-events-none`}
-      ></div>
     </div>
   );
 };
 
 export default ClaimCard;
-
-
-
-
-

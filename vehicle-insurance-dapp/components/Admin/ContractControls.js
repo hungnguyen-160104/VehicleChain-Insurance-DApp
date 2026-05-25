@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { useEthersSigner } from "../../provider/hooks";
 import { contractService } from "../../services/contract";
 import {
@@ -165,30 +165,27 @@ const ContractControls = ({ contractBalance, loading, onRefresh }) => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-white">
+          <h2 className="text-2xl font-bold text-gray-900">
             Điều Khiển Hợp Đồng
           </h2>
-          <p className="text-white/60">
+          <p className="text-gray-500">
             Kiểm soát khẩn cấp và quản lý quỹ bảo hiểm
           </p>
         </div>
       </div>
 
       {/* Contract State Control */}
-      <div className="bg-white/8 backdrop-blur-xl border border-white/12 shadow-xl rounded-2xl p-8 relative">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-orange-50 rounded-full opacity-50"></div>
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-red-50 rounded-full opacity-30"></div>
-
+      <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-8 relative">
         <div className="relative z-10">
           <div className="flex items-center space-x-3 mb-8">
-            <div className="w-10 h-10 rounded-xl bg-orange-500/20 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center">
               {isPaused ? (
-                <FiPlay className="h-5 w-5 text-orange-400" />
+                <FiPlay className="h-5 w-5 text-orange-600" />
               ) : (
-                <FiPause className="h-5 w-5 text-orange-400" />
+                <FiPause className="h-5 w-5 text-orange-600" />
               )}
             </div>
-            <h3 className="text-xl font-bold text-white">
+            <h3 className="text-xl font-bold text-gray-900">
               Trạng Thái Hợp Đồng
             </h3>
           </div>
@@ -199,28 +196,28 @@ const ContractControls = ({ contractBalance, loading, onRefresh }) => {
               className={`border-2 rounded-2xl p-6 ${
                 isPaused
                   ? "bg-red-50 border-red-200"
-                  : "bg-green-50 border-green-500/25"
+                  : "bg-green-50 border-green-200"
               }`}
             >
               <div className="flex items-center justify-between">
                 <div>
                   <h4
                     className={`text-lg font-bold mb-2 ${
-                      isPaused ? "text-red-300" : "text-green-900"
+                      isPaused ? "text-red-700" : "text-green-800"
                     }`}
                   >
                     Trạng Thái Hiện Tại
                   </h4>
                   <p
                     className={`text-3xl font-bold mb-2 ${
-                      isPaused ? "text-red-400" : "text-green-400"
+                      isPaused ? "text-red-600" : "text-green-600"
                     }`}
                   >
                     {isPaused ? "TẠM DỪNG" : "ĐANG HOẠT ĐỘNG"}
                   </p>
                   <p
                     className={`text-sm font-medium ${
-                      isPaused ? "text-red-400" : "text-green-400"
+                      isPaused ? "text-red-600" : "text-green-600"
                     }`}
                   >
                     {isPaused
@@ -230,26 +227,26 @@ const ContractControls = ({ contractBalance, loading, onRefresh }) => {
                 </div>
                 <div
                   className={`w-16 h-16 rounded-2xl flex items-center justify-center ${
-                    isPaused ? "bg-red-500/20" : "bg-green-500/20"
+                    isPaused ? "bg-red-100" : "bg-green-100"
                   }`}
                 >
                   {isPaused ? (
-                    <FiLock className="h-8 w-8 text-red-400" />
+                    <FiLock className="h-8 w-8 text-red-600" />
                   ) : (
-                    <FiShield className="h-8 w-8 text-green-400" />
+                    <FiShield className="h-8 w-8 text-green-600" />
                   )}
                 </div>
               </div>
             </div>
 
             {/* Pause/Unpause Control */}
-            <div className="bg-white/5 border border-white/12 rounded-2xl p-6">
+            <div className="bg-gray-50 border border-gray-100 rounded-2xl p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="text-lg font-bold text-white mb-2">
+                  <h4 className="text-lg font-bold text-gray-900 mb-2">
                     Kiểm Soát Khẩn Cấp
                   </h4>
-                  <p className="text-sm font-medium text-white/60">
+                  <p className="text-sm font-medium text-gray-500">
                     {isPaused
                       ? "Tiếp tục hoạt động bình thường của hợp đồng"
                       : "Tạm thời vô hiệu hóa tất cả tương tác hợp đồng"}
@@ -284,50 +281,45 @@ const ContractControls = ({ contractBalance, loading, onRefresh }) => {
       </div>
 
       {/* Fund Management */}
-      <div className="bg-white/8 backdrop-blur-xl border border-white/12 shadow-xl rounded-2xl p-8 relative">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-green-50 rounded-full opacity-50"></div>
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-emerald-50 rounded-full opacity-30"></div>
-
+      <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-8 relative">
         <div className="relative z-10">
           <div className="flex items-center space-x-3 mb-8">
-            <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
-              <FiDollarSign className="h-5 w-5 text-green-400" />
+            <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
+              <FiDollarSign className="h-5 w-5 text-green-600" />
             </div>
-            <h3 className="text-xl font-bold text-white">Quản Lý Quỹ</h3>
+            <h3 className="text-xl font-bold text-gray-900">Quản Lý Quỹ</h3>
           </div>
 
           <div className="space-y-8">
             {/* Current Balance Display */}
-            <div className="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-500/25 rounded-2xl p-8 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-green-500/20 rounded-full opacity-30"></div>
-
+            <div className="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200 rounded-2xl p-8 relative overflow-hidden">
               <div className="relative z-10 flex items-center justify-between">
                 <div>
-                  <h4 className="text-lg font-bold text-green-900 mb-2">
+                  <h4 className="text-lg font-bold text-green-800 mb-2">
                     Số Dư Quỹ Bảo Hiểm
                   </h4>
-                  <p className="text-4xl font-bold text-green-400 mb-2">
+                  <p className="text-4xl font-bold text-green-600 mb-2">
                     {loading
                       ? "..."
                       : `${parseFloat(contractBalance || 0).toFixed(4)} ETH`}
                   </p>
-                  <p className="text-sm font-medium text-green-400">
+                  <p className="text-sm font-medium text-green-600">
                     Quỹ dùng để chi trả bồi thường xe cơ giới
                   </p>
                 </div>
-                <div className="w-16 h-16 rounded-2xl bg-green-500/20 flex items-center justify-center">
-                  <FiDollarSign className="h-8 w-8 text-green-400" />
+                <div className="w-16 h-16 rounded-2xl bg-green-100 flex items-center justify-center">
+                  <FiDollarSign className="h-8 w-8 text-green-600" />
                 </div>
               </div>
             </div>
 
             {/* Partial Withdrawal */}
-            <div className="bg-white/5 border border-white/12 rounded-2xl p-6">
+            <div className="bg-gray-50 border border-gray-100 rounded-2xl p-6">
               <div className="flex items-center space-x-3 mb-4">
-                <div className="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center">
-                  <FiZap className="h-4 w-4 text-red-400" />
+                <div className="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center">
+                  <FiZap className="h-4 w-4 text-red-600" />
                 </div>
-                <h4 className="text-lg font-bold text-white">
+                <h4 className="text-lg font-bold text-gray-900">
                   Rút Tiền Một Phần
                 </h4>
               </div>
@@ -342,7 +334,7 @@ const ContractControls = ({ contractBalance, loading, onRefresh }) => {
                     placeholder="Nhập số tiền muốn rút (ETH)"
                     value={withdrawAmount}
                     onChange={(e) => setWithdrawAmount(e.target.value)}
-                    className="w-full px-4 py-3 bg-white/8 border border-white/15 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 font-medium transition-all duration-300"
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-400 font-medium transition-all duration-300"
                   />
                 </div>
                 <button
@@ -358,9 +350,9 @@ const ContractControls = ({ contractBalance, loading, onRefresh }) => {
                   {withdrawing ? "Đang Rút..." : "Rút Tiền"}
                 </button>
               </div>
-              <p className="text-sm font-medium text-white/60 mt-3">
+              <p className="text-sm font-medium text-gray-500 mt-3">
                 Số dư khả dụng:{" "}
-                <span className="font-bold text-white">
+                <span className="font-bold text-gray-900">
                   {parseFloat(contractBalance || 0).toFixed(4)} ETH
                 </span>
               </p>
@@ -368,19 +360,17 @@ const ContractControls = ({ contractBalance, loading, onRefresh }) => {
 
             {/* Full Withdrawal */}
             <div className="bg-gradient-to-br from-red-50 to-pink-50 border-2 border-red-200 rounded-2xl p-6 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-20 h-20 bg-red-500/20 rounded-full opacity-30"></div>
-
               <div className="relative z-10">
                 <div className="flex items-center space-x-3 mb-4">
-                  <div className="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center">
-                    <FiAlertTriangle className="h-4 w-4 text-red-400" />
+                  <div className="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center">
+                    <FiAlertTriangle className="h-4 w-4 text-red-600" />
                   </div>
-                  <h4 className="text-lg font-bold text-red-300">
+                  <h4 className="text-lg font-bold text-red-700">
                     Rút Toàn Bộ (Khẩn Cấp)
                   </h4>
                 </div>
 
-                <p className="text-sm font-medium text-red-400 mb-6">
+                <p className="text-sm font-medium text-red-600 mb-6">
                   Rút toàn bộ tiền từ hợp đồng. Chỉ sử dụng trong trường hợp
                   khẩn cấp. Thao tác này không thể hoàn tác.
                 </p>
@@ -402,22 +392,19 @@ const ContractControls = ({ contractBalance, loading, onRefresh }) => {
       </div>
 
       {/* Data Management */}
-      <div className="bg-white/8 backdrop-blur-xl border border-white/12 shadow-xl rounded-2xl p-8 relative">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-red-50 rounded-full opacity-50"></div>
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-50 rounded-full opacity-30"></div>
-
+      <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-8 relative">
         <div className="relative z-10">
           <div className="flex items-center space-x-3 mb-8">
-            <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
-              <FiSettings className="h-5 w-5 text-red-400" />
+            <div className="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center">
+              <FiSettings className="h-5 w-5 text-red-600" />
             </div>
-            <h3 className="text-xl font-bold text-white">Quản Lý Dữ Liệu</h3>
+            <h3 className="text-xl font-bold text-gray-900">Quản Lý Dữ Liệu</h3>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <button
               onClick={exportContractData}
-              className="inline-flex items-center justify-center px-6 py-4 bg-white/5 border border-white/12 shadow-lg text-white/80 font-semibold rounded-xl hover:bg-white/8 hover:shadow-xl transition-all duration-300 hover:scale-105"
+              className="inline-flex items-center justify-center px-6 py-4 bg-gray-50 border border-gray-200 shadow-sm text-gray-700 font-semibold rounded-xl hover:bg-gray-100 hover:shadow-md transition-all duration-300 hover:scale-105"
             >
               <FiDownload className="w-5 h-5 mr-3" />
               Xuất Dữ Liệu Hợp Đồng
@@ -426,7 +413,7 @@ const ContractControls = ({ contractBalance, loading, onRefresh }) => {
             <button
               onClick={onRefresh}
               disabled={loading}
-              className="inline-flex items-center justify-center px-6 py-4 bg-white/5 border border-white/12 shadow-lg text-white/80 font-semibold rounded-xl hover:bg-white/8 hover:shadow-xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:transform-none disabled:cursor-not-allowed"
+              className="inline-flex items-center justify-center px-6 py-4 bg-gray-50 border border-gray-200 shadow-sm text-gray-700 font-semibold rounded-xl hover:bg-gray-100 hover:shadow-md transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:transform-none disabled:cursor-not-allowed"
             >
               <FiRefreshCw
                 className={`w-5 h-5 mr-3 ${loading ? "animate-spin" : ""}`}
@@ -439,12 +426,10 @@ const ContractControls = ({ contractBalance, loading, onRefresh }) => {
 
       {/* Security Guidelines */}
       <div className="bg-gradient-to-br from-yellow-50 to-orange-50 border-2 border-yellow-200 rounded-2xl p-8 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-500/20 rounded-full opacity-30"></div>
-
         <div className="relative z-10 flex items-start space-x-4">
           <div className="flex-shrink-0">
-            <div className="w-12 h-12 rounded-xl bg-yellow-500/20 flex items-center justify-center">
-              <FiShield className="h-6 w-6 text-yellow-400" />
+            <div className="w-12 h-12 rounded-xl bg-yellow-100 flex items-center justify-center">
+              <FiShield className="h-6 w-6 text-yellow-600" />
             </div>
           </div>
           <div>
@@ -471,17 +456,14 @@ const ContractControls = ({ contractBalance, loading, onRefresh }) => {
       </div>
 
       {/* Recent Admin Actions */}
-      <div className="bg-white/8 backdrop-blur-xl border border-white/12 shadow-xl rounded-2xl overflow-hidden relative">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-orange-50 to-red-50 rounded-full opacity-30"></div>
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-br from-purple-900/20 to-red-900/15 rounded-full opacity-20"></div>
-
+      <div className="bg-white shadow-sm border border-gray-100 rounded-2xl overflow-hidden relative">
         <div className="relative z-10">
-          <div className="px-8 py-6 border-b border-white/12">
+          <div className="px-8 py-6 border-b border-gray-100">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-xl bg-orange-500/20 flex items-center justify-center">
-                <FiActivity className="h-5 w-5 text-orange-400" />
+              <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center">
+                <FiActivity className="h-5 w-5 text-orange-600" />
               </div>
-              <h3 className="text-xl font-bold text-white">
+              <h3 className="text-xl font-bold text-gray-900">
                 Hành Động Quản Trị Gần Đây
               </h3>
             </div>
@@ -529,7 +511,7 @@ const ContractControls = ({ contractBalance, loading, onRefresh }) => {
                 return (
                   <div
                     key={index}
-                    className="flex items-center justify-between p-4 bg-white/5 border border-white/12 rounded-2xl hover:bg-white transition-all duration-300"
+                    className="flex items-center justify-between p-4 bg-gray-50 border border-gray-100 rounded-2xl hover:bg-white transition-all duration-300"
                   >
                     <div className="flex items-center space-x-4">
                       <div
@@ -538,13 +520,13 @@ const ContractControls = ({ contractBalance, loading, onRefresh }) => {
                         <action.icon className="h-5 w-5 text-white" />
                       </div>
                       <div>
-                        <p className="font-bold text-white">{action.action}</p>
-                        <p className="text-sm text-white/60 font-medium">
+                        <p className="font-bold text-gray-900">{action.action}</p>
+                        <p className="text-sm text-gray-500 font-medium">
                           {action.description}
                         </p>
                       </div>
                     </div>
-                    <span className="text-sm font-medium text-white/50">
+                    <span className="text-sm font-medium text-gray-400">
                       {action.timestamp}
                     </span>
                   </div>
@@ -559,9 +541,3 @@ const ContractControls = ({ contractBalance, loading, onRefresh }) => {
 };
 
 export default ContractControls;
-
-
-
-
-
-

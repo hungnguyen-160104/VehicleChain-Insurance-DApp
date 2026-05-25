@@ -105,7 +105,7 @@ const PayPremiumModal = ({ isOpen, onClose, policy, onSuccess }) => {
             >
               <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
                 {/* Header */}
-                <div className="flex items-center justify-between p-6 pb-4 border-b border-white/12">
+                <div className="flex items-center justify-between p-6 pb-4 border-b border-gray-100">
                   <div className="flex items-center space-x-3">
                     <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
                       <FiCreditCard className="h-5 w-5 text-emerald-400" />
@@ -117,14 +117,14 @@ const PayPremiumModal = ({ isOpen, onClose, policy, onSuccess }) => {
                       >
                         Gia Hạn Hợp Đồng
                       </Dialog.Title>
-                      <p className="text-sm text-white/60">
+                      <p className="text-sm text-gray-500">
                         Gia hạn thêm 30 ngày
                       </p>
                     </div>
                   </div>
                   <button
                     type="button"
-                    className="rounded-xl text-white/40 hover:text-white/50 hover:bg-white/8 p-2 transition-colors"
+                    className="rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 transition-colors"
                     onClick={onClose}
                   >
                     <FiX className="h-5 w-5" />
@@ -133,16 +133,16 @@ const PayPremiumModal = ({ isOpen, onClose, policy, onSuccess }) => {
 
                 <div className="p-6 space-y-5">
                   {/* Policy Details */}
-                  <div className="bg-white/5 rounded-xl p-5">
+                  <div className="bg-gray-50 rounded-xl p-5 border border-gray-100">
                     <div className="flex items-center space-x-3 mb-4">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-500/20">
-                        <FiTruck className="h-5 w-5 text-red-400" />
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-100">
+                        <FiTruck className="h-5 w-5 text-red-600" />
                       </div>
                       <div>
-                        <h4 className="text-base font-bold text-white">
+                        <h4 className="text-base font-bold text-gray-900">
                           {policy.vehicleBienSo || "Biển số N/A"}
                         </h4>
-                        <p className="text-sm text-white/50">
+                        <p className="text-sm text-gray-500">
                           {policy.insuranceTypeLabel || "N/A"} · HĐ #{policy.policyId}
                         </p>
                       </div>
@@ -150,26 +150,26 @@ const PayPremiumModal = ({ isOpen, onClose, policy, onSuccess }) => {
 
                     <div className="space-y-3 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-white/50 flex items-center space-x-1">
+                        <span className="text-gray-500 flex items-center space-x-1">
                           <FiDollarSign className="h-4 w-4" />
                           <span>Phí gia hạn:</span>
                         </span>
-                        <span className="font-bold text-white">
+                        <span className="font-bold text-gray-900">
                           {parseFloat(policy.premium || 0).toFixed(4)} ETH
                         </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-white/50 flex items-center space-x-1">
+                        <span className="text-gray-500 flex items-center space-x-1">
                           <FiCalendar className="h-4 w-4" />
                           <span>Hạn hiện tại:</span>
                         </span>
-                        <span className={`font-bold ${isExpired() ? "text-red-400" : "text-white"}`}>
+                        <span className={`font-bold ${isExpired() ? "text-red-600" : "text-gray-900"}`}>
                           {formatDate(policy.endDate)}
                           {isExpired() && " (Đã hết hạn)"}
                         </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-white/50 flex items-center space-x-1">
+                        <span className="text-gray-500 flex items-center space-x-1">
                           <FiCalendar className="h-4 w-4" />
                           <span>Hạn mới sau gia hạn:</span>
                         </span>
@@ -199,19 +199,19 @@ const PayPremiumModal = ({ isOpen, onClose, policy, onSuccess }) => {
                   )}
 
                   {/* Payment Summary */}
-                  <div className="border border-white/12 rounded-xl p-4">
-                    <h4 className="text-sm font-bold text-white mb-3 flex items-center space-x-2">
+                  <div className="border border-gray-100 rounded-xl p-4 bg-gray-50">
+                    <h4 className="text-sm font-bold text-gray-900 mb-3 flex items-center space-x-2">
                       <FiShield className="h-4 w-4 text-red-400" />
                       <span>Chi tiết thanh toán</span>
                     </h4>
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-white/60">Phí gia hạn 30 ngày</span>
+                        <span className="text-gray-500">Phí gia hạn 30 ngày</span>
                         <span className="font-medium">
                           {parseFloat(policy.premium || 0).toFixed(4)} ETH
                         </span>
                       </div>
-                      <div className="flex justify-between text-white/50">
+                      <div className="flex justify-between text-gray-400">
                         <span>Phí gas (ước tính)</span>
                         <span>~0.001 ETH</span>
                       </div>
@@ -255,7 +255,7 @@ const PayPremiumModal = ({ isOpen, onClose, policy, onSuccess }) => {
                     <button
                       type="button"
                       onClick={onClose}
-                      className="flex-1 px-4 py-3 text-sm font-semibold text-white/80 bg-white/8 border border-white/15 rounded-xl hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200"
+                      className="flex-1 px-4 py-3 text-sm font-semibold text-gray-700 bg-gray-100 border border-gray-200 rounded-xl hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-all duration-200"
                     >
                       Hủy
                     </button>

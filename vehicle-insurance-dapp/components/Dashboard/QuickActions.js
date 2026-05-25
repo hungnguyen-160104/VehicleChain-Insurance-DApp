@@ -52,28 +52,21 @@ const QuickActions = () => {
 
   return (
     <div
-      className="relative overflow-hidden rounded-2xl"
+      className="relative overflow-hidden rounded-2xl bg-white shadow-sm"
       style={{
-        background: "rgba(255,255,255,0.05)",
-        backdropFilter: "blur(24px)",
-        WebkitBackdropFilter: "blur(24px)",
-        border: "1px solid rgba(255,255,255,0.10)",
-        boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
+        border: "1px solid #f3f4f6",
+        boxShadow: "0 4px 16px rgba(0,0,0,0.06)",
       }}
     >
-      {/* Subtle background glow */}
-      <div className="absolute top-0 right-0 w-48 h-48 bg-red-900/20 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute bottom-0 left-0 w-32 h-32 bg-purple-900/10 rounded-full blur-2xl pointer-events-none"></div>
-
       <div className="relative px-6 py-6 sm:p-8">
         {/* Header */}
         <div className="flex items-center space-x-3 mb-6">
-          <div className="w-10 h-10 bg-gradient-to-br from-red-700 to-red-900 rounded-xl flex items-center justify-center shadow-lg shadow-red-900/50">
+          <div className="w-10 h-10 bg-gradient-to-br from-red-700 to-red-900 rounded-xl flex items-center justify-center shadow-lg shadow-red-900/30">
             <FiZap className="h-5 w-5 text-white" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-white">Thao Tác Nhanh</h3>
-            <p className="text-sm text-white/50">Truy cập nhanh các chức năng chính</p>
+            <h3 className="text-lg font-bold text-gray-900">Thao Tác Nhanh</h3>
+            <p className="text-sm text-gray-500">Truy cập nhanh các chức năng chính</p>
           </div>
         </div>
 
@@ -130,15 +123,15 @@ const QuickActions = () => {
         {/* Bottom info bar */}
         <div
           className="mt-6 p-4 rounded-xl"
-          style={{ background: "rgba(200,16,46,0.08)", border: "1px solid rgba(200,16,46,0.15)" }}
+          style={{ background: "rgba(200,16,46,0.06)", border: "1px solid rgba(200,16,46,0.15)" }}
         >
           <div className="flex items-center justify-between text-xs">
-            <div className="flex items-center space-x-2 text-red-300">
+            <div className="flex items-center space-x-2 text-red-600">
               <FiShield className="h-3.5 w-3.5" />
               <span className="font-medium">Tất cả giao dịch được bảo mật bởi blockchain</span>
             </div>
-            <div className="flex items-center space-x-2 text-emerald-400">
-              <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse shadow-sm shadow-emerald-400/50"></div>
+            <div className="flex items-center space-x-2 text-emerald-600">
+              <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-sm shadow-emerald-400/50"></div>
               <span className="font-medium">Mạng đang hoạt động</span>
             </div>
           </div>

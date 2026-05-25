@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import {
@@ -196,7 +196,7 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" />
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -210,14 +210,9 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="relative w-full max-w-4xl transform overflow-hidden rounded-3xl bg-white/10 backdrop-blur-xl p-8 text-left align-middle shadow-2xl border border-white/12 transition-all">
-                {/* Background Pattern */}
-                <div className="absolute inset-0 bg-gradient-to-br from-red-50/30 via-white/5 to-orange-50/30 rounded-3xl"></div>
-                <div className="absolute top-0 right-0 w-64 h-64 bg-red-600/5 rounded-full blur-3xl"></div>
-                <div className="absolute bottom-0 left-0 w-48 h-48 bg-orange-500/5 rounded-full blur-2xl"></div>
-
+              <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white shadow-2xl border border-gray-100 p-8 text-left align-middle transition-all">
                 {/* Header */}
-                <div className="relative flex items-center justify-between mb-8">
+                <div className="flex items-center justify-between mb-8">
                   <div className="flex items-center space-x-4">
                     <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
                       <FiFileText className="h-6 w-6 text-white" />
@@ -225,18 +220,18 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
                     <div>
                       <Dialog.Title
                         as="h3"
-                        className="text-2xl font-bold text-white"
+                        className="text-2xl font-bold text-gray-900"
                       >
                         Nộp Yêu Cầu Bồi Thường
                       </Dialog.Title>
-                      <p className="text-white/60">
+                      <p className="text-gray-500">
                         Quy trình xử lý minh bạch trên blockchain
                       </p>
                     </div>
                   </div>
                   <button
                     type="button"
-                    className="rounded-xl text-white/40 hover:text-white/60 hover:bg-white/8 p-2 transition-colors"
+                    className="rounded-xl text-gray-500 hover:text-gray-700 hover:bg-gray-200 bg-gray-100 p-2 transition-colors"
                     onClick={onClose}
                   >
                     <FiX className="h-6 w-6" />
@@ -244,7 +239,7 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
                 </div>
 
                 {/* Progress Bar */}
-                <div className="relative mb-10">
+                <div className="mb-10">
                   <div className="flex items-center justify-between relative z-10">
                     {steps.map((stepItem) => {
                       const StepIcon = stepItem.icon;
@@ -260,7 +255,7 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
                             className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 border-2 ${
                               isActive
                                 ? "bg-gradient-to-br from-red-600 to-orange-500 border-red-600 text-white shadow-lg"
-                                : "bg-white border-white/12 text-white/40"
+                                : "bg-gray-100 border-gray-200 text-gray-400"
                             }`}
                           >
                             {isCompleted ? (
@@ -272,14 +267,14 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
                           <div className="mt-3 text-center">
                             <p
                               className={`text-xs font-semibold ${
-                                isActive ? "text-red-400" : "text-white/50"
+                                isActive ? "text-red-600" : "text-gray-400"
                               }`}
                             >
                               Bước {stepItem.number}
                             </p>
                             <p
                               className={`text-xs ${
-                                isActive ? "text-white" : "text-white/50"
+                                isActive ? "text-gray-900" : "text-gray-400"
                               }`}
                             >
                               {stepItem.title}
@@ -290,7 +285,7 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
                     })}
 
                     {/* Progress Line */}
-                    <div className="absolute top-6 left-0 right-0 h-0.5 bg-white/10 -z-10">
+                    <div className="absolute top-6 left-0 right-0 h-0.5 bg-gray-200 -z-10">
                       <div
                         className="h-full bg-gradient-to-r from-red-600 to-orange-500 transition-all duration-500 ease-out"
                         style={{ width: `${((step - 1) / 3) * 100}%` }}
@@ -300,20 +295,20 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
                 </div>
 
                 {/* Step Content */}
-                <div className="relative min-h-[400px]">
+                <div className="min-h-[400px]">
                   {/* Step 1: Chọn hợp đồng */}
                   {step === 1 && (
                     <div className="space-y-6">
                       <div className="text-center">
-                        <h4 className="text-xl font-bold text-white mb-2">
+                        <h4 className="text-xl font-bold text-gray-900 mb-2">
                           Chọn Hợp Đồng Bảo Hiểm
                         </h4>
-                        <p className="text-white/60">
+                        <p className="text-gray-500">
                           Chọn hợp đồng xe cần nộp yêu cầu bồi thường
                         </p>
                       </div>
 
-                      <div className="bg-white/6 backdrop-blur-sm rounded-2xl p-6 border border-white/12 shadow-lg">
+                      <div className="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
                         {activePolicies.length === 0 ? (
                           <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
                             <div className="flex items-center space-x-2">
@@ -325,7 +320,7 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
                           </div>
                         ) : (
                           <div className="space-y-3">
-                            <label className="flex items-center space-x-2 text-sm font-bold text-white/80 mb-3">
+                            <label className="flex items-center space-x-2 text-sm font-bold text-gray-700 mb-3">
                               <FiShield className="h-4 w-4" />
                               <span>Chọn hợp đồng *</span>
                             </label>
@@ -352,7 +347,7 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
                                     String(formData.policyId) ===
                                     String(policy.policyId)
                                       ? "border-red-600 bg-red-50 shadow-lg"
-                                      : "border-white/12 hover:border-gray-300 bg-white/8 hover:shadow-md"
+                                      : "border-gray-200 hover:border-gray-300 bg-white hover:shadow-md"
                                   }`}
                                 >
                                   <div className="flex items-center justify-between">
@@ -362,7 +357,7 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
                                           String(formData.policyId) ===
                                           String(policy.policyId)
                                             ? "bg-red-500/20"
-                                            : "bg-white/8"
+                                            : "bg-gray-100"
                                         }`}
                                       >
                                         <FiTruck
@@ -370,22 +365,22 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
                                             String(formData.policyId) ===
                                             String(policy.policyId)
                                               ? "text-red-400"
-                                              : "text-white/40"
+                                              : "text-gray-400"
                                           }`}
                                         />
                                       </div>
                                       <div>
-                                        <p className="font-bold text-white">
+                                        <p className="font-bold text-gray-900">
                                           {policy.vehicleBienSo || "N/A"}
                                         </p>
-                                        <p className="text-xs text-white/50">
+                                        <p className="text-xs text-gray-500">
                                           {policy.insuranceTypeLabel} · HĐ #{policy.policyId}
                                         </p>
                                       </div>
                                     </div>
                                     <div className="text-right">
-                                      <p className="text-xs text-white/50">Hạn mức còn lại</p>
-                                      <p className="font-bold text-emerald-400 text-sm">
+                                      <p className="text-xs text-gray-500">Hạn mức còn lại</p>
+                                      <p className="font-bold text-emerald-700 text-sm">
                                         {parseFloat(
                                           parseFloat(policy.coverageAmount || 0) -
                                           parseFloat(policy.claimsUsed || 0)
@@ -406,18 +401,18 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
                   {step === 2 && (
                     <div className="space-y-6">
                       <div className="text-center">
-                        <h4 className="text-xl font-bold text-white mb-2">
+                        <h4 className="text-xl font-bold text-gray-900 mb-2">
                           Thông Tin Vụ Tai Nạn
                         </h4>
-                        <p className="text-white/60">
+                        <p className="text-gray-500">
                           Cung cấp thông tin chi tiết về sự cố xảy ra
                         </p>
                       </div>
 
-                      <div className="bg-white/6 backdrop-blur-sm rounded-2xl p-6 border border-white/12 shadow-lg">
+                      <div className="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
                         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                           <div>
-                            <label className="flex items-center space-x-2 text-sm font-bold text-white/80 mb-2">
+                            <label className="flex items-center space-x-2 text-sm font-bold text-gray-700 mb-2">
                               <FiDollarSign className="h-4 w-4" />
                               <span>Số tiền yêu cầu (ETH) *</span>
                             </label>
@@ -430,13 +425,13 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
                               onChange={(e) =>
                                 handleInputChange("claimAmount", e.target.value)
                               }
-                              className="w-full px-4 py-3 border border-white/12 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 bg-white/8 text-sm font-medium"
+                              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 bg-white text-gray-900 text-sm font-medium"
                               placeholder="0.0000"
                             />
                           </div>
 
                           <div>
-                            <label className="flex items-center space-x-2 text-sm font-bold text-white/80 mb-2">
+                            <label className="flex items-center space-x-2 text-sm font-bold text-gray-700 mb-2">
                               <FiFileText className="h-4 w-4" />
                               <span>Loại sự cố *</span>
                             </label>
@@ -445,7 +440,7 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
                               onChange={(e) =>
                                 handleInputChange("claimType", e.target.value)
                               }
-                              className="w-full px-4 py-3 border border-white/12 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 bg-white/8 text-sm font-medium"
+                              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 bg-gray-50 text-gray-800 text-sm font-medium"
                               required
                             >
                               <option value="">-- Chọn loại sự cố --</option>
@@ -458,7 +453,7 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
                           </div>
 
                           <div>
-                            <label className="flex items-center space-x-2 text-sm font-bold text-white/80 mb-2">
+                            <label className="flex items-center space-x-2 text-sm font-bold text-gray-700 mb-2">
                               <FiCalendar className="h-4 w-4" />
                               <span>Ngày xảy ra sự cố *</span>
                             </label>
@@ -470,12 +465,12 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
                                 handleInputChange("ngayXayRa", e.target.value)
                               }
                               max={new Date().toISOString().split("T")[0]}
-                              className="w-full px-4 py-3 border border-white/12 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 bg-white/8 text-sm font-medium"
+                              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 bg-white text-gray-900 text-sm font-medium"
                             />
                           </div>
 
                           <div>
-                            <label className="flex items-center space-x-2 text-sm font-bold text-white/80 mb-2">
+                            <label className="flex items-center space-x-2 text-sm font-bold text-gray-700 mb-2">
                               <FiMapPin className="h-4 w-4" />
                               <span>Địa chỉ xảy ra sự cố *</span>
                             </label>
@@ -486,13 +481,13 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
                               onChange={(e) =>
                                 handleInputChange("diaChiXayRa", e.target.value)
                               }
-                              className="w-full px-4 py-3 border border-white/12 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 bg-white/8 text-sm font-medium"
+                              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 bg-white text-gray-900 text-sm font-medium"
                               placeholder="Số nhà, đường, phường/xã, quận/huyện"
                             />
                           </div>
 
                           <div className="sm:col-span-2">
-                            <label className="flex items-center space-x-2 text-sm font-bold text-white/80 mb-2">
+                            <label className="flex items-center space-x-2 text-sm font-bold text-gray-700 mb-2">
                               <FiFileText className="h-4 w-4" />
                               <span>Mô tả vụ tai nạn *</span>
                             </label>
@@ -503,7 +498,7 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
                               onChange={(e) =>
                                 handleInputChange("description", e.target.value)
                               }
-                              className="w-full px-4 py-3 border border-white/12 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 bg-white/8 text-sm font-medium resize-none"
+                              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 bg-white text-gray-900 text-sm font-medium resize-none"
                               placeholder="Mô tả chi tiết về vụ tai nạn, thiệt hại, hoàn cảnh xảy ra..."
                             />
                           </div>
@@ -518,19 +513,19 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
                               <FiShield className="h-5 w-5 text-white" />
                             </div>
                             <div className="flex-1">
-                              <h3 className="text-base font-bold text-red-300 mb-2">
+                              <h3 className="text-base font-bold text-red-700 mb-2">
                                 Thông tin hợp đồng được chọn
                               </h3>
                               <div className="grid grid-cols-2 gap-3 text-sm">
                                 <div>
-                                  <span className="text-red-400 font-semibold">Xe:</span>
-                                  <span className="ml-2 text-red-300 font-bold">
+                                  <span className="text-red-600 font-semibold">Xe:</span>
+                                  <span className="ml-2 text-red-700 font-bold">
                                     {selectedPolicy.vehicleBienSo}
                                   </span>
                                 </div>
                                 <div>
-                                  <span className="text-red-400 font-semibold">Hạn mức còn lại:</span>
-                                  <span className="ml-2 text-emerald-400 font-bold">
+                                  <span className="text-red-600 font-semibold">Hạn mức còn lại:</span>
+                                  <span className="ml-2 text-emerald-700 font-bold">
                                     {parseFloat(
                                       parseFloat(selectedPolicy.coverageAmount || 0) -
                                       parseFloat(selectedPolicy.claimsUsed || 0)
@@ -549,25 +544,25 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
                   {step === 3 && (
                     <div className="space-y-6">
                       <div className="text-center">
-                        <h4 className="text-xl font-bold text-white mb-2">
+                        <h4 className="text-xl font-bold text-gray-900 mb-2">
                           Tải Lên Hồ Sơ Chứng Từ
                         </h4>
-                        <p className="text-white/60">
+                        <p className="text-gray-500">
                           Ảnh hiện trường, biên bản tai nạn, hóa đơn sửa xe
                         </p>
                       </div>
 
                       {/* File Upload */}
-                      <div className="bg-white/6 backdrop-blur-sm rounded-2xl p-6 border border-white/12 shadow-lg">
+                      <div className="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
                         <div className="flex justify-center px-6 pt-8 pb-8 border-2 border-dashed border-gray-300 rounded-xl hover:border-red-500 transition-colors group">
                           <div className="space-y-2 text-center">
-                            <div className="w-16 h-16 bg-gradient-to-br from-red-900/40 to-orange-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                            <div className="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                               <FiUpload className="h-8 w-8 text-red-400" />
                             </div>
-                            <div className="flex text-sm text-white/60 justify-center">
+                            <div className="flex text-sm text-gray-500 justify-center">
                               <label
                                 htmlFor="claim-file-upload"
-                                className="relative cursor-pointer bg-white/8 backdrop-blur-xl rounded-xl font-bold text-red-400 hover:text-red-400 px-3 py-1 transition-colors"
+                                className="relative cursor-pointer bg-gray-100 rounded-xl font-bold text-red-500 hover:text-red-600 px-3 py-1 transition-colors"
                               >
                                 <span>Chọn tập tin</span>
                                 <input
@@ -583,7 +578,7 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
                               </label>
                               <p className="pl-1">hoặc kéo thả vào đây</p>
                             </div>
-                            <p className="text-xs text-white/50 font-medium">
+                            <p className="text-xs text-gray-400 font-medium">
                               Ảnh hiện trường (JPG/PNG), Biên bản (PDF/DOC), Hóa đơn (PDF) · Tối đa 10MB/file
                             </p>
                             {uploadingDocuments && (
@@ -597,8 +592,8 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
 
                       {/* Uploaded Documents */}
                       {documents.length > 0 && (
-                        <div className="bg-white/6 backdrop-blur-sm rounded-2xl p-6 border border-white/12 shadow-lg">
-                          <h5 className="text-base font-bold text-white mb-4 flex items-center space-x-2">
+                        <div className="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+                          <h5 className="text-base font-bold text-gray-900 mb-4 flex items-center space-x-2">
                             <FiFileText className="h-5 w-5 text-red-400" />
                             <span>Đã tải lên ({documents.length} tập tin)</span>
                           </h5>
@@ -606,24 +601,24 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
                             {documents.map((doc, index) => (
                               <div
                                 key={index}
-                                className="flex items-center justify-between p-4 bg-white/8 rounded-xl border border-white/12 shadow-sm"
+                                className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100 shadow-sm"
                               >
                                 <div className="flex items-center space-x-3 min-w-0 flex-1">
                                   <div className="w-10 h-10 bg-gradient-to-br from-green-100 to-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                    <FiFileText className="h-5 w-5 text-green-400" />
+                                    <FiFileText className="h-5 w-5 text-green-600" />
                                   </div>
                                   <div className="min-w-0">
-                                    <p className="text-sm font-bold text-white truncate">
+                                    <p className="text-sm font-bold text-gray-900 truncate">
                                       {doc.name}
                                     </p>
-                                    <p className="text-xs text-white/50">
+                                    <p className="text-xs text-gray-500">
                                       {formatFileSize(doc.size)} · IPFS: {doc.ipfsHash?.slice(0, 12)}...
                                     </p>
                                   </div>
                                 </div>
                                 <button
                                   onClick={() => removeDocument(index)}
-                                  className="text-red-400 hover:text-red-400 p-2 rounded-lg hover:bg-red-50 transition-colors ml-2 flex-shrink-0"
+                                  className="text-red-400 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 transition-colors ml-2 flex-shrink-0"
                                 >
                                   <FiX className="h-4 w-4" />
                                 </button>
@@ -634,10 +629,10 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
                       )}
 
                       {documents.length === 0 && (
-                        <div className="p-4 bg-amber-900/20 border border-amber-500/20 rounded-xl">
+                        <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl">
                           <div className="flex items-center space-x-3">
-                            <FiAlertTriangle className="h-5 w-5 text-amber-400" />
-                            <p className="text-sm text-amber-300 font-medium">
+                            <FiAlertTriangle className="h-5 w-5 text-amber-500" />
+                            <p className="text-sm text-amber-700 font-medium">
                               Khuyến nghị tải lên ít nhất 1 tài liệu chứng minh để tăng tỷ lệ được duyệt.
                               Bạn vẫn có thể tiếp tục mà không cần tài liệu.
                             </p>
@@ -651,60 +646,60 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
                   {step === 4 && (
                     <div className="space-y-6">
                       <div className="text-center">
-                        <h4 className="text-xl font-bold text-white mb-2">
+                        <h4 className="text-xl font-bold text-gray-900 mb-2">
                           Xác Nhận Nộp Yêu Cầu
                         </h4>
-                        <p className="text-white/60">
+                        <p className="text-gray-500">
                           Kiểm tra lại thông tin trước khi gửi
                         </p>
                       </div>
 
                       {/* Summary */}
-                      <div className="bg-white/6 backdrop-blur-sm rounded-2xl p-6 border border-white/12 shadow-lg">
-                        <h5 className="text-base font-bold text-white mb-5 flex items-center space-x-2">
-                          <FiCheckCircle className="h-5 w-5 text-green-400" />
+                      <div className="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+                        <h5 className="text-base font-bold text-gray-900 mb-5 flex items-center space-x-2">
+                          <FiCheckCircle className="h-5 w-5 text-green-500" />
                           <span>Tóm Tắt Yêu Cầu</span>
                         </h5>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="p-4 bg-gradient-to-r from-red-50/80 to-orange-50/80 rounded-xl border border-red-500/25">
-                            <p className="text-sm font-semibold text-red-400 mb-1">Hợp đồng</p>
-                            <p className="font-bold text-white">
+                          <div className="p-4 bg-gradient-to-r from-red-50 to-orange-50 rounded-xl border border-red-100">
+                            <p className="text-sm font-semibold text-red-600 mb-1">Hợp đồng</p>
+                            <p className="font-bold text-gray-900">
                               {selectedPolicy?.vehicleBienSo || "N/A"} · #{formData.policyId}
                             </p>
                           </div>
-                          <div className="p-4 bg-gradient-to-r from-emerald-50/80 to-green-50/80 rounded-xl border border-emerald-500/25">
-                            <p className="text-sm font-semibold text-emerald-400 mb-1">Số tiền yêu cầu</p>
-                            <p className="font-bold text-white">{formData.claimAmount} ETH</p>
+                          <div className="p-4 bg-gradient-to-r from-emerald-50 to-green-50 rounded-xl border border-emerald-100">
+                            <p className="text-sm font-semibold text-emerald-700 mb-1">Số tiền yêu cầu</p>
+                            <p className="font-bold text-gray-900">{formData.claimAmount} ETH</p>
                           </div>
-                          <div className="p-4 bg-gradient-to-r from-purple-50/80 to-violet-50/80 rounded-xl border border-purple-500/20">
-                            <p className="text-sm font-semibold text-purple-400 mb-1">Loại sự cố</p>
-                            <p className="font-bold text-white">
+                          <div className="p-4 bg-gradient-to-r from-purple-50 to-violet-50 rounded-xl border border-purple-100">
+                            <p className="text-sm font-semibold text-purple-600 mb-1">Loại sự cố</p>
+                            <p className="font-bold text-gray-900">
                               {claimTypeLabels[formData.claimType] || formData.claimType}
                             </p>
                           </div>
-                          <div className="p-4 bg-gradient-to-r from-amber-50/80 to-yellow-50/80 rounded-xl border border-amber-500/20/50">
-                            <p className="text-sm font-semibold text-amber-400 mb-1">Ngày xảy ra</p>
-                            <p className="font-bold text-white">{formData.ngayXayRa || "N/A"}</p>
+                          <div className="p-4 bg-gradient-to-r from-amber-50 to-yellow-50 rounded-xl border border-amber-100">
+                            <p className="text-sm font-semibold text-amber-600 mb-1">Ngày xảy ra</p>
+                            <p className="font-bold text-gray-900">{formData.ngayXayRa || "N/A"}</p>
                           </div>
-                          <div className="p-4 bg-gradient-to-r bg-white/5 to-white/3 rounded-xl border border-white/10 md:col-span-2">
-                            <p className="text-sm font-semibold text-white/60 mb-1">Địa điểm</p>
-                            <p className="font-bold text-white">{formData.diaChiXayRa}</p>
+                          <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 md:col-span-2">
+                            <p className="text-sm font-semibold text-gray-500 mb-1">Địa điểm</p>
+                            <p className="font-bold text-gray-900">{formData.diaChiXayRa}</p>
                           </div>
-                          <div className="p-4 bg-gradient-to-r from-rose-50/80 to-pink-50/80 rounded-xl border border-rose-200/50">
+                          <div className="p-4 bg-gradient-to-r from-rose-50 to-pink-50 rounded-xl border border-rose-100">
                             <p className="text-sm font-semibold text-rose-600 mb-1">Tài liệu đính kèm</p>
-                            <p className="font-bold text-white">{documents.length} tập tin</p>
+                            <p className="font-bold text-gray-900">{documents.length} tập tin</p>
                           </div>
                         </div>
                       </div>
 
                       {/* Important Notice */}
-                      <div className="bg-gradient-to-r from-amber-50/80 to-yellow-50/80 border border-amber-500/20/50 rounded-2xl p-5">
+                      <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
                         <div className="flex items-start space-x-4">
                           <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center flex-shrink-0">
                             <FiAlertTriangle className="h-5 w-5 text-white" />
                           </div>
                           <div>
-                            <h3 className="text-base font-bold text-amber-300 mb-1">
+                            <h3 className="text-base font-bold text-amber-700 mb-1">
                               Lưu ý quan trọng
                             </h3>
                             <p className="text-sm text-amber-700 leading-relaxed">
@@ -720,11 +715,11 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
                 </div>
 
                 {/* Navigation Buttons */}
-                <div className="relative flex justify-between items-center pt-8 mt-6 border-t border-white/10">
+                <div className="flex justify-between items-center pt-8 mt-6 border-t border-gray-100">
                   <button
                     type="button"
                     onClick={step === 1 ? onClose : () => setStep(step - 1)}
-                    className="px-6 py-3 text-sm font-semibold text-white/80 bg-white/8 backdrop-blur-sm border border-white/12 rounded-xl hover:bg-white/5 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200"
+                    className="px-6 py-3 text-sm font-semibold text-gray-700 bg-gray-100 border border-gray-200 rounded-xl hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 transition-all duration-200"
                   >
                     {step === 1 ? "Hủy" : "Quay lại"}
                   </button>
@@ -773,10 +768,3 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
 };
 
 export default SubmitClaimModal;
-
-
-
-
-
-
-

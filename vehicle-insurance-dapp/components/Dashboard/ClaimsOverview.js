@@ -14,25 +14,23 @@ import {
 import { CLAIM_STATUS } from "../../services/contract";
 
 const glassCard = {
-  background: "rgba(255,255,255,0.05)",
-  backdropFilter: "blur(24px)",
-  WebkitBackdropFilter: "blur(24px)",
-  border: "1px solid rgba(255,255,255,0.10)",
-  boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
+  background: "#fff",
+  border: "1px solid #f3f4f6",
+  boxShadow: "0 4px 16px rgba(0,0,0,0.06)",
 };
 
 const ClaimsOverview = ({ claims = [], loading = false, onRefresh }) => {
   const getStatusColor = (status) => {
     const colors = {
-      0: "bg-white/10 text-white/50 border border-white/15",
-      1: "bg-red-500/15 text-red-300 border border-red-500/25",
-      2: "bg-amber-500/15 text-amber-300 border border-amber-500/25",
-      3: "bg-orange-500/15 text-orange-300 border border-orange-500/25",
-      4: "bg-emerald-500/15 text-emerald-300 border border-emerald-500/25",
-      5: "bg-red-600/15 text-red-300 border border-red-600/25",
-      6: "bg-emerald-600/20 text-emerald-200 border border-emerald-500/30",
+      0: "bg-gray-100 text-gray-500 border border-gray-200",
+      1: "bg-red-50 text-red-600 border border-red-200",
+      2: "bg-amber-50 text-amber-700 border border-amber-200",
+      3: "bg-orange-50 text-orange-600 border border-orange-200",
+      4: "bg-emerald-50 text-emerald-700 border border-emerald-200",
+      5: "bg-red-50 text-red-600 border border-red-200",
+      6: "bg-emerald-50 text-emerald-700 border border-emerald-200",
     };
-    return colors[status] || "bg-white/10 text-white/50 border border-white/15";
+    return colors[status] || "bg-gray-100 text-gray-500 border border-gray-200";
   };
 
   const getStatusLabel = (status) => {
@@ -85,39 +83,33 @@ const ClaimsOverview = ({ claims = [], loading = false, onRefresh }) => {
 
   return (
     <div className="relative overflow-hidden rounded-2xl" style={glassCard}>
-      {/* Background glows */}
-      <div className="absolute top-0 right-0 w-40 h-40 bg-red-900/20 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute bottom-0 left-0 w-32 h-32 bg-orange-900/15 rounded-full blur-2xl pointer-events-none"></div>
-      {/* Top accent */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-600/40 to-transparent"></div>
-
       <div className="relative px-6 py-6 sm:p-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-3">
             <div className="relative">
-              <div className="w-10 h-10 bg-gradient-to-br from-red-700 to-orange-600 rounded-xl flex items-center justify-center shadow-lg shadow-red-900/50">
+              <div className="w-10 h-10 bg-gradient-to-br from-red-700 to-orange-600 rounded-xl flex items-center justify-center shadow-lg shadow-red-900/20">
                 <FiFileText className="h-5 w-5 text-white" />
               </div>
               {pendingCount > 0 && (
-                <div className="absolute -top-1 -right-1 w-5 h-5 bg-amber-500 rounded-full border-2 border-black/50 flex items-center justify-center">
+                <div className="absolute -top-1 -right-1 w-5 h-5 bg-amber-500 rounded-full border-2 border-white flex items-center justify-center">
                   <span className="text-xs font-bold text-white">{pendingCount}</span>
                 </div>
               )}
             </div>
             <div>
-              <h3 className="text-lg font-bold text-white">Yêu Cầu Bồi Thường</h3>
-              <p className="text-sm text-white/50">Theo dõi trạng thái yêu cầu bảo hiểm</p>
+              <h3 className="text-lg font-bold text-gray-900">Yêu Cầu Bồi Thường</h3>
+              <p className="text-sm text-gray-500">Theo dõi trạng thái yêu cầu bảo hiểm</p>
             </div>
           </div>
 
           <button
             onClick={onRefresh}
             disabled={loading}
-            className="group inline-flex items-center px-3 py-2 rounded-xl text-sm font-semibold text-white/70 hover:text-white transition-all duration-200 disabled:opacity-40"
-            style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", backdropFilter: "blur(8px)" }}
+            className="group inline-flex items-center px-3 py-2 rounded-xl text-sm font-semibold text-gray-600 hover:text-gray-900 transition-all duration-200 disabled:opacity-40 bg-gray-50 hover:bg-gray-100"
+            style={{ border: "1px solid #e5e7eb" }}
           >
-            <FiRefreshCw className={`h-4 w-4 mr-2 transition-transform ${loading ? "animate-spin text-red-400" : "group-hover:rotate-180"}`} />
+            <FiRefreshCw className={`h-4 w-4 mr-2 transition-transform ${loading ? "animate-spin text-red-500" : "group-hover:rotate-180"}`} />
             <span>Làm mới</span>
           </button>
         </div>
@@ -126,14 +118,14 @@ const ClaimsOverview = ({ claims = [], loading = false, onRefresh }) => {
         {loading ? (
           <div className="space-y-3">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="rounded-xl p-4 animate-pulse" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <div key={i} className="rounded-xl p-4 animate-pulse bg-gray-50" style={{ border: "1px solid #f3f4f6" }}>
                 <div className="flex items-center space-x-3">
-                  <div className="h-10 w-10 bg-white/10 rounded-xl flex-shrink-0"></div>
+                  <div className="h-10 w-10 bg-gray-200 rounded-xl flex-shrink-0"></div>
                   <div className="flex-1">
-                    <div className="h-3.5 bg-white/10 rounded-lg w-1/4 mb-2"></div>
-                    <div className="h-3 bg-white/6 rounded-lg w-1/2"></div>
+                    <div className="h-3.5 bg-gray-200 rounded-lg w-1/4 mb-2"></div>
+                    <div className="h-3 bg-gray-100 rounded-lg w-1/2"></div>
                   </div>
-                  <div className="h-6 bg-white/10 rounded-full w-20 flex-shrink-0"></div>
+                  <div className="h-6 bg-gray-200 rounded-full w-20 flex-shrink-0"></div>
                 </div>
               </div>
             ))}
@@ -141,18 +133,18 @@ const ClaimsOverview = ({ claims = [], loading = false, onRefresh }) => {
         ) : claims.length === 0 ? (
           <div className="text-center py-12">
             <div className="relative inline-block mb-6">
-              <div className="w-20 h-20 bg-gradient-to-br from-red-900/40 to-orange-900/40 rounded-2xl flex items-center justify-center shadow-lg border border-white/10">
-                <FiFileText className="h-10 w-10 text-red-300" />
+              <div className="w-20 h-20 bg-gradient-to-br from-red-100 to-orange-100 rounded-2xl flex items-center justify-center shadow-lg border border-gray-200">
+                <FiFileText className="h-10 w-10 text-red-600" />
               </div>
               <div className="absolute -top-2 -right-2 w-7 h-7 bg-gradient-to-r from-orange-500 to-red-700 rounded-full flex items-center justify-center shadow-lg">
                 <FiZap className="h-3.5 w-3.5 text-white" />
               </div>
             </div>
-            <h3 className="text-base font-bold text-white mb-2">Chưa Có Yêu Cầu Bồi Thường</h3>
-            <p className="text-white/50 mb-6 text-sm max-w-xs mx-auto">Khi xảy ra tai nạn, bạn có thể gửi yêu cầu bồi thường tại đây.</p>
+            <h3 className="text-base font-bold text-gray-900 mb-2">Chưa Có Yêu Cầu Bồi Thường</h3>
+            <p className="text-gray-500 mb-6 text-sm max-w-xs mx-auto">Khi xảy ra tai nạn, bạn có thể gửi yêu cầu bồi thường tại đây.</p>
             <a
               href="/claims"
-              className="inline-flex items-center px-5 py-2.5 text-sm font-semibold rounded-xl text-white bg-gradient-to-r from-red-700 to-orange-600 hover:from-red-600 hover:to-orange-500 shadow-lg shadow-red-900/40 transition-all duration-200 hover:scale-105"
+              className="inline-flex items-center px-5 py-2.5 text-sm font-semibold rounded-xl text-white bg-gradient-to-r from-red-700 to-orange-600 hover:from-red-600 hover:to-orange-500 shadow-lg shadow-red-900/20 transition-all duration-200 hover:scale-105"
             >
               <FiFileText className="mr-2 h-4 w-4" />
               Nộp Yêu Cầu Đầu Tiên
@@ -167,11 +159,9 @@ const ClaimsOverview = ({ claims = [], loading = false, onRefresh }) => {
               return (
                 <div
                   key={claim.claimId || index}
-                  className="group relative rounded-xl p-4 transition-all duration-300 overflow-hidden"
-                  style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}
+                  className="group relative rounded-xl p-4 transition-all duration-300 overflow-hidden bg-gray-50 hover:bg-white"
+                  style={{ border: "1px solid #f3f4f6" }}
                 >
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-red-600/0 to-orange-600/0 group-hover:from-red-600/6 group-hover:to-orange-600/6 transition-all duration-300"></div>
-
                   <div className="relative flex items-center justify-between">
                     <div className="flex items-center space-x-3 min-w-0 flex-1">
                       <div className="relative flex-shrink-0">
@@ -184,10 +174,10 @@ const ClaimsOverview = ({ claims = [], loading = false, onRefresh }) => {
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center space-x-2 mb-0.5">
-                          <p className="text-sm font-bold text-white">Yêu cầu #{claim.claimId || "N/A"}</p>
-                          <span className="text-xs text-white/30">· HĐ #{claim.policyId || "N/A"}</span>
+                          <p className="text-sm font-bold text-gray-900">Yêu cầu #{claim.claimId || "N/A"}</p>
+                          <span className="text-xs text-gray-400">· HĐ #{claim.policyId || "N/A"}</span>
                         </div>
-                        <div className="flex items-center space-x-3 text-xs text-white/40">
+                        <div className="flex items-center space-x-3 text-xs text-gray-500">
                           <span className="flex items-center space-x-1">
                             <FiDollarSign className="h-3 w-3" />
                             <span>{parseFloat(claim.claimAmount || 0).toFixed(4)} ETH</span>
@@ -206,9 +196,9 @@ const ClaimsOverview = ({ claims = [], loading = false, onRefresh }) => {
                   </div>
 
                   {(claim.status === 4 || claim.status === 6) && claim.approvedAmount && (
-                    <div className="mt-2.5 p-2 rounded-lg flex items-center space-x-2" style={{ background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.20)" }}>
-                      <FiCheck className="h-3 w-3 text-emerald-400" />
-                      <span className="text-xs font-semibold text-emerald-300">
+                    <div className="mt-2.5 p-2 rounded-lg flex items-center space-x-2" style={{ background: "rgba(16,185,129,0.06)", border: "1px solid rgba(16,185,129,0.15)" }}>
+                      <FiCheck className="h-3 w-3 text-emerald-600" />
+                      <span className="text-xs font-semibold text-emerald-600">
                         Số tiền duyệt: {parseFloat(claim.approvedAmount || 0).toFixed(4)} ETH
                       </span>
                     </div>
@@ -219,7 +209,7 @@ const ClaimsOverview = ({ claims = [], loading = false, onRefresh }) => {
 
             {claims.length > 5 && (
               <div className="text-center pt-2">
-                <a href="/claims" className="group inline-flex items-center text-sm text-red-400 hover:text-red-300 font-semibold transition-colors">
+                <a href="/claims" className="group inline-flex items-center text-sm text-red-600 hover:text-red-700 font-semibold transition-colors">
                   <span>Xem tất cả {claims.length} yêu cầu</span>
                   <svg className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

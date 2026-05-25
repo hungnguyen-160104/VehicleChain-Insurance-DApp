@@ -39,47 +39,42 @@ const LoginPanel = ({ onLogin }) => {
   return (
     <div className="flex items-center justify-center py-8">
       <div
-        className="w-full max-w-sm rounded-2xl p-6"
-        style={{
-          background: "rgba(255,255,255,0.03)",
-          border: "1px solid rgba(200,16,46,0.2)",
-          backdropFilter: "blur(20px)"
-        }}
+        className="w-full max-w-sm rounded-2xl p-6 bg-white border border-gray-200 shadow-lg"
       >
         <div className="text-center mb-6">
           <div className="w-14 h-14 rounded-full bg-gradient-to-br from-red-600 to-red-900 flex items-center justify-center mx-auto mb-3">
             <FiLock className="text-white text-xl" />
           </div>
-          <h3 className="text-white font-semibold text-lg">Đăng nhập AI Admin</h3>
-          <p className="text-white/40 text-sm mt-1">Xác thực để quản lý tài liệu AI</p>
+          <h3 className="text-gray-900 font-semibold text-lg">Đăng nhập AI Admin</h3>
+          <p className="text-gray-500 text-sm mt-1">Xác thực để quản lý tài liệu AI</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="text-white/60 text-xs uppercase tracking-wider mb-1.5 block">Tên đăng nhập</label>
+            <label className="text-gray-500 text-xs uppercase tracking-wider mb-1.5 block">Tên đăng nhập</label>
             <input
               type="text"
               value={username}
               onChange={e => setUsername(e.target.value)}
               placeholder="admin"
               required
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm placeholder-white/20 outline-none focus:border-red-500/60 transition-colors"
+              className="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-gray-900 text-sm placeholder-gray-400 outline-none focus:border-red-500/60 transition-colors"
             />
           </div>
           <div>
-            <label className="text-white/60 text-xs uppercase tracking-wider mb-1.5 block">Mật khẩu</label>
+            <label className="text-gray-500 text-xs uppercase tracking-wider mb-1.5 block">Mật khẩu</label>
             <input
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
               placeholder="••••••••"
               required
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm placeholder-white/20 outline-none focus:border-red-500/60 transition-colors"
+              className="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-gray-900 text-sm placeholder-gray-400 outline-none focus:border-red-500/60 transition-colors"
             />
           </div>
 
           {error && (
-            <div className="flex items-center gap-2 text-red-400 text-sm bg-red-900/20 border border-red-700/30 rounded-lg px-3 py-2">
+            <div className="flex items-center gap-2 text-red-600 text-sm bg-red-50 border border-red-200 rounded-lg px-3 py-2">
               <FiAlertCircle size={14} />
               {error}
             </div>
@@ -139,7 +134,7 @@ const UploadZone = ({ token, onUploaded }) => {
   return (
     <div
       className={`relative rounded-2xl p-8 text-center transition-all cursor-pointer
-        ${dragging ? "border-red-500 bg-red-900/20" : "border-white/10 hover:border-red-500/40 hover:bg-white/5"}`}
+        ${dragging ? "border-red-500 bg-red-50" : "border-gray-200 hover:border-red-400 hover:bg-gray-50"}`}
       style={{ border: "2px dashed" }}
       onClick={() => !uploading && fileInputRef.current?.click()}
       onDragOver={e => { e.preventDefault(); setDragging(true); }}
@@ -156,22 +151,22 @@ const UploadZone = ({ token, onUploaded }) => {
 
       {uploading ? (
         <div className="flex flex-col items-center gap-3">
-          <FiLoader className="text-red-400 text-3xl animate-spin" />
-          <p className="text-white/70 text-sm">Đang xử lý PDF và tạo embedding...</p>
-          <p className="text-white/40 text-xs">Có thể mất 15-30 giây</p>
+          <FiLoader className="text-red-600 text-3xl animate-spin" />
+          <p className="text-gray-600 text-sm">Đang xử lý PDF và tạo embedding...</p>
+          <p className="text-gray-400 text-xs">Có thể mất 15-30 giây</p>
         </div>
       ) : (
         <div className="flex flex-col items-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-red-900/40 flex items-center justify-center">
-            <FiUpload className="text-red-400 text-xl" />
+          <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+            <FiUpload className="text-red-600 text-xl" />
           </div>
           <div>
-            <p className="text-white/80 text-sm font-medium">Kéo thả PDF vào đây</p>
-            <p className="text-white/40 text-xs mt-1">hoặc click để chọn file (tối đa 20MB)</p>
+            <p className="text-gray-700 text-sm font-medium">Kéo thả PDF vào đây</p>
+            <p className="text-gray-400 text-xs mt-1">hoặc click để chọn file (tối đa 20MB)</p>
           </div>
           <div className="flex gap-2">
             {["Luật bảo hiểm", "Nghị định 67/2023", "Quy trình BT"].map(t => (
-              <span key={t} className="text-[10px] px-2 py-1 bg-white/5 border border-white/10 rounded-full text-white/40">{t}</span>
+              <span key={t} className="text-[10px] px-2 py-1 bg-gray-100 border border-gray-200 rounded-full text-gray-400">{t}</span>
             ))}
           </div>
         </div>
@@ -205,7 +200,7 @@ const DocumentList = ({ documents, token, onDeleted }) => {
 
   if (documents.length === 0) {
     return (
-      <div className="text-center py-8 text-white/30">
+      <div className="text-center py-8 text-gray-400">
         <FiFileText size={32} className="mx-auto mb-3 opacity-30" />
         <p className="text-sm">Chưa có tài liệu nào. Upload PDF để bắt đầu.</p>
       </div>
@@ -217,26 +212,25 @@ const DocumentList = ({ documents, token, onDeleted }) => {
       {documents.map(doc => (
         <div
           key={doc.id}
-          className="flex items-center gap-3 p-3 rounded-xl"
-          style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}
+          className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 border border-gray-100"
         >
-          <div className="w-9 h-9 rounded-lg bg-red-900/40 flex items-center justify-center flex-shrink-0">
-            <FiFileText className="text-red-400" size={16} />
+          <div className="w-9 h-9 rounded-lg bg-red-100 flex items-center justify-center flex-shrink-0">
+            <FiFileText className="text-red-600" size={16} />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-white/90 text-sm font-medium truncate">{doc.original_name}</p>
-            <p className="text-white/30 text-xs mt-0.5">
+            <p className="text-gray-800 text-sm font-medium truncate">{doc.original_name}</p>
+            <p className="text-gray-400 text-xs mt-0.5">
               {doc.chunks_count} đoạn · {doc.size_kb} KB · {new Date(doc.uploaded_at).toLocaleDateString("vi-VN")}
             </p>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
-            <span className="text-[10px] px-2 py-0.5 bg-green-900/40 border border-green-700/30 text-green-400 rounded-full">
+            <span className="text-[10px] px-2 py-0.5 bg-green-50 border border-green-200 text-green-600 rounded-full">
               Hoạt động
             </span>
             <button
               onClick={() => handleDelete(doc)}
               disabled={deletingId === doc.id}
-              className="p-1.5 text-white/30 hover:text-red-400 hover:bg-red-900/30 rounded-lg transition-all disabled:opacity-30"
+              className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all disabled:opacity-30"
             >
               {deletingId === doc.id
                 ? <FiLoader size={14} className="animate-spin" />
@@ -300,21 +294,21 @@ export default function DocumentManagement() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-white font-semibold">Quản Lý Tài Liệu AI</h3>
-          <p className="text-white/40 text-sm mt-0.5">
+          <h3 className="text-gray-900 font-semibold">Quản Lý Tài Liệu AI</h3>
+          <p className="text-gray-500 text-sm mt-0.5">
             {documents.length} tài liệu · {stats.total_chunks} đoạn văn bản trong ChromaDB
           </p>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={fetchDocuments}
-            className="p-2 text-white/40 hover:text-white hover:bg-white/5 rounded-lg transition-all"
+            className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all"
           >
             <FiRefreshCw size={16} className={loadingDocs ? "animate-spin" : ""} />
           </button>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-white/40 hover:text-white border border-white/10 hover:border-white/20 rounded-lg text-xs transition-all"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-gray-500 hover:text-gray-900 border border-gray-200 hover:border-gray-300 rounded-lg text-xs transition-all"
           >
             <FiUnlock size={12} />
             Đăng xuất
@@ -326,8 +320,8 @@ export default function DocumentManagement() {
       <div
         className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm
           ${stats.total_chunks > 0
-            ? "bg-green-900/20 border border-green-700/30 text-green-400"
-            : "bg-yellow-900/20 border border-yellow-700/30 text-yellow-400"
+            ? "bg-green-50 border border-green-200 text-green-600"
+            : "bg-yellow-50 border border-yellow-200 text-amber-700"
           }`}
       >
         {stats.total_chunks > 0 ? <FiCheckCircle size={14} /> : <FiAlertCircle size={14} />}
@@ -342,11 +336,11 @@ export default function DocumentManagement() {
 
       {/* Document List */}
       <div>
-        <h4 className="text-white/60 text-xs uppercase tracking-wider mb-3">
+        <h4 className="text-gray-500 text-xs uppercase tracking-wider mb-3">
           Tài liệu đã upload ({documents.length})
         </h4>
         {loadingDocs ? (
-          <div className="text-center py-6 text-white/30">
+          <div className="text-center py-6 text-gray-300">
             <FiLoader size={20} className="animate-spin mx-auto" />
           </div>
         ) : (

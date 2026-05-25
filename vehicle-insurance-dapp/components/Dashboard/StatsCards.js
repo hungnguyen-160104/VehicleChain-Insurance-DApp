@@ -80,28 +80,15 @@ const StatsCards = ({
         return (
           <div
             key={stat.name}
-            className="group relative overflow-hidden rounded-2xl transition-all duration-300 hover:scale-105"
+            className="group relative overflow-hidden rounded-2xl transition-all duration-300 hover:scale-105 bg-white shadow-sm"
             style={{
-              background: "rgba(255,255,255,0.05)",
-              backdropFilter: "blur(24px)",
-              WebkitBackdropFilter: "blur(24px)",
-              border: "1px solid rgba(255,255,255,0.10)",
-              boxShadow: `0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.05)`,
+              border: "1px solid #f3f4f6",
+              boxShadow: `0 4px 16px rgba(0,0,0,0.06)`,
               animationDelay: `${index * 100}ms`,
             }}
           >
-            {/* Hover glow */}
-            <div
-              className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none"
-              style={{ boxShadow: `inset 0 0 40px ${stat.glow}`, background: `radial-gradient(circle at 50% 0%, ${stat.glow}, transparent 70%)` }}
-            ></div>
-
             {/* Top accent line */}
             <div className={`absolute top-0 left-0 right-0 h-px bg-gradient-to-r ${stat.gradient} opacity-50 group-hover:opacity-100 transition-opacity`}></div>
-
-            {/* Floating particles */}
-            <div className="absolute top-4 right-4 w-1 h-1 bg-white/20 rounded-full animate-pulse"></div>
-            <div className="absolute bottom-6 right-6 w-1.5 h-1.5 bg-white/10 rounded-full animate-pulse" style={{ animationDelay: "2s" }}></div>
 
             <div className="relative p-6">
               {/* Icon Section */}
@@ -110,42 +97,42 @@ const StatsCards = ({
                   <div className={`w-12 h-12 bg-gradient-to-br ${stat.gradient} rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300`}>
                     <stat.icon className="h-6 w-6 text-white drop-shadow-sm" aria-hidden="true" />
                   </div>
-                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-black/50 flex items-center justify-center shadow-sm">
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white flex items-center justify-center shadow-sm">
                     <FiLock className="h-2 w-2 text-white" />
                   </div>
                 </div>
                 <div className="flex items-center space-x-1">
                   <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse shadow-sm shadow-green-400/50"></div>
-                  <span className="text-xs font-medium text-white/40">Live</span>
+                  <span className="text-xs font-medium text-gray-400">Live</span>
                 </div>
               </div>
 
               {/* Content */}
               <div className="space-y-1.5">
-                <h3 className="text-xs font-semibold text-white/50 tracking-widest uppercase">
+                <h3 className="text-xs font-semibold text-gray-500 tracking-widest uppercase">
                   {stat.name}
                 </h3>
 
                 {loading ? (
                   <div className="animate-pulse">
-                    <div className="h-8 bg-white/10 rounded-lg w-20"></div>
+                    <div className="h-8 bg-gray-100 rounded-lg w-20"></div>
                   </div>
                 ) : (
                   <div className="flex items-baseline space-x-2">
-                    <p className="text-2xl font-bold text-white tracking-tight">{stat.value}</p>
+                    <p className="text-2xl font-bold text-gray-900 tracking-tight">{stat.value}</p>
                     <FiZap className="h-4 w-4 text-red-400" />
                   </div>
                 )}
 
-                <p className="text-xs text-white/40 font-medium">{stat.description}</p>
+                <p className="text-xs text-gray-400 font-medium">{stat.description}</p>
               </div>
 
               {/* Bottom reveal on hover */}
               <div className="absolute inset-x-0 bottom-0 px-6 py-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-full group-hover:translate-y-0"
-                style={{ background: "rgba(255,255,255,0.05)", backdropFilter: "blur(8px)", borderTop: "1px solid rgba(255,255,255,0.08)" }}
+                style={{ background: "#f9fafb", borderTop: "1px solid #f3f4f6" }}
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2 text-xs text-white/40">
+                  <div className="flex items-center space-x-2 text-xs text-gray-400">
                     <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
                     <span>On-chain verified</span>
                   </div>

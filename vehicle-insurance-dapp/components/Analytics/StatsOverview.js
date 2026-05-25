@@ -1,4 +1,4 @@
-﻿import {
+import {
   FiShield,
   FiFileText,
   FiDollarSign,
@@ -87,43 +87,43 @@ const StatsOverview = ({ data, loading }) => {
     const colors = {
       indigo: {
         bg: "from-red-100 to-purple-100",
-        text: "text-red-400",
+        text: "text-red-600",
         border: "border-red-200",
         glow: "from-red-500/10 to-purple-500/10",
       },
       blue: {
-        bg: "from-red-900/40 to-orange-900/30",
-        text: "text-red-400",
+        bg: "from-red-50 to-orange-50",
+        text: "text-red-600",
         border: "border-red-200",
         glow: "from-red-600/10 to-orange-500/10",
       },
       green: {
         bg: "from-emerald-100 to-green-100",
-        text: "text-emerald-400",
-        border: "border-emerald-500/25",
+        text: "text-emerald-600",
+        border: "border-emerald-200",
         glow: "from-emerald-500/10 to-green-500/10",
       },
       purple: {
         bg: "from-purple-100 to-pink-100",
-        text: "text-purple-400",
+        text: "text-purple-600",
         border: "border-purple-200",
         glow: "from-purple-500/10 to-pink-500/10",
       },
       emerald: {
         bg: "from-emerald-100 to-teal-100",
-        text: "text-emerald-400",
-        border: "border-emerald-500/25",
+        text: "text-emerald-600",
+        border: "border-emerald-200",
         glow: "from-emerald-500/10 to-teal-500/10",
       },
       red: {
         bg: "from-red-100 to-pink-100",
-        text: "text-red-400",
+        text: "text-red-600",
         border: "border-red-200",
         glow: "from-red-500/10 to-pink-500/10",
       },
       yellow: {
         bg: "from-yellow-100 to-orange-100",
-        text: "text-yellow-400",
+        text: "text-amber-700",
         border: "border-yellow-200",
         glow: "from-yellow-500/10 to-orange-500/10",
       },
@@ -148,20 +148,20 @@ const StatsOverview = ({ data, loading }) => {
         {[...Array(6)].map((_, index) => (
           <div
             key={index}
-            className="relative bg-white/8 backdrop-blur-xl border border-white/12 shadow-xl rounded-2xl p-6 overflow-hidden"
+            className="relative bg-white shadow-sm border border-gray-100 rounded-2xl p-6 overflow-hidden"
           >
             <div className="animate-pulse">
               <div className="flex items-center space-x-4 mb-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-white/10 to-white/15 rounded-xl"></div>
+                <div className="w-12 h-12 bg-gray-100 rounded-xl"></div>
                 <div className="flex-1">
-                  <div className="h-3 bg-gradient-to-r from-white/10 to-white/15 rounded-lg w-3/4 mb-2"></div>
-                  <div className="h-2 bg-gradient-to-r from-white/10 to-white/15 rounded-lg w-1/2"></div>
+                  <div className="h-3 bg-gray-200 rounded-lg w-3/4 mb-2"></div>
+                  <div className="h-2 bg-gray-100 rounded-lg w-1/2"></div>
                 </div>
               </div>
               <div className="space-y-3">
-                <div className="h-8 bg-gradient-to-r from-white/10 to-white/15 rounded-lg w-2/3"></div>
-                <div className="h-4 bg-gradient-to-r from-white/10 to-white/15 rounded-lg w-1/2"></div>
-                <div className="h-4 bg-gradient-to-r from-white/10 to-white/15 rounded-lg w-1/3"></div>
+                <div className="h-8 bg-gray-200 rounded-lg w-2/3"></div>
+                <div className="h-4 bg-gray-100 rounded-lg w-1/2"></div>
+                <div className="h-4 bg-gray-100 rounded-lg w-1/3"></div>
               </div>
             </div>
           </div>
@@ -179,20 +179,9 @@ const StatsOverview = ({ data, loading }) => {
         return (
           <div
             key={stat.name}
-            className="relative bg-white/8 backdrop-blur-xl border border-white/12 shadow-xl rounded-2xl p-6 overflow-hidden group hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+            className="relative bg-white shadow-sm border border-gray-100 rounded-2xl p-6 overflow-hidden group hover:shadow-md transition-all duration-300 transform hover:scale-105"
             style={{ animationDelay: `${index * 100}ms` }}
           >
-            {/* Background Elements */}
-            <div className="absolute inset-0 overflow-hidden rounded-2xl">
-              <div
-                className={`absolute top-0 right-0 w-20 h-20 bg-gradient-to-br ${colorScheme.glow} rounded-full blur-xl opacity-50`}
-              ></div>
-              <div
-                className={`absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-br ${colorScheme.glow} rounded-full blur-lg opacity-30`}
-                style={{ animationDelay: "1s" }}
-              ></div>
-            </div>
-
             <div className="relative">
               {/* Icon and Title */}
               <div className="flex items-start justify-between mb-4">
@@ -203,10 +192,10 @@ const StatsOverview = ({ data, loading }) => {
                     <stat.icon className={`h-6 w-6 ${colorScheme.text}`} />
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-bold text-white mb-1">
+                    <p className="text-sm font-bold text-gray-900 mb-1">
                       {stat.name}
                     </p>
-                    <p className="text-xs font-medium text-white/60">
+                    <p className="text-xs font-medium text-gray-500">
                       {stat.subValue}
                     </p>
                   </div>
@@ -215,7 +204,7 @@ const StatsOverview = ({ data, loading }) => {
 
               {/* Main Value */}
               <div className="mb-4">
-                <div className="text-3xl font-bold text-white mb-1">
+                <div className="text-3xl font-bold text-gray-900 mb-1">
                   {stat.value}
                 </div>
               </div>
@@ -224,19 +213,19 @@ const StatsOverview = ({ data, loading }) => {
               <div
                 className={`inline-flex items-center space-x-2 px-3 py-1 rounded-xl text-sm font-semibold ${
                   stat.changeType === "positive"
-                    ? "bg-gradient-to-r from-emerald-900/20 to-green-900/15 text-emerald-400 border border-emerald-500/25"
+                    ? "bg-emerald-50 text-emerald-600 border border-emerald-200"
                     : stat.changeType === "negative"
-                    ? "bg-gradient-to-r from-red-900/20 to-pink-900/15 text-red-300 border border-red-500/20"
-                    : "bg-gradient-to-r from-gray-50 to-white/8 text-white/80 border border-white/12"
+                    ? "bg-red-50 text-red-600 border border-red-200"
+                    : "bg-gray-50 text-gray-700 border border-gray-200"
                 }`}
               >
                 <ChangeIcon
                   className={`h-3 w-3 ${
                     stat.changeType === "positive"
-                      ? "text-emerald-400"
+                      ? "text-emerald-600"
                       : stat.changeType === "negative"
-                      ? "text-red-400"
-                      : "text-white/60"
+                      ? "text-red-600"
+                      : "text-gray-500"
                   }`}
                 />
                 <span>{stat.change}</span>
@@ -244,7 +233,7 @@ const StatsOverview = ({ data, loading }) => {
 
               {/* Period Label */}
               <div className="mt-2">
-                <span className="text-xs text-white/50 font-medium">
+                <span className="text-xs text-gray-400 font-medium">
                   vs last period
                 </span>
               </div>
@@ -252,7 +241,7 @@ const StatsOverview = ({ data, loading }) => {
               {/* Progress Bar for Percentage Values */}
               {stat.name.includes("Rate") || stat.name.includes("Ratio") ? (
                 <div className="mt-4">
-                  <div className="bg-white/10 rounded-full h-2 overflow-hidden">
+                  <div className="bg-gray-100 rounded-full h-2 overflow-hidden">
                     <div
                       className={`h-full bg-gradient-to-r ${colorScheme.bg} rounded-full transition-all duration-1000 ease-out`}
                       style={{
@@ -266,11 +255,6 @@ const StatsOverview = ({ data, loading }) => {
                   </div>
                 </div>
               ) : null}
-
-              {/* Hover Glow Effect */}
-              <div
-                className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${colorScheme.glow} opacity-0 group-hover:opacity-20 transition-opacity duration-300`}
-              ></div>
             </div>
           </div>
         );
@@ -280,9 +264,3 @@ const StatsOverview = ({ data, loading }) => {
 };
 
 export default StatsOverview;
-
-
-
-
-
-
