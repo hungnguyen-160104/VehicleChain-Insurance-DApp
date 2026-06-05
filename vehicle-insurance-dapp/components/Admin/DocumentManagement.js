@@ -1,94 +1,134 @@
 import { useState, useEffect, useRef } from "react";
 import {
-  FiUpload, FiTrash2, FiFileText, FiLock, FiUnlock,
-  FiRefreshCw, FiAlertCircle, FiCheckCircle, FiLoader
+  FiUpload, FiTrash2, FiFileText,
+  FiRefreshCw, FiAlertCircle, FiCheckCircle, FiLoader,
+  FiLock, FiLogIn,
 } from "react-icons/fi";
 import toast from "react-hot-toast";
+import { useAccount } from "wagmi";
+import { useEthersSigner } from "../../provider/hooks";
 
 const AI_SERVICE_URL = process.env.NEXT_PUBLIC_AI_SERVICE_URL || "http://localhost:8000";
+const TOKEN_KEY = "vc_ai_admin_token";
 
-// ─── Login Panel ──────────────────────────────────────────────────────
-const LoginPanel = ({ onLogin }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+// ─── Hook: quản lý JWT token cho AI service ───────────────────────────
+function useAiAuth() {
+  const [token, setToken] = useState(null);
+  const [checking, setChecking] = useState(true);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+  useEffect(() => {
+    const saved = sessionStorage.getItem(TOKEN_KEY);
+    if (saved) {
+      // Kiểm tra token còn hợp lệ không
+      fetch(`${AI_SERVICE_URL}/auth/verify`, {
+        headers: { Authorization: `Bearer ${saved}` },
+      })
+        .then((r) => {
+          if (r.ok) setToken(saved);
+          else sessionStorage.removeItem(TOKEN_KEY);
+        })
+        .catch(() => sessionStorage.removeItem(TOKEN_KEY))
+        .finally(() => setChecking(false));
+    } else {
+      setChecking(false);
+    }
+  }, []);
+
+  // Đăng nhập bằng chữ ký ví owner (Sign-In With Ethereum)
+  const loginWithWallet = async (signer, address) => {
+    if (!signer || !address) throw new Error("Vui lòng kết nối ví owner trước");
+
+    // Bước 1: lấy thông điệp cần ký
+    const chRes = await fetch(`${AI_SERVICE_URL}/auth/challenge`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ address }),
+    });
+    if (!chRes.ok) {
+      const data = await chRes.json().catch(() => ({}));
+      throw new Error(data.detail || "Không tạo được thông điệp đăng nhập");
+    }
+    const { message } = await chRes.json();
+
+    // Bước 2: ký thông điệp bằng ví
+    const signature = await signer.signMessage(message);
+
+    // Bước 3: gửi chữ ký để nhận JWT
+    const res = await fetch(`${AI_SERVICE_URL}/auth/wallet-login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ address, signature }),
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      throw new Error(data.detail || "Đăng nhập thất bại");
+    }
+    const data = await res.json();
+    sessionStorage.setItem(TOKEN_KEY, data.access_token);
+    setToken(data.access_token);
+    return data.access_token;
+  };
+
+  const logout = () => {
+    sessionStorage.removeItem(TOKEN_KEY);
+    setToken(null);
+  };
+
+  return { token, checking, loginWithWallet, logout };
+}
+
+// ─── Login Form ───────────────────────────────────────────────────────
+const WalletLoginForm = ({ onLogin }) => {
+  const { address, isConnected } = useAccount();
+  const signer = useEthersSigner();
+  const [loggingIn, setLoggingIn] = useState(false);
+
+  const handleSignIn = async () => {
+    if (!isConnected || !signer || !address) {
+      toast.error("Vui lòng kết nối ví owner trước");
+      return;
+    }
+    setLoggingIn(true);
     try {
-      const res = await fetch(`${AI_SERVICE_URL}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || "Đăng nhập thất bại");
-      localStorage.setItem("ai_admin_token", data.access_token);
-      onLogin(data.access_token);
-      toast.success("Đăng nhập thành công!");
+      await onLogin(signer, address);
+      toast.success("Đăng nhập AI Service thành công!");
     } catch (err) {
-      setError(err.message);
+      toast.error(err.message || "Đăng nhập thất bại");
     } finally {
-      setLoading(false);
+      setLoggingIn(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center py-8">
-      <div
-        className="w-full max-w-sm rounded-2xl p-6 bg-white border border-gray-200 shadow-lg"
-      >
-        <div className="text-center mb-6">
-          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-red-600 to-red-900 flex items-center justify-center mx-auto mb-3">
-            <FiLock className="text-white text-xl" />
-          </div>
-          <h3 className="text-gray-900 font-semibold text-lg">Đăng nhập AI Admin</h3>
-          <p className="text-gray-500 text-sm mt-1">Xác thực để quản lý tài liệu AI</p>
-        </div>
-
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label className="text-gray-500 text-xs uppercase tracking-wider mb-1.5 block">Tên đăng nhập</label>
-            <input
-              type="text"
-              value={username}
-              onChange={e => setUsername(e.target.value)}
-              placeholder="admin"
-              required
-              className="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-gray-900 text-sm placeholder-gray-400 outline-none focus:border-red-500/60 transition-colors"
-            />
-          </div>
-          <div>
-            <label className="text-gray-500 text-xs uppercase tracking-wider mb-1.5 block">Mật khẩu</label>
-            <input
-              type="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              placeholder="••••••••"
-              required
-              className="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-gray-900 text-sm placeholder-gray-400 outline-none focus:border-red-500/60 transition-colors"
-            />
-          </div>
-
-          {error && (
-            <div className="flex items-center gap-2 text-red-600 text-sm bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-              <FiAlertCircle size={14} />
-              {error}
-            </div>
-          )}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white rounded-xl py-2.5 text-sm font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? "Đang xác thực..." : "Đăng nhập"}
-          </button>
-        </form>
+    <div className="flex flex-col items-center justify-center py-8 space-y-6">
+      <div className="w-16 h-16 rounded-2xl bg-red-100 flex items-center justify-center">
+        <FiLock className="text-red-600 text-2xl" />
       </div>
+      <div className="text-center">
+        <h4 className="text-gray-900 font-bold text-lg">Xác Thực AI Service</h4>
+        <p className="text-gray-500 text-sm mt-1 max-w-sm">
+          Ký một thông điệp bằng <strong>ví owner</strong> để xác thực — không cần mật khẩu.
+        </p>
+      </div>
+      <button
+        onClick={handleSignIn}
+        disabled={loggingIn || !isConnected}
+        className="w-full max-w-sm flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white text-sm font-semibold rounded-xl hover:from-red-700 hover:to-red-800 transition-all disabled:opacity-50"
+      >
+        {loggingIn ? (
+          <FiLoader className="animate-spin" size={14} />
+        ) : (
+          <FiLogIn size={14} />
+        )}
+        {loggingIn
+          ? "Đang ký & xác thực..."
+          : isConnected
+          ? "Đăng nhập bằng ví"
+          : "Hãy kết nối ví trước"}
+      </button>
+      <p className="text-xs text-gray-400 max-w-sm text-center">
+        Chỉ ví trùng với <code className="bg-gray-100 px-1 rounded">owner</code> của hợp đồng mới đăng nhập được.
+      </p>
     </div>
   );
 };
@@ -100,8 +140,9 @@ const UploadZone = ({ token, onUploaded }) => {
   const fileInputRef = useRef(null);
 
   const handleUpload = async (file) => {
-    if (!file || !file.name.toLowerCase().endsWith(".pdf")) {
-      toast.error("Chỉ hỗ trợ file PDF");
+    const isSupported = file && /\.(pdf|docx)$/i.test(file.name);
+    if (!isSupported) {
+      toast.error("Chỉ hỗ trợ file PDF hoặc DOCX");
       return;
     }
     setUploading(true);
@@ -111,7 +152,7 @@ const UploadZone = ({ token, onUploaded }) => {
       const res = await fetch(`${AI_SERVICE_URL}/documents/upload`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
-        body: formData
+        body: formData,
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || "Upload thất bại");
@@ -144,7 +185,7 @@ const UploadZone = ({ token, onUploaded }) => {
       <input
         ref={fileInputRef}
         type="file"
-        accept=".pdf"
+        accept=".pdf,.docx"
         className="hidden"
         onChange={e => e.target.files[0] && handleUpload(e.target.files[0])}
       />
@@ -152,7 +193,7 @@ const UploadZone = ({ token, onUploaded }) => {
       {uploading ? (
         <div className="flex flex-col items-center gap-3">
           <FiLoader className="text-red-600 text-3xl animate-spin" />
-          <p className="text-gray-600 text-sm">Đang xử lý PDF và tạo embedding...</p>
+          <p className="text-gray-600 text-sm">Đang xử lý tài liệu và tạo embedding...</p>
           <p className="text-gray-400 text-xs">Có thể mất 15-30 giây</p>
         </div>
       ) : (
@@ -161,7 +202,7 @@ const UploadZone = ({ token, onUploaded }) => {
             <FiUpload className="text-red-600 text-xl" />
           </div>
           <div>
-            <p className="text-gray-700 text-sm font-medium">Kéo thả PDF vào đây</p>
+            <p className="text-gray-700 text-sm font-medium">Kéo thả PDF / DOCX vào đây</p>
             <p className="text-gray-400 text-xs mt-1">hoặc click để chọn file (tối đa 20MB)</p>
           </div>
           <div className="flex gap-2">
@@ -185,7 +226,7 @@ const DocumentList = ({ documents, token, onDeleted }) => {
     try {
       const res = await fetch(`${AI_SERVICE_URL}/documents/${doc.id}`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || "Xóa thất bại");
@@ -202,7 +243,7 @@ const DocumentList = ({ documents, token, onDeleted }) => {
     return (
       <div className="text-center py-8 text-gray-400">
         <FiFileText size={32} className="mx-auto mb-3 opacity-30" />
-        <p className="text-sm">Chưa có tài liệu nào. Upload PDF để bắt đầu.</p>
+        <p className="text-sm">Chưa có tài liệu nào. Upload PDF/DOCX để bắt đầu.</p>
       </div>
     );
   }
@@ -220,7 +261,9 @@ const DocumentList = ({ documents, token, onDeleted }) => {
           <div className="flex-1 min-w-0">
             <p className="text-gray-800 text-sm font-medium truncate">{doc.original_name}</p>
             <p className="text-gray-400 text-xs mt-0.5">
-              {doc.chunks_count} đoạn · {doc.size_kb} KB · {new Date(doc.uploaded_at).toLocaleDateString("vi-VN")}
+              {doc.chunks_count} đoạn
+              {doc.size_kb ? ` · ${doc.size_kb} KB` : ""}
+              {doc.uploaded_at ? ` · ${new Date(doc.uploaded_at).toLocaleDateString("vi-VN")}` : ""}
             </p>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
@@ -246,47 +289,54 @@ const DocumentList = ({ documents, token, onDeleted }) => {
 
 // ─── Main Component ────────────────────────────────────────────────────
 export default function DocumentManagement() {
-  const [token, setToken] = useState(null);
+  const { token, checking, loginWithWallet, logout } = useAiAuth();
   const [documents, setDocuments] = useState([]);
   const [loadingDocs, setLoadingDocs] = useState(false);
   const [stats, setStats] = useState({ total_chunks: 0 });
-
-  useEffect(() => {
-    const saved = localStorage.getItem("ai_admin_token");
-    if (saved) setToken(saved);
-  }, []);
 
   useEffect(() => {
     if (token) fetchDocuments();
   }, [token]);
 
   const fetchDocuments = async () => {
+    if (!token) return;
     setLoadingDocs(true);
     try {
       const [docsRes, statsRes] = await Promise.all([
-        fetch(`${AI_SERVICE_URL}/documents/`, { headers: { Authorization: `Bearer ${token}` } }),
-        fetch(`${AI_SERVICE_URL}/documents/stats/public`)
+        fetch(`${AI_SERVICE_URL}/documents/`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        fetch(`${AI_SERVICE_URL}/documents/stats/public`),
       ]);
-      if (docsRes.status === 401) { setToken(null); localStorage.removeItem("ai_admin_token"); return; }
+
+      if (docsRes.status === 401 || docsRes.status === 403) {
+        logout();
+        toast.error("Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.");
+        return;
+      }
+
       const docsData = await docsRes.json();
       const statsData = await statsRes.json();
       setDocuments(docsData.documents || []);
       setStats(statsData);
-    } catch (err) {
+    } catch {
       toast.error("Không thể tải danh sách tài liệu");
     } finally {
       setLoadingDocs(false);
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("ai_admin_token");
-    setToken(null);
-    setDocuments([]);
-  };
+  if (checking) {
+    return (
+      <div className="flex items-center justify-center py-12 text-gray-400 gap-3">
+        <FiLoader className="animate-spin" size={18} />
+        <span className="text-sm">Đang kiểm tra phiên đăng nhập...</span>
+      </div>
+    );
+  }
 
   if (!token) {
-    return <LoginPanel onLogin={setToken} />;
+    return <WalletLoginForm onLogin={loginWithWallet} />;
   }
 
   return (
@@ -307,11 +357,11 @@ export default function DocumentManagement() {
             <FiRefreshCw size={16} className={loadingDocs ? "animate-spin" : ""} />
           </button>
           <button
-            onClick={handleLogout}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-gray-500 hover:text-gray-900 border border-gray-200 hover:border-gray-300 rounded-lg text-xs transition-all"
+            onClick={() => { logout(); toast("Đã đăng xuất khỏi AI Service"); }}
+            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+            title="Đăng xuất"
           >
-            <FiUnlock size={12} />
-            Đăng xuất
+            <FiLock size={16} />
           </button>
         </div>
       </div>
@@ -327,7 +377,7 @@ export default function DocumentManagement() {
         {stats.total_chunks > 0 ? <FiCheckCircle size={14} /> : <FiAlertCircle size={14} />}
         {stats.total_chunks > 0
           ? `AI đang hoạt động với ${stats.total_chunks} đoạn văn bản từ ${documents.length} tài liệu`
-          : "Chưa có tài liệu — Upload PDF để chatbot có thể trả lời"
+          : "Chưa có tài liệu — Upload PDF/DOCX để chatbot có thể trả lời"
         }
       </div>
 

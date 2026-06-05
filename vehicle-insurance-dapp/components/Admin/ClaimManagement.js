@@ -180,7 +180,7 @@ const IpfsViewerModal = ({ hash, onClose }) => {
 };
 
 // ─── Main Component ────────────────────────────────────────────────────────
-const ClaimManagement = () => {
+const ClaimManagement = ({ isOwner = false, isGarage = false }) => {
   const provider = useEthersProvider();
   const signer = useEthersSigner();
 
@@ -191,6 +191,8 @@ const ClaimManagement = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [processingClaim, setProcessingClaim] = useState(null);
   const [claimActions, setClaimActions] = useState({});
+  // Garage input state: { [claimId]: { tenGarage, lyDo } }
+  const [garageInputs, setGarageInputs] = useState({});
 
   // IPFS viewer state
   const [ipfsModal, setIpfsModal] = useState({ open: false, hash: null });
@@ -298,6 +300,47 @@ const ClaimManagement = () => {
     }));
   };
 
+  const updateGarageInput = (claimId, field, value) => {
+    setGarageInputs((prev) => ({
+      ...prev,
+      [claimId]: { ...(prev[claimId] || {}), [field]: value },
+    }));
+  };
+
+  // Garage: cập nhật trạng thái giám định (PENDING→DANG_GIAM_DINH hoặc DANG_GIAM_DINH→CHO_HO_SO)
+  const handleGarageAdvance = async (claimId, currentStatus) => {
+    const input = garageInputs[claimId] || {};
+    if (!input.tenGarage?.trim()) {
+      toast.error("Vui lòng nhập tên garage");
+      return;
+    }
+    const nextStatus =
+      currentStatus === CLAIM_STATUS.PENDING
+        ? CLAIM_STATUS.DANG_GIAM_DINH
+        : CLAIM_STATUS.CHO_HO_SO;
+    try {
+      setProcessingClaim(claimId);
+      const result = await contractService.garageCapNhatTrangThai(
+        claimId,
+        nextStatus,
+        input.tenGarage.trim(),
+        input.lyDo?.trim() || "",
+        signer
+      );
+      if (result && result.success) {
+        toast.success("Cập nhật trạng thái giám định thành công!");
+        setGarageInputs((prev) => ({ ...prev, [claimId]: {} }));
+        await fetchClaims();
+      } else {
+        toast.error(result?.error || "Không thể cập nhật trạng thái");
+      }
+    } catch (error) {
+      toast.error("Lỗi khi cập nhật trạng thái giám định");
+    } finally {
+      setProcessingClaim(null);
+    }
+  };
+
   const getStatusColor = (status) => {
     const colors = {
       [CLAIM_STATUS.PENDING]: "bg-yellow-50 text-yellow-700 border-yellow-200",
@@ -316,8 +359,15 @@ const ClaimManagement = () => {
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
   };
 
-  const isActionable = (status) =>
-    status === CLAIM_STATUS.CHO_HO_SO || status === CLAIM_STATUS.DANG_THAM_DINH;
+  // Admin có thể xử lý bất kỳ claim nào chưa kết thúc
+  const isAdminActionable = (status) =>
+    status !== CLAIM_STATUS.APPROVED &&
+    status !== CLAIM_STATUS.REJECTED &&
+    status !== CLAIM_STATUS.PAID;
+
+  // Garage chỉ xử lý PENDING và DANG_GIAM_DINH
+  const isGarageActionable = (status) =>
+    status === CLAIM_STATUS.PENDING || status === CLAIM_STATUS.DANG_GIAM_DINH;
 
   const filterOptions = [
     { value: "all", label: "Tất Cả" },
@@ -485,8 +535,10 @@ const ClaimManagement = () => {
               <div className="divide-y divide-gray-100">
                 {filteredClaims.map((claim, index) => {
                   const action = claimActions[claim.claimId] || {};
+                  const garageInput = garageInputs[claim.claimId] || {};
                   const isProcessing = processingClaim === claim.claimId;
-                  const showActionForm = isActionable(claim.status);
+                  const showAdminForm = isOwner && isAdminActionable(claim.status);
+                  const showGarageForm = isGarage && !isOwner && isGarageActionable(claim.status);
                   const hasIpfs = !!(claim.ipfsDocuments || claim.ipfsHash);
 
                   return (
@@ -606,8 +658,8 @@ const ClaimManagement = () => {
                         </div>
                       )}
 
-                      {/* Chi Tra Button for APPROVED claims */}
-                      {claim.status === CLAIM_STATUS.APPROVED && (
+                      {/* ── Chi Trả: Admin + claim đã duyệt ── */}
+                      {isOwner && claim.status === CLAIM_STATUS.APPROVED && (
                         <div className="flex space-x-4 mb-4">
                           <button
                             onClick={() => handleChiTra(claim.claimId)}
@@ -620,13 +672,71 @@ const ClaimManagement = () => {
                         </div>
                       )}
 
-                      {/* Duyet / Tu Choi Form */}
-                      {showActionForm && (
+                      {/* ── GARAGE: form cập nhật giám định ── */}
+                      {showGarageForm && (
+                        <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 space-y-4">
+                          <div className="flex items-center space-x-2 mb-1">
+                            <FiTruck className="h-5 w-5 text-emerald-600" />
+                            <h5 className="font-bold text-gray-900">
+                              {claim.status === CLAIM_STATUS.PENDING
+                                ? "Bắt Đầu Giám Định"
+                                : "Hoàn Thành Giám Định — Chờ Hồ Sơ"}
+                            </h5>
+                          </div>
+                          <p className="text-xs text-emerald-700">
+                            {claim.status === CLAIM_STATUS.PENDING
+                              ? "Xác nhận tiếp nhận và bắt đầu quá trình giám định xe"
+                              : "Giám định hoàn tất, yêu cầu khách nộp hồ sơ giấy tờ bổ sung"}
+                          </p>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                              <label className="block text-sm font-bold text-gray-700 mb-2">
+                                Tên Garage <span className="text-red-500">*</span>
+                              </label>
+                              <input
+                                type="text"
+                                placeholder="VD: Garage Hoàng Long"
+                                value={garageInput.tenGarage || ""}
+                                onChange={(e) => updateGarageInput(claim.claimId, "tenGarage", e.target.value)}
+                                className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 text-gray-900 font-medium"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-bold text-gray-700 mb-2">Ghi Chú</label>
+                              <input
+                                type="text"
+                                placeholder="Ghi chú kết quả giám định..."
+                                value={garageInput.lyDo || ""}
+                                onChange={(e) => updateGarageInput(claim.claimId, "lyDo", e.target.value)}
+                                className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 text-gray-900 font-medium"
+                              />
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => handleGarageAdvance(claim.claimId, claim.status)}
+                            disabled={isProcessing || !garageInput.tenGarage?.trim()}
+                            className="group inline-flex items-center px-6 py-3 bg-gradient-to-r from-emerald-600 to-green-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:transform-none"
+                          >
+                            <FiCheck className="w-4 h-4 mr-2" />
+                            {isProcessing
+                              ? "Đang Xử Lý..."
+                              : claim.status === CLAIM_STATUS.PENDING
+                              ? "Bắt Đầu Giám Định"
+                              : "Xác Nhận Chờ Hồ Sơ"}
+                          </button>
+                        </div>
+                      )}
+
+                      {/* ── ADMIN: form duyệt/từ chối ── */}
+                      {showAdminForm && (
                         <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 space-y-4">
                           <div className="flex items-center space-x-2 mb-2">
                             <FiAlertCircle className="h-5 w-5 text-amber-600" />
                             <h5 className="font-bold text-gray-900">
                               Xử Lý Yêu Cầu #{String(claim.claimId)}
+                              <span className="ml-2 text-xs font-normal text-amber-600">
+                                (Trạng thái hiện tại: {CLAIM_STATUS_LABELS[claim.status]})
+                              </span>
                             </h5>
                           </div>
 
@@ -662,7 +772,7 @@ const ClaimManagement = () => {
                               className="group inline-flex items-center px-6 py-3 bg-gradient-to-r from-emerald-600 to-green-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:transform-none"
                             >
                               <FiCheck className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
-                              {isProcessing ? "Đang Xử Lý..." : "Duyệt"}
+                              {isProcessing ? "Đang Xử Lý..." : "Duyệt Bồi Thường"}
                             </button>
 
                             <button

@@ -126,6 +126,7 @@ contract VehicleInsuranceDApp is ReentrancyGuard, Ownable, Pausable {
     mapping(uint256 => uint256[]) public policyClaims;       // policyId => claimId[]
 
     mapping(address => bool) public authorizedGarages;       // Garage được ủy quyền giám định
+    address[] private _garageList;                           // Danh sách địa chỉ garage đã từng được cấp quyền
 
     // ═══════════════════════════════════════════
     // EVENTS
@@ -296,7 +297,7 @@ contract VehicleInsuranceDApp is ReentrancyGuard, Ownable, Pausable {
     ) external whenNotPaused {
         require(_notEmpty(_bienSo), "Bien so khong duoc trong");
         require(!vehicles[_bienSo].isRegistered, "Xe da duoc dang ky");
-        require(_namSanXuat > 1900 && _namSanXuat < 2030, "Nam san xuat khong hop le");
+        require(_namSanXuat > 1900 && _namSanXuat < 2100, "Nam san xuat khong hop le");
         if (_loaiXe != VehicleType.XE_MAY) {
             require(_giaTriXe > 0, "O to/xe tai phai khai bao gia tri xe");
         }
@@ -402,12 +403,13 @@ contract VehicleInsuranceDApp is ReentrancyGuard, Ownable, Pausable {
         external
         payable
         nonReentrant
+        whenNotPaused
         onlyPolicyholder(_policyId)
     {
         Policy storage policy = policies[_policyId];
         require(policy.paymentType == PaymentType.MONTHLY, "Khong phai hop dong hang thang");
         require(policy.status == PolicyStatus.ACTIVE, "Hop dong khong con hieu luc");
-        require(block.timestamp >= policy.endDate, "Chua den ky gia han");
+        require(block.timestamp >= policy.endDate - 7 days, "Chua den ky gia han (chi duoc gia han trong vong 7 ngay truoc khi het han)");
 
         uint256 requiredPremium = _tinhPhiBaoHiem(
             policy.vehicleBienSo,
@@ -444,7 +446,7 @@ contract VehicleInsuranceDApp is ReentrancyGuard, Ownable, Pausable {
         uint256 _claimAmount,
         string calldata _ipfsDocuments,
         string calldata _description
-    ) external nonReentrant onlyPolicyholder(_policyId) validPolicy(_policyId) {
+    ) external nonReentrant whenNotPaused onlyPolicyholder(_policyId) validPolicy(_policyId) {
         require(_claimAmount > 0, "So tien yeu cau phai lon hon 0");
         require(block.timestamp <= policies[_policyId].endDate, "Hop dong da het han");
 
@@ -552,10 +554,11 @@ contract VehicleInsuranceDApp is ReentrancyGuard, Ownable, Pausable {
         require(_claimId > 0 && _claimId <= _claimIdCounter, "ID khieu nai khong hop le");
 
         Claim storage claim = claims[_claimId];
+        // Admin chỉ duyệt/từ chối sau khi đã qua giám định garage và nộp đủ hồ sơ
         require(
             claim.status == ClaimStatus.CHO_HO_SO ||
             claim.status == ClaimStatus.DANG_THAM_DINH,
-            "Claim chua o giai doan tham dinh"
+            "Claim phai o buoc CHO_HO_SO hoac DANG_THAM_DINH"
         );
 
         if (_isApproved) {
@@ -627,6 +630,7 @@ contract VehicleInsuranceDApp is ReentrancyGuard, Ownable, Pausable {
     function huyHopDong(uint256 _policyId)
         external
         nonReentrant
+        whenNotPaused
         onlyPolicyholder(_policyId)
     {
         Policy storage policy = policies[_policyId];
@@ -648,8 +652,20 @@ contract VehicleInsuranceDApp is ReentrancyGuard, Ownable, Pausable {
      */
     function capQuyenGarage(address _garage, bool _status) external onlyOwner {
         require(_garage != address(0), "Dia chi garage khong hop le");
+        // Thêm vào danh sách nếu là lần cấp quyền đầu tiên
+        if (_status && !authorizedGarages[_garage]) {
+            _garageList.push(_garage);
+        }
         authorizedGarages[_garage] = _status;
         emit GarageCapNhatQuyen(_garage, _status);
+    }
+
+    /**
+     * @notice Lấy danh sách tất cả garage đã từng được cấp quyền
+     * @return Mảng địa chỉ garage
+     */
+    function getGarageList() external view returns (address[] memory) {
+        return _garageList;
     }
 
     /**

@@ -1,6 +1,7 @@
 {
   "nav": {
     "dashboard": "Tableau de bord",
+    "vehicles": "Véhicules",
     "plans": "Plans d'assurance",
     "policies": "Contrats",
     "claims": "Sinistres",
@@ -193,7 +194,7 @@
     "footer_active": "Actif sur Ethereum",
     "footer_tagline": "Assurance Véhicule",
     "footer_desc": "Système de gestion d'assurance véhicule intelligent sur la blockchain Ethereum. Transparent, sécurisé et entièrement décentralisé.",
-    "footer_copyright": "2025 VehicleChain. Tous droits réservés.",
+    "footer_copyright": "2026 VehicleChain. Tous droits réservés.",
     "footer_privacy": "Politique de confidentialité",
     "footer_terms": "Conditions d'utilisation"
   },

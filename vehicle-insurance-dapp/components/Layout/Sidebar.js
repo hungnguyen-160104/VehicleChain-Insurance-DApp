@@ -16,15 +16,14 @@ import {
   FiGlobe,
   FiTruck,
 } from "react-icons/fi";
-import { MdAdminPanelSettings } from "react-icons/md";
 
 const NAV_ITEMS = [
   { key: "dashboard", href: "/dashboard", icon: FiHome },
+  { key: "vehicles", href: "/vehicles", icon: FiTruck },
   { key: "plans", href: "/plans", icon: FiShield },
   { key: "policies", href: "/policies", icon: FiFileText },
   { key: "claims", href: "/claims", icon: FiCreditCard },
   { key: "analytics", href: "/analytics", icon: FiBarChart },
-  { key: "admin", href: "/admin", icon: MdAdminPanelSettings },
 ];
 
 function classNames(...classes) {
@@ -44,11 +43,11 @@ const Sidebar = ({ open, setOpen }) => {
           <div className="relative flex-shrink-0">
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white border border-gray-100 shadow-md group-hover/logo:shadow-lg transition-all duration-200 overflow-hidden">
               <Image
-                src="/hust-logo.png"
-                alt="HUST Logo"
-                width={40}
-                height={40}
-                className="object-contain p-0.5"
+                src="/logo.png"
+                alt="VehicleChain Logo"
+                width={44}
+                height={44}
+                className="w-full h-full object-cover"
                 unoptimized
               />
             </div>
@@ -60,7 +59,6 @@ const Sidebar = ({ open, setOpen }) => {
             <h1 className="text-lg font-bold text-gray-900 tracking-tight group-hover/logo:text-red-600 transition-colors">
               VehicleChain
             </h1>
-            <p className="text-xs text-red-500 font-semibold leading-none">ĐHBK Hà Nội</p>
           </div>
         </Link>
       </div>

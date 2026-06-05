@@ -1,6 +1,7 @@
 {
   "nav": {
     "dashboard": "Trang chủ",
+    "vehicles": "Phương tiện",
     "plans": "Gói bảo hiểm",
     "policies": "Hợp đồng",
     "claims": "Bồi thường",
@@ -193,7 +194,7 @@
     "footer_active": "Đang hoạt động trên Ethereum",
     "footer_tagline": "Bảo Hiểm Xe Cơ Giới",
     "footer_desc": "Hệ thống quản lý bảo hiểm xe cơ giới thông minh trên nền tảng blockchain Ethereum. Minh bạch, an toàn và hoàn toàn phi tập trung.",
-    "footer_copyright": "2025 VehicleChain — Đại học Bách Khoa Hà Nội. Bảo lưu mọi quyền.",
+    "footer_copyright": "2026 VehicleChain. Bảo lưu mọi quyền.",
     "footer_privacy": "Chính sách bảo mật",
     "footer_terms": "Điều khoản dịch vụ"
   },

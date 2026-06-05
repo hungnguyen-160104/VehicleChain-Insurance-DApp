@@ -202,7 +202,7 @@ const PurchaseModal = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-3xl transform overflow-hidden rounded-2xl bg-white shadow-2xl border border-gray-100 transition-all">
+              <Dialog.Panel className="w-full max-w-3xl transform max-h-[calc(100vh-2rem)] overflow-y-auto rounded-2xl bg-white shadow-2xl border border-gray-100 transition-all">
                 {/* Header */}
                 <div className="flex items-center justify-between p-8 pb-4 border-b border-gray-100">
                   <div className="flex items-center space-x-4">

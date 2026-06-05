@@ -98,8 +98,7 @@ export default function LandingPage() {
       <Head>
         <title>VehicleChain | ĐHBK Hà Nội - {t("index.hero_title")} {t("index.hero_title2")}</title>
         <meta name="description" content={t("index.hero_desc")} />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/hust-logo.png" />
+        <link rel="icon" href="/logo.png" />
       </Head>
 
       <div className="min-h-screen bg-white">
@@ -118,11 +117,10 @@ export default function LandingPage() {
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-md border border-gray-100 overflow-hidden">
-                  <Image src="/hust-logo.png" alt="HUST" width={36} height={36} className="object-contain p-0.5" unoptimized />
+                  <Image src="/logo.png" alt="VehicleChain" width={40} height={40} className="w-full h-full object-cover" unoptimized />
                 </div>
                 <div>
                   <span className="text-xl font-bold text-gray-900">VehicleChain</span>
-                  <p className="text-xs text-red-600 leading-none font-semibold">ĐHBK Hà Nội</p>
                 </div>
               </div>
 
@@ -446,11 +444,10 @@ export default function LandingPage() {
               <div className="col-span-2">
                 <div className="flex items-center space-x-3 mb-6">
                   <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center border border-gray-200 overflow-hidden">
-                    <Image src="/hust-logo.png" alt="HUST" width={36} height={36} className="object-contain p-0.5" unoptimized />
+                    <Image src="/logo.png" alt="VehicleChain" width={40} height={40} className="w-full h-full object-cover" unoptimized />
                   </div>
                   <div>
                     <span className="text-xl font-bold text-white">VehicleChain</span>
-                    <p className="text-xs text-red-400">Đại học Bách Khoa Hà Nội</p>
                   </div>
                 </div>
                 <p className="text-gray-400 mb-6 max-w-md leading-relaxed text-sm">

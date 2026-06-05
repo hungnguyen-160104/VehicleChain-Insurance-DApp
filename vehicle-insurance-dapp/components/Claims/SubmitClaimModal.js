@@ -210,7 +210,7 @@ const SubmitClaimModal = ({ isOpen, onClose, policies = [], onSuccess }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white shadow-2xl border border-gray-100 p-8 text-left align-middle transition-all">
+              <Dialog.Panel className="w-full max-w-4xl transform max-h-[calc(100vh-2rem)] overflow-y-auto rounded-2xl bg-white shadow-2xl border border-gray-100 p-4 sm:p-8 text-left align-middle transition-all">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-8">
                   <div className="flex items-center space-x-4">

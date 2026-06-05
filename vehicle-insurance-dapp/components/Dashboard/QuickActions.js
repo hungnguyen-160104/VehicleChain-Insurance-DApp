@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   FiPlus,
   FiFileText,
@@ -7,12 +8,6 @@ import {
   FiZap,
   FiLock,
 } from "react-icons/fi";
-
-const Link = ({ href, children, className }) => (
-  <a href={href} className={className}>
-    {children}
-  </a>
-);
 
 const QuickActions = () => {
   const actions = [

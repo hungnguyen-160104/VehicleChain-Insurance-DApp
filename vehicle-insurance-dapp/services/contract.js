@@ -480,29 +480,65 @@ class ContractService {
   async fetchAllClaims(provider) {
     try {
       const contract = this.initContract(provider);
-      const total = await contract.getTotalClaims();
-      const claims = [];
+      const total = Number(await contract.getTotalClaims());
+      if (total === 0) return { success: true, claims: [] };
 
-      for (let i = 1; i <= Number(total); i++) {
-        try {
-          const claim = await this.getClaim(i, provider);
-          if (!claim) continue;
+      // Parallel fetch tất cả claims cùng lúc (thay vì sequential N+1)
+      const claimIds = Array.from({ length: total }, (_, i) => i + 1);
+      const claimResults = await Promise.all(
+        claimIds.map((id) => this.getClaim(id, provider).catch(() => null))
+      );
+      const validClaims = claimResults.filter(Boolean);
 
-          // Lấy thêm biển số xe từ policy
-          const policy = await contract.policies(claim.policyId);
-          claim.vehicleBienSo = policy.vehicleBienSo;
-          claim.insuranceTypeLabel = INSURANCE_TYPE_LABELS[Number(policy.insuranceType)] || "Không rõ";
+      // Parallel fetch tất cả policies tương ứng
+      const policyResults = await Promise.all(
+        validClaims.map((claim) =>
+          contract.policies(claim.policyId).catch(() => null)
+        )
+      );
 
-          claims.push(claim);
-        } catch (err) {
-          console.error(`fetchAllClaims item ${i} error:`, err);
-        }
-      }
+      const claims = validClaims.map((claim, idx) => {
+        const policy = policyResults[idx];
+        return {
+          ...claim,
+          vehicleBienSo: policy ? policy.vehicleBienSo : "",
+          insuranceTypeLabel: policy
+            ? INSURANCE_TYPE_LABELS[Number(policy.insuranceType)] || "Không rõ"
+            : "Không rõ",
+        };
+      });
 
       return { success: true, claims };
     } catch (err) {
       console.error("fetchAllClaims error:", err);
       return { success: false, error: err.message, claims: [] };
+    }
+  }
+
+  async getGarageList(provider) {
+    try {
+      const contract = this.initContract(provider);
+      const addresses = await contract.getGarageList();
+      const statusResults = await Promise.all(
+        addresses.map((addr) => contract.authorizedGarages(addr).catch(() => false))
+      );
+      return addresses.map((addr, i) => ({
+        address: addr,
+        isActive: statusResults[i],
+      }));
+    } catch (err) {
+      console.error("getGarageList error:", err);
+      return [];
+    }
+  }
+
+  async getIsPaused(provider) {
+    try {
+      const contract = this.initContract(provider);
+      return await contract.paused();
+    } catch (err) {
+      console.error("getIsPaused error:", err);
+      return false;
     }
   }
 

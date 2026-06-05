@@ -4,8 +4,10 @@ import os
 
 class Settings(BaseSettings):
     GEMINI_API_KEY: str
-    ADMIN_USERNAME: str = "admin"
-    ADMIN_PASSWORD: str = "admin123"
+    # Địa chỉ ví owner (chủ hợp đồng) — CHỈ ví này mới đăng nhập quản trị AI được.
+    # Đăng nhập bằng chữ ký ví thay cho username/password.
+    # Mặc định = tài khoản Hardhat #0 (deployer trên localhost).
+    OWNER_ADDRESS: str = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
     JWT_SECRET_KEY: str = "insurance-vehiclechain-secret-2025"
     JWT_ALGORITHM: str = "HS256"
     JWT_EXPIRE_MINUTES: int = 480

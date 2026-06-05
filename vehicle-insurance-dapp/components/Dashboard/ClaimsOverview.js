@@ -11,6 +11,7 @@ import {
   FiCheckCircle,
   FiDollarSign,
 } from "react-icons/fi";
+import Link from "next/link";
 import { CLAIM_STATUS } from "../../services/contract";
 
 const glassCard = {
@@ -142,13 +143,13 @@ const ClaimsOverview = ({ claims = [], loading = false, onRefresh }) => {
             </div>
             <h3 className="text-base font-bold text-gray-900 mb-2">Chưa Có Yêu Cầu Bồi Thường</h3>
             <p className="text-gray-500 mb-6 text-sm max-w-xs mx-auto">Khi xảy ra tai nạn, bạn có thể gửi yêu cầu bồi thường tại đây.</p>
-            <a
+            <Link
               href="/claims"
               className="inline-flex items-center px-5 py-2.5 text-sm font-semibold rounded-xl text-white bg-gradient-to-r from-red-700 to-orange-600 hover:from-red-600 hover:to-orange-500 shadow-lg shadow-red-900/20 transition-all duration-200 hover:scale-105"
             >
               <FiFileText className="mr-2 h-4 w-4" />
               Nộp Yêu Cầu Đầu Tiên
-            </a>
+            </Link>
           </div>
         ) : (
           <div className="space-y-3">
@@ -209,12 +210,12 @@ const ClaimsOverview = ({ claims = [], loading = false, onRefresh }) => {
 
             {claims.length > 5 && (
               <div className="text-center pt-2">
-                <a href="/claims" className="group inline-flex items-center text-sm text-red-600 hover:text-red-700 font-semibold transition-colors">
+                <Link href="/claims" className="group inline-flex items-center text-sm text-red-600 hover:text-red-700 font-semibold transition-colors">
                   <span>Xem tất cả {claims.length} yêu cầu</span>
                   <svg className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
-                </a>
+                </Link>
               </div>
             )}
           </div>

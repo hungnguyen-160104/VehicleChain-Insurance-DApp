@@ -1,9 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",
+  // output: "export" đã bỏ → dùng Next.js server mode để hỗ trợ rewrites
   trailingSlash: true,
   images: {
     unoptimized: true,
+  },
+  // Proxy /ai-api/* → http://localhost:8000/* (chỉ cần 1 cổng Cloudflare)
+  async rewrites() {
+    return [
+      {
+        source: "/ai-api/:path*",
+        destination: "http://localhost:8000/:path*",
+      },
+    ];
   },
   experimental: {
     appDir: false, // Keep this false for pages directory

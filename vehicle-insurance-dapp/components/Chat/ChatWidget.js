@@ -61,20 +61,6 @@ const ChatMessage = ({ msg, onRetry }) => {
             🔄 Thử lại câu hỏi
           </button>
         )}
-
-        {/* Sources */}
-        {!isUser && msg.sources && msg.sources.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-1">
-            {msg.sources.map((s, i) => (
-              <span
-                key={i}
-                className="text-[10px] px-2 py-0.5 bg-red-50 border border-red-200 text-red-600 rounded-full"
-              >
-                📄 {s.filename.replace(/^[a-f0-9-]{36}\.pdf$/, "Tài liệu")}
-              </span>
-            ))}
-          </div>
-        )}
       </div>
     </div>
   );
@@ -123,7 +109,9 @@ export default function ChatWidget() {
   }, []);
 
   const sendMessage = async (questionOverride) => {
-    const question = (questionOverride || input).trim();
+    // Chỉ nhận override khi là chuỗi (tránh trường hợp bị truyền vào event object)
+    const source = typeof questionOverride === "string" ? questionOverride : input;
+    const question = source.trim();
     if (!question || isLoading) return;
 
     setInput("");
@@ -179,7 +167,7 @@ export default function ChatWidget() {
       {/* Chat Panel */}
       {isOpen && (
         <div
-          className="fixed bottom-24 right-6 z-50 w-[380px] h-[520px] flex flex-col rounded-2xl overflow-hidden bg-white border border-gray-200 shadow-2xl"
+          className="fixed bottom-24 right-3 sm:right-6 z-50 w-[calc(100vw-1.5rem)] sm:w-[380px] h-[520px] max-h-[calc(100vh-8rem)] flex flex-col rounded-2xl overflow-hidden bg-white border border-gray-200 shadow-2xl"
         >
           {/* Header */}
           <div
@@ -249,7 +237,7 @@ export default function ChatWidget() {
                 style={{ minHeight: "20px" }}
               />
               <button
-                onClick={sendMessage}
+                onClick={() => sendMessage()}
                 disabled={isLoading || !input.trim()}
                 className={`p-2 rounded-lg transition-all flex-shrink-0
                   ${input.trim() && !isLoading

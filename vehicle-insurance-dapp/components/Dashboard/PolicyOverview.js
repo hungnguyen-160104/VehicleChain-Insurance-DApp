@@ -8,6 +8,7 @@ import {
   FiTrendingUp,
   FiTruck,
 } from "react-icons/fi";
+import Link from "next/link";
 import { POLICY_STATUS } from "../../services/contract";
 
 const glassCard = {
@@ -122,13 +123,13 @@ const PolicyOverview = ({ policies = [], loading = false, onRefresh }) => {
             </div>
             <h3 className="text-base font-bold text-gray-900 mb-2">Chưa Có Hợp Đồng</h3>
             <p className="text-gray-500 mb-6 text-sm max-w-xs mx-auto">Bảo vệ xe của bạn với các gói bảo hiểm xe cơ giới trên blockchain.</p>
-            <a
+            <Link
               href="/plans"
               className="inline-flex items-center px-5 py-2.5 text-sm font-semibold rounded-xl text-white bg-gradient-to-r from-purple-700 to-red-700 hover:from-purple-600 hover:to-red-600 shadow-lg shadow-purple-900/20 transition-all duration-200 hover:scale-105"
             >
               <FiShield className="mr-2 h-4 w-4" />
               Xem Gói Bảo Hiểm
-            </a>
+            </Link>
           </div>
         ) : (
           <div className="space-y-3">
@@ -191,12 +192,12 @@ const PolicyOverview = ({ policies = [], loading = false, onRefresh }) => {
 
             {policies.length > 3 && (
               <div className="text-center pt-2">
-                <a href="/policies" className="group inline-flex items-center text-sm text-purple-600 hover:text-purple-700 font-semibold transition-colors">
+                <Link href="/policies" className="group inline-flex items-center text-sm text-purple-600 hover:text-purple-700 font-semibold transition-colors">
                   <span>Xem tất cả {policies.length} hợp đồng</span>
                   <svg className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
-                </a>
+                </Link>
               </div>
             )}
           </div>

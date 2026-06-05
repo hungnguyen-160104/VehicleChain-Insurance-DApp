@@ -1,4 +1,5 @@
 import pdfplumber
+from docx import Document as DocxDocument
 from pathlib import Path
 from typing import List
 import re
@@ -25,6 +26,28 @@ def extract_text_from_pdf(file_path: str) -> str:
                         full_text.append(f"[Bảng trang {page_num}]\n{table_text}")
 
     return "\n\n".join(full_text)
+
+def extract_text_from_docx(file_path: str) -> str:
+    """Trích xuất text từ file Word (.docx), hỗ trợ tiếng Việt và bảng biểu"""
+    doc = DocxDocument(file_path)
+    parts = []
+
+    # Đoạn văn
+    for para in doc.paragraphs:
+        if para.text and para.text.strip():
+            parts.append(para.text.strip())
+
+    # Bảng biểu
+    for idx, table in enumerate(doc.tables, start=1):
+        rows = []
+        for row in table.rows:
+            cells = [cell.text.strip() if cell.text else "" for cell in row.cells]
+            rows.append(" | ".join(cells))
+        table_text = "\n".join(rows).strip()
+        if table_text:
+            parts.append(f"[Bảng {idx}]\n{table_text}")
+
+    return "\n\n".join(parts)
 
 def _table_to_text(table: List[List]) -> str:
     """Chuyển bảng thành text dạng markdown"""
@@ -93,10 +116,22 @@ def _get_overlap(text: str) -> str:
         return text[newline_pos:].strip()
     return text[-CHUNK_OVERLAP:].strip()
 
-def process_pdf(file_path: str) -> List[str]:
-    """Pipeline hoàn chỉnh: PDF → text → chunks"""
-    text = extract_text_from_pdf(file_path)
+SUPPORTED_EXTENSIONS = (".pdf", ".docx")
+
+def process_document(file_path: str) -> List[str]:
+    """Pipeline hoàn chỉnh: PDF/DOCX → text → chunks"""
+    ext = Path(file_path).suffix.lower()
+    if ext == ".pdf":
+        text = extract_text_from_pdf(file_path)
+    elif ext == ".docx":
+        text = extract_text_from_docx(file_path)
+    else:
+        raise ValueError(f"Định dạng không hỗ trợ: {ext}")
+
     if not text.strip():
-        raise ValueError("PDF không có nội dung hoặc bị mã hóa")
-    chunks = split_text_into_chunks(text)
-    return chunks
+        raise ValueError("Tài liệu không có nội dung văn bản hoặc bị mã hóa")
+    return split_text_into_chunks(text)
+
+# Giữ tương thích ngược
+def process_pdf(file_path: str) -> List[str]:
+    return process_document(file_path)

@@ -2,10 +2,16 @@ from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime
 
-# ─── Auth ──────────────────────────────────────────────────────────────
-class LoginRequest(BaseModel):
-    username: str
-    password: str
+# ─── Auth (đăng nhập bằng chữ ký ví owner) ─────────────────────────────
+class WalletChallengeRequest(BaseModel):
+    address: str
+
+class WalletChallengeResponse(BaseModel):
+    message: str
+
+class WalletLoginRequest(BaseModel):
+    address: str
+    signature: str
 
 class TokenResponse(BaseModel):
     access_token: str
@@ -30,10 +36,10 @@ class ChatResponse(BaseModel):
 class DocumentInfo(BaseModel):
     id: str
     filename: str
-    original_name: str
-    uploaded_at: str
-    chunks_count: int
-    size_kb: float
+    original_name: str = ""
+    uploaded_at: str = ""
+    chunks_count: int = 0
+    size_kb: float = 0
     status: str = "active"
 
 class DocumentListResponse(BaseModel):

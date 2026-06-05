@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useEthersSigner } from "../../provider/hooks";
+import { useState, useEffect, useCallback } from "react";
+import { useEthersSigner, useEthersProvider } from "../../provider/hooks";
 import { contractService } from "../../services/contract";
 import {
   FiTruck,
@@ -9,92 +9,70 @@ import {
   FiShield,
   FiRefreshCw,
   FiAlertCircle,
+  FiLoader,
 } from "react-icons/fi";
 import toast from "react-hot-toast";
 
 const GarageManagement = () => {
   const signer = useEthersSigner();
+  const provider = useEthersProvider();
   const [garageAddress, setGarageAddress] = useState("");
   const [authorizing, setAuthorizing] = useState(false);
   const [revokingAddress, setRevokingAddress] = useState(null);
   const [garages, setGarages] = useState([]);
+  const [loadingGarages, setLoadingGarages] = useState(false);
 
-  // Load garages from localStorage on mount
-  useEffect(() => {
-    const saved = localStorage.getItem("authorizedGarages");
-    if (saved) {
-      try {
-        setGarages(JSON.parse(saved));
-      } catch {
-        setGarages([]);
-      }
+  // Đọc danh sách garage từ blockchain (nguồn truth duy nhất)
+  const loadGaragesFromChain = useCallback(async () => {
+    if (!provider) return;
+    setLoadingGarages(true);
+    try {
+      const list = await contractService.getGarageList(provider);
+      setGarages(list);
+    } catch (err) {
+      console.error("Lỗi tải danh sách garage:", err);
+      toast.error("Không thể tải danh sách garage từ blockchain");
+    } finally {
+      setLoadingGarages(false);
     }
-  }, []);
+  }, [provider]);
 
-  const saveGarages = (list) => {
-    setGarages(list);
-    localStorage.setItem("authorizedGarages", JSON.stringify(list));
-  };
+  useEffect(() => {
+    loadGaragesFromChain();
+  }, [loadGaragesFromChain]);
 
   const handleCapQuyen = async () => {
     if (!garageAddress.trim()) {
       toast.error("Vui lòng nhập địa chỉ ví của garage");
       return;
     }
-
     if (!/^0x[a-fA-F0-9]{40}$/.test(garageAddress.trim())) {
       toast.error("Địa chỉ Ethereum không hợp lệ");
       return;
     }
-
-    const normalizedAddress = garageAddress.trim().toLowerCase();
-
-    if (
-      garages.some(
-        (g) => g.address.toLowerCase() === normalizedAddress && g.isActive
-      )
-    ) {
+    if (!signer) {
+      toast.error("Vui lòng kết nối ví MetaMask");
+      return;
+    }
+    const existingActive = garages.find(
+      (g) => g.address.toLowerCase() === garageAddress.trim().toLowerCase() && g.isActive
+    );
+    if (existingActive) {
       toast.error("Garage này đã được cấp quyền");
       return;
     }
 
     try {
       setAuthorizing(true);
-      const result = await contractService.capQuyenGarage(
-        garageAddress.trim(),
-        true,
-        signer
-      );
-
+      const result = await contractService.capQuyenGarage(garageAddress.trim(), true, signer);
       if (result && result.success) {
         toast.success("Cấp quyền garage thành công!");
-
-        const newGarage = {
-          address: garageAddress.trim(),
-          isActive: true,
-          authorizedDate: new Date().toISOString(),
-          transactionHash: result.transactionHash || "",
-        };
-
-        // Update or add to list
-        const existingIndex = garages.findIndex(
-          (g) => g.address.toLowerCase() === normalizedAddress
-        );
-        let updatedList;
-        if (existingIndex >= 0) {
-          updatedList = [...garages];
-          updatedList[existingIndex] = newGarage;
-        } else {
-          updatedList = [newGarage, ...garages];
-        }
-
-        saveGarages(updatedList);
         setGarageAddress("");
+        await loadGaragesFromChain();
       } else {
         toast.error(result?.error || "Không thể cấp quyền garage");
       }
     } catch (error) {
-      console.error("Lỗi khi cấp quyền garage:", error);
       toast.error(error.reason || "Lỗi khi cấp quyền garage");
     } finally {
       setAuthorizing(false);
@@ -102,35 +80,17 @@ const GarageManagement = () => {
   };
 
   const handleThuHoi = async (address) => {
-    if (
-      !window.confirm(
-        `Bạn có chắc chắn muốn thu hồi quyền của garage ${formatAddress(address)}?`
-      )
-    ) {
-      return;
-    }
-
+    if (!window.confirm(`Bạn có chắc chắn muốn thu hồi quyền của garage ${formatAddress(address)}?`)) return;
     try {
       setRevokingAddress(address);
-      const result = await contractService.capQuyenGarage(
-        address,
-        false,
-        signer
-      );
-
+      const result = await contractService.capQuyenGarage(address, false, signer);
       if (result && result.success) {
         toast.success("Thu hồi quyền garage thành công!");
-        const updatedList = garages.map((g) =>
-          g.address.toLowerCase() === address.toLowerCase()
-            ? { ...g, isActive: false, revokedDate: new Date().toISOString() }
-            : g
-        );
-        saveGarages(updatedList);
+        await loadGaragesFromChain();
       } else {
         toast.error(result?.error || "Không thể thu hồi quyền garage");
       }
     } catch (error) {
-      console.error("Lỗi khi thu hồi quyền:", error);
       toast.error(error.reason || "Lỗi khi thu hồi quyền garage");
     } finally {
       setRevokingAddress(null);
@@ -140,42 +100,18 @@ const GarageManagement = () => {
   const handleCapLai = async (address) => {
     try {
       setRevokingAddress(address);
-      const result = await contractService.capQuyenGarage(
-        address,
-        true,
-        signer
-      );
-
+      const result = await contractService.capQuyenGarage(address, true, signer);
       if (result && result.success) {
         toast.success("Cấp lại quyền garage thành công!");
-        const updatedList = garages.map((g) =>
-          g.address.toLowerCase() === address.toLowerCase()
-            ? {
-                ...g,
-                isActive: true,
-                authorizedDate: new Date().toISOString(),
-                revokedDate: undefined,
-              }
-            : g
-        );
-        saveGarages(updatedList);
+        await loadGaragesFromChain();
       } else {
         toast.error(result?.error || "Không thể cấp lại quyền");
       }
     } catch (error) {
-      console.error("Lỗi khi cấp lại quyền:", error);
       toast.error(error.reason || "Lỗi khi cấp lại quyền garage");
     } finally {
       setRevokingAddress(null);
     }
-  };
-
-  const handleRemoveFromList = (address) => {
-    const updatedList = garages.filter(
-      (g) => g.address.toLowerCase() !== address.toLowerCase()
-    );
-    saveGarages(updatedList);
-    toast.success("Đã xóa khỏi danh sách");
   };
 
   const formatAddress = (address) => {
@@ -193,9 +129,17 @@ const GarageManagement = () => {
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Quản Lý Garage</h2>
           <p className="text-gray-500">
-            Cấp quyền và quản lý các garage giám định xe
+            Cấp quyền và quản lý các garage giám định xe (đồng bộ từ blockchain)
           </p>
         </div>
+        <button
+          onClick={loadGaragesFromChain}
+          disabled={loadingGarages}
+          className="inline-flex items-center px-4 py-2 bg-gray-50 border border-gray-200 text-sm font-medium rounded-xl text-gray-700 hover:bg-gray-100 transition-all disabled:opacity-50"
+        >
+          <FiRefreshCw className={`w-4 h-4 mr-2 ${loadingGarages ? "animate-spin" : ""}`} />
+          Đồng bộ
+        </button>
       </div>
 
       {/* Stats */}
@@ -294,7 +238,12 @@ const GarageManagement = () => {
           </div>
         </div>
 
-        {garages.length === 0 ? (
+        {loadingGarages ? (
+          <div className="p-12 flex flex-col items-center justify-center gap-3 text-gray-400">
+            <FiLoader className="h-8 w-8 animate-spin" />
+            <p className="text-sm">Đang đọc từ blockchain...</p>
+          </div>
+        ) : garages.length === 0 ? (
           <div className="p-12 text-center">
             <div className="w-20 h-20 rounded-2xl bg-gray-100 flex items-center justify-center mx-auto mb-6">
               <FiTruck className="h-10 w-10 text-gray-300" />
@@ -340,24 +289,15 @@ const GarageManagement = () => {
                     </div>
 
                     <div className="flex items-center space-x-4">
-                      <div className="text-right mr-2">
-                        <span
-                          className={`inline-flex items-center px-3 py-1 rounded-xl text-sm font-semibold border ${
-                            garage.isActive
-                              ? "bg-green-50 text-green-600 border-green-200"
-                              : "bg-red-50 text-red-600 border-red-200"
-                          }`}
-                        >
-                          {garage.isActive ? "Hoạt Động" : "Đã Thu Hồi"}
-                        </span>
-                        <div className="text-xs text-gray-400 mt-1">
-                          {garage.isActive
-                            ? `Cấp: ${new Date(garage.authorizedDate).toLocaleDateString("vi-VN")}`
-                            : garage.revokedDate
-                            ? `Thu hồi: ${new Date(garage.revokedDate).toLocaleDateString("vi-VN")}`
-                            : ""}
-                        </div>
-                      </div>
+                      <span
+                        className={`inline-flex items-center px-3 py-1 rounded-xl text-sm font-semibold border ${
+                          garage.isActive
+                            ? "bg-green-50 text-green-600 border-green-200"
+                            : "bg-red-50 text-red-600 border-red-200"
+                        }`}
+                      >
+                        {garage.isActive ? "Hoạt Động" : "Đã Thu Hồi"}
+                      </span>
 
                       <div className="flex space-x-2">
                         {garage.isActive ? (
@@ -370,24 +310,14 @@ const GarageManagement = () => {
                             {isRevoking ? "Đang xử lý..." : "Thu Hồi"}
                           </button>
                         ) : (
-                          <>
-                            <button
-                              onClick={() => handleCapLai(garage.address)}
-                              disabled={isRevoking}
-                              className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:transform-none"
-                            >
-                              <FiCheck className="w-4 h-4 mr-1.5" />
-                              {isRevoking ? "Đang xử lý..." : "Cấp Lại"}
-                            </button>
-                            <button
-                              onClick={() =>
-                                handleRemoveFromList(garage.address)
-                              }
-                              className="inline-flex items-center px-4 py-2 bg-white text-gray-600 border border-gray-200 font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300"
-                            >
-                              Xóa
-                            </button>
-                          </>
+                          <button
+                            onClick={() => handleCapLai(garage.address)}
+                            disabled={isRevoking}
+                            className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:transform-none"
+                          >
+                            <FiCheck className="w-4 h-4 mr-1.5" />
+                            {isRevoking ? "Đang xử lý..." : "Cấp Lại"}
+                          </button>
                         )}
                       </div>
                     </div>

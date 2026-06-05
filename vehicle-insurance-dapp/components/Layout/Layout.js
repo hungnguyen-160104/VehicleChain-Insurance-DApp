@@ -2,7 +2,6 @@ import { useState } from "react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { Toaster } from "react-hot-toast";
-import ChatWidget from "../Chat/ChatWidget";
 
 const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -86,9 +85,6 @@ const Layout = ({ children }) => {
               </div>
             </div>
           </div>
-
-          {/* AI Chat Widget */}
-          <ChatWidget />
         </main>
       </div>
 

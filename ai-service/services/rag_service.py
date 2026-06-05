@@ -121,13 +121,32 @@ class RAGService:
         print(f"[RAG] Da them tong {total_added} chunks cho '{filename}'")
         return total_added
 
-    def delete_documents(self, doc_id: str):
-        """Xóa tất cả chunks của tài liệu"""
+    def delete_documents(self, doc_id: str) -> int:
+        """Xóa tất cả chunks của 1 tài liệu (theo doc_id). Trả về số chunks đã xóa."""
         collection = self.vectorstore._collection
         results = collection.get(where={"doc_id": doc_id})
-        if results and results["ids"]:
-            collection.delete(ids=results["ids"])
-            print(f"[RAG] Da xoa {len(results['ids'])} chunks cua doc '{doc_id}'")
+        ids = results.get("ids") if results else []
+        if ids:
+            collection.delete(ids=ids)
+            print(f"[RAG] Da xoa {len(ids)} chunks cua doc '{doc_id}'")
+        return len(ids) if ids else 0
+
+    def list_documents_from_store(self) -> List[Dict[str, Any]]:
+        """Liệt kê tài liệu THỰC CÓ trong ChromaDB, gom nhóm theo doc_id.
+        Nhờ vậy danh sách luôn khớp với dữ liệu thật (kể cả tài liệu không có
+        trong documents.json) — mỗi nhóm có thể xóa riêng theo doc_id."""
+        collection = self.vectorstore._collection
+        data = collection.get(include=["metadatas"])
+        metadatas = data.get("metadatas") or []
+        groups: Dict[str, Dict[str, Any]] = {}
+        for md in metadatas:
+            if not md:
+                continue
+            doc_id = md.get("doc_id") or "unknown"
+            filename = md.get("filename") or "Tài liệu không xác định"
+            g = groups.setdefault(doc_id, {"doc_id": doc_id, "filename": filename, "chunks_count": 0})
+            g["chunks_count"] += 1
+        return list(groups.values())
 
     def chat(self, question: str) -> Dict[str, Any]:
         """RAG pipeline: embed query → search → generate (1 embedding call, với retry)"""

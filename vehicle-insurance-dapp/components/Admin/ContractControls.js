@@ -1,27 +1,68 @@
-import { useState } from "react";
-import { useEthersSigner } from "../../provider/hooks";
+import { useState, useEffect, useCallback } from "react";
+import { useEthersSigner, useEthersProvider } from "../../provider/hooks";
 import { contractService } from "../../services/contract";
 import {
-  FiPause,
-  FiPlay,
-  FiDollarSign,
-  FiSettings,
-  FiAlertTriangle,
-  FiDownload,
-  FiShield,
-  FiZap,
-  FiActivity,
-  FiLock,
-  FiRefreshCw,
+  FiPause, FiPlay, FiDollarSign, FiSettings, FiAlertTriangle,
+  FiDownload, FiShield, FiZap, FiActivity, FiLock, FiRefreshCw,
 } from "react-icons/fi";
 import toast from "react-hot-toast";
 
+const LOG_KEY = "vc_admin_action_log";
+const MAX_LOG = 20;
+
+function loadLog() {
+  if (typeof window === "undefined") return [];
+  try { return JSON.parse(localStorage.getItem(LOG_KEY) || "[]"); } catch { return []; }
+}
+
+function saveLog(entries) {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(LOG_KEY, JSON.stringify(entries.slice(0, MAX_LOG)));
+}
+
+function pushLog(action, description, status = "success") {
+  const entries = loadLog();
+  const now = new Date();
+  const time = now.toLocaleString("vi-VN", { hour: "2-digit", minute: "2-digit", day: "2-digit", month: "2-digit" });
+  entries.unshift({ action, description, time, status });
+  saveLog(entries);
+}
+
 const ContractControls = ({ contractBalance, loading, onRefresh }) => {
   const signer = useEthersSigner();
+  const provider = useEthersProvider();
   const [isPaused, setIsPaused] = useState(false);
+  const [loadingPauseState, setLoadingPauseState] = useState(true);
   const [pausing, setPausing] = useState(false);
   const [withdrawing, setWithdrawing] = useState(false);
   const [withdrawAmount, setWithdrawAmount] = useState("");
+  const [actionLog, setActionLog] = useState([]);
+
+  useEffect(() => {
+    setActionLog(loadLog());
+  }, []);
+
+  // Đọc trạng thái pause thực từ blockchain khi mount và khi refresh
+  useEffect(() => {
+    const fetchPauseState = async () => {
+      if (!provider) return;
+      setLoadingPauseState(true);
+      try {
+        const paused = await contractService.getIsPaused(provider);
+        setIsPaused(paused);
+      } catch (err) {
+        console.error("Lỗi đọc trạng thái pause:", err);
+      } finally {
+        setLoadingPauseState(false);
+      }
+    };
+    fetchPauseState();
+  }, [provider]);
+
+  const addLog = useCallback((action, description, status = "success") => {
+    pushLog(action, description, status);
+    setActionLog(loadLog());
+  }, []);
 
   const handlePauseContract = async () => {
     try {
@@ -35,12 +76,12 @@ const ContractControls = ({ contractBalance, loading, onRefresh }) => {
       }
 
       if (result && result.success) {
-        setIsPaused(!isPaused);
-        toast.success(
-          isPaused
-            ? "Hợp đồng đã được tiếp tục hoạt động!"
-            : "Hợp đồng đã được tạm dừng thành công!"
-        );
+        // Đọc lại từ blockchain để đảm bảo đồng bộ
+        const newPaused = await contractService.getIsPaused(provider);
+        setIsPaused(newPaused);
+        const msg = newPaused ? "Hợp đồng đã được tạm dừng thành công!" : "Hợp đồng đã được tiếp tục hoạt động!";
+        toast.success(msg);
+        addLog(newPaused ? "Tạm Dừng Hợp Đồng" : "Tiếp Tục Hợp Đồng", msg);
         onRefresh && onRefresh();
       } else {
         toast.error(
@@ -85,6 +126,7 @@ const ContractControls = ({ contractBalance, loading, onRefresh }) => {
 
       if (result && result.success) {
         toast.success(`Rút ${withdrawAmount} ETH thành công!`);
+        addLog("Rút Tiền", `Rút ${withdrawAmount} ETH từ quỹ bảo hiểm`);
         setWithdrawAmount("");
         onRefresh && onRefresh();
       } else {
@@ -123,6 +165,7 @@ const ContractControls = ({ contractBalance, loading, onRefresh }) => {
 
       if (result && result.success) {
         toast.success("Rút toàn bộ tiền thành công!");
+        addLog("Rút Toàn Bộ Quỹ", `Rút toàn bộ ${contractBalance} ETH từ hợp đồng`);
         setWithdrawAmount("");
         onRefresh && onRefresh();
       } else {
@@ -157,6 +200,7 @@ const ContractControls = ({ contractBalance, loading, onRefresh }) => {
     linkElement.setAttribute("download", exportFileDefaultName);
     linkElement.click();
 
+    addLog("Xuất Dữ Liệu", "Xuất dữ liệu hợp đồng bảo hiểm thành công");
     toast.success("Xuất dữ liệu hợp đồng thành công!");
   };
 
@@ -210,10 +254,10 @@ const ContractControls = ({ contractBalance, loading, onRefresh }) => {
                   </h4>
                   <p
                     className={`text-3xl font-bold mb-2 ${
-                      isPaused ? "text-red-600" : "text-green-600"
+                      loadingPauseState ? "text-gray-400" : isPaused ? "text-red-600" : "text-green-600"
                     }`}
                   >
-                    {isPaused ? "TẠM DỪNG" : "ĐANG HOẠT ĐỘNG"}
+                    {loadingPauseState ? "Đang kiểm tra..." : isPaused ? "TẠM DỪNG" : "ĐANG HOẠT ĐỘNG"}
                   </p>
                   <p
                     className={`text-sm font-medium ${
@@ -470,69 +514,42 @@ const ContractControls = ({ contractBalance, loading, onRefresh }) => {
           </div>
 
           <div className="p-8">
-            <div className="space-y-4">
-              {[
-                {
-                  action: "Rút Tiền",
-                  description: "Rút 0.5 ETH từ quỹ bảo hiểm",
-                  timestamp: "2 giờ trước",
-                  status: "success",
-                  icon: FiDollarSign,
-                },
-                {
-                  action: "Cấp Quyền Garage",
-                  description: "Garage mới được cấp quyền giám định",
-                  timestamp: "1 ngày trước",
-                  status: "success",
-                  icon: FiShield,
-                },
-                {
-                  action: "Chi Trả Bồi Thường",
-                  description: "Chi trả thành công cho yêu cầu bồi thường #5",
-                  timestamp: "3 ngày trước",
-                  status: "success",
-                  icon: FiSettings,
-                },
-                {
-                  action: "Tạm Dừng Hợp Đồng",
-                  description: "Tạm dừng hợp đồng để bảo trì",
-                  timestamp: "1 tuần trước",
-                  status: "warning",
-                  icon: FiLock,
-                },
-              ].map((action, index) => {
-                const statusConfig = {
-                  success: { bg: "bg-green-500" },
-                  warning: { bg: "bg-yellow-500" },
-                  error: { bg: "bg-red-500" },
-                };
-                const config = statusConfig[action.status];
-
-                return (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-4 bg-gray-50 border border-gray-100 rounded-2xl hover:bg-white transition-all duration-300"
-                  >
-                    <div className="flex items-center space-x-4">
-                      <div
-                        className={`w-10 h-10 rounded-xl ${config.bg} flex items-center justify-center shadow-lg`}
-                      >
-                        <action.icon className="h-5 w-5 text-white" />
+            {actionLog.length === 0 ? (
+              <div className="text-center py-8 text-gray-400">
+                <FiActivity className="mx-auto mb-2 opacity-30" size={28} />
+                <p className="text-sm">Chưa có hành động nào được ghi lại.</p>
+                <p className="text-xs mt-1">Log sẽ tự động cập nhật khi bạn thực hiện các thao tác quản trị.</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {actionLog.map((entry, index) => {
+                  const statusConfig = {
+                    success: { bg: "bg-green-500", icon: FiShield },
+                    warning: { bg: "bg-yellow-500", icon: FiAlertTriangle },
+                    error:   { bg: "bg-red-500",   icon: FiAlertTriangle },
+                  };
+                  const cfg = statusConfig[entry.status] || statusConfig.success;
+                  const Icon = cfg.icon;
+                  return (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-4 bg-gray-50 border border-gray-100 rounded-2xl hover:bg-white transition-all duration-200"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className={`w-9 h-9 rounded-xl ${cfg.bg} flex items-center justify-center shadow`}>
+                          <Icon className="h-4 w-4 text-white" />
+                        </div>
+                        <div>
+                          <p className="font-bold text-gray-900 text-sm">{entry.action}</p>
+                          <p className="text-xs text-gray-500">{entry.description}</p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-bold text-gray-900">{action.action}</p>
-                        <p className="text-sm text-gray-500 font-medium">
-                          {action.description}
-                        </p>
-                      </div>
+                      <span className="text-xs font-medium text-gray-400 flex-shrink-0 ml-4">{entry.time}</span>
                     </div>
-                    <span className="text-sm font-medium text-gray-400">
-                      {action.timestamp}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       </div>

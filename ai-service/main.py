@@ -5,7 +5,8 @@ from routers import auth, chat, documents
 app = FastAPI(
     title="VehicleChain Insurance AI Service",
     description="RAG-based AI chatbot cho hệ thống bảo hiểm xe cơ giới",
-    version="1.0.0"
+    version="1.0.0",
+    redirect_slashes=False,  # tránh 307 redirect khi proxy qua Next.js
 )
 
 # ─── CORS — cho phép Next.js frontend gọi API ─────────────────────────
@@ -17,8 +18,8 @@ app.add_middleware(
         "http://localhost:3001",
     ],
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type"],
 )
 
 # ─── Routers ──────────────────────────────────────────────────────────

@@ -5,9 +5,9 @@ from datetime import datetime
 from pathlib import Path
 from fastapi import APIRouter, HTTPException, UploadFile, File, Depends
 from models.schemas import DocumentListResponse, DocumentInfo, UploadResponse, DeleteResponse
-from services.auth_service import require_admin
-from services.pdf_service import process_pdf
+from services.pdf_service import process_document, SUPPORTED_EXTENSIONS
 from services.rag_service import rag_service
+from services.auth_service import require_admin
 from config import settings
 
 router = APIRouter()
@@ -27,19 +27,35 @@ def _save_documents(docs: list):
 # ─── Lấy danh sách tài liệu (admin only) ──────────────────────────────
 @router.get("/", response_model=DocumentListResponse)
 async def list_documents(admin=Depends(require_admin)):
-    docs = _load_documents()
-    doc_infos = [DocumentInfo(**d) for d in docs]
+    # Nguồn sự thật = chunks thực có trong ChromaDB (gom theo doc_id),
+    # bổ sung metadata đẹp từ documents.json nếu có.
+    json_meta = {d["id"]: d for d in _load_documents()}
+    groups = rag_service.list_documents_from_store()
+    doc_infos = []
+    for g in groups:
+        meta = json_meta.get(g["doc_id"], {})
+        doc_infos.append(DocumentInfo(
+            id=g["doc_id"],
+            filename=g["filename"],
+            original_name=meta.get("original_name") or g["filename"],
+            uploaded_at=meta.get("uploaded_at", ""),
+            chunks_count=g["chunks_count"],
+            size_kb=meta.get("size_kb", 0),
+            status=meta.get("status", "active"),
+        ))
+    doc_infos.sort(key=lambda d: d.uploaded_at or "", reverse=True)
     return DocumentListResponse(documents=doc_infos, total=len(doc_infos))
 
 # ─── Upload PDF (admin only) ───────────────────────────────────────────
 @router.post("/upload", response_model=UploadResponse)
 async def upload_document(
     file: UploadFile = File(...),
-    admin=Depends(require_admin)
+    admin=Depends(require_admin),
 ):
     # Kiểm tra định dạng
-    if not file.filename.lower().endswith(".pdf"):
-        raise HTTPException(status_code=400, detail="Chỉ hỗ trợ file PDF")
+    ext = Path(file.filename or "").suffix.lower()
+    if ext not in SUPPORTED_EXTENSIONS:
+        raise HTTPException(status_code=400, detail="Chỉ hỗ trợ file PDF hoặc DOCX")
 
     # Giới hạn kích thước 20MB
     contents = await file.read()
@@ -48,22 +64,22 @@ async def upload_document(
 
     # Lưu file vào disk
     doc_id = str(uuid.uuid4())
-    safe_name = f"{doc_id}.pdf"
+    safe_name = f"{doc_id}{ext}"
     file_path = Path(settings.UPLOADS_PATH) / safe_name
 
     with open(file_path, "wb") as f:
         f.write(contents)
 
-    # Xử lý PDF → chunks
+    # Xử lý tài liệu (PDF/DOCX) → chunks
     try:
-        chunks = process_pdf(str(file_path))
+        chunks = process_document(str(file_path))
     except Exception as e:
         os.remove(file_path)
-        raise HTTPException(status_code=422, detail=f"Không thể đọc PDF: {str(e)}")
+        raise HTTPException(status_code=422, detail=f"Không thể đọc tài liệu: {str(e)}")
 
     if not chunks:
         os.remove(file_path)
-        raise HTTPException(status_code=422, detail="PDF không có nội dung văn bản")
+        raise HTTPException(status_code=422, detail="Tài liệu không có nội dung văn bản")
 
     # Thêm vào ChromaDB
     try:
@@ -108,24 +124,24 @@ async def delete_document(doc_id: str, admin=Depends(require_admin)):
     docs = _load_documents()
     doc = next((d for d in docs if d["id"] == doc_id), None)
 
-    if not doc:
+    # Xóa chunks khỏi ChromaDB theo doc_id (kể cả tài liệu "mồ côi" không có trong JSON)
+    deleted = rag_service.delete_documents(doc_id)
+
+    if deleted == 0 and not doc:
         raise HTTPException(status_code=404, detail="Tai lieu khong ton tai")
 
-    # Xóa khỏi ChromaDB
-    rag_service.delete_documents(doc_id)
+    # Xóa file vật lý + cập nhật JSON nếu có metadata
+    if doc:
+        file_path = Path(settings.UPLOADS_PATH) / doc["filename"]
+        if file_path.exists():
+            os.remove(file_path)
+        docs = [d for d in docs if d["id"] != doc_id]
+        _save_documents(docs)
 
-    # Xóa file vật lý
-    file_path = Path(settings.UPLOADS_PATH) / doc["filename"]
-    if file_path.exists():
-        os.remove(file_path)
-
-    # Cập nhật JSON
-    docs = [d for d in docs if d["id"] != doc_id]
-    _save_documents(docs)
-
+    name = doc["original_name"] if doc else doc_id
     return DeleteResponse(
         success=True,
-        message=f"Da xoa tai lieu '{doc['original_name']}'"
+        message=f"Da xoa tai lieu '{name}'"
     )
 
 # ─── Public: kiểm tra có tài liệu không ──────────────────────────────

@@ -103,7 +103,7 @@ const PayPremiumModal = ({ isOpen, onClose, policy, onSuccess }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-md transform max-h-[calc(100vh-2rem)] overflow-y-auto rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 pb-4 border-b border-gray-100">
                   <div className="flex items-center space-x-3">

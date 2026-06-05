@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useEthersProvider, useEthersSigner } from "../provider/hooks";
 import Layout from "../components/Layout/Layout";
 import ClaimCard from "../components/Claims/ClaimCard";
@@ -18,6 +19,7 @@ export default function Claims() {
   const router = useRouter();
   const { policyId } = router.query;
   const { address, isConnected } = useAccount();
+  const { openConnectModal } = useConnectModal();
   const provider = useEthersProvider();
   const signer = useEthersSigner();
 
@@ -121,7 +123,10 @@ export default function Claims() {
                   <FiLock className="h-4 w-4 text-purple-500" /><span>{t("wallet.claims_feat_2")}</span>
                 </div>
               </div>
-              <button className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 text-white font-semibold rounded-xl shadow-md hover:shadow-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 w-full">
+              <button
+                onClick={openConnectModal}
+                className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 text-white font-semibold rounded-xl shadow-md hover:shadow-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 w-full"
+              >
                 <FiLock className="mr-2 h-5 w-5" /><span>{t("wallet.connect_btn")}</span>
               </button>
             </div>
