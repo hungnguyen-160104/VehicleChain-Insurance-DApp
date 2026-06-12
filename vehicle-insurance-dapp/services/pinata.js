@@ -1,8 +1,7 @@
 import toast from "react-hot-toast";
 
-const PINATA_API_KEY = process.env.NEXT_PUBLIC_PINATA_API_KEY;
-const PINATA_SECRET_KEY = process.env.NEXT_PUBLIC_PINATA_SECRET_KEY;
-const PINATA_JWT = process.env.NEXT_PUBLIC_PINATA_JWT;
+// Upload đi qua API route nội bộ (/api/ipfs/*) — Pinata JWT chỉ nằm phía server
+// (biến môi trường PINATA_JWT, KHÔNG dùng NEXT_PUBLIC_ để tránh lộ key ra client).
 
 export const uploadToPinata = async (file, metadata = {}) => {
   try {
@@ -20,11 +19,8 @@ export const uploadToPinata = async (file, metadata = {}) => {
     });
     formData.append("pinataOptions", pinataOptions);
 
-    const res = await fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
+    const res = await fetch("/api/ipfs/upload", {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${PINATA_JWT}`,
-      },
       body: formData,
     });
 
@@ -53,11 +49,10 @@ export const uploadJSONToPinata = async (
   filename = "metadata.json"
 ) => {
   try {
-    const res = await fetch("https://api.pinata.cloud/pinning/pinJSONToIPFS", {
+    const res = await fetch("/api/ipfs/upload-json", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${PINATA_JWT}`,
       },
       body: JSON.stringify({
         pinataContent: jsonData,

@@ -8,7 +8,9 @@ class Settings(BaseSettings):
     # Đăng nhập bằng chữ ký ví thay cho username/password.
     # Mặc định = tài khoản Hardhat #0 (deployer trên localhost).
     OWNER_ADDRESS: str = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
-    JWT_SECRET_KEY: str = "insurance-vehiclechain-secret-2025"
+    # Bắt buộc khai báo trong .env — không có giá trị mặc định để tránh
+    # deploy nhầm với secret công khai trong source code.
+    JWT_SECRET_KEY: str
     JWT_ALGORITHM: str = "HS256"
     JWT_EXPIRE_MINUTES: int = 480
     CHROMA_DB_PATH: str = "./data/chroma_db"

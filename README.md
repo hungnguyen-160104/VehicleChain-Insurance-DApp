@@ -199,7 +199,7 @@ cp .env.example .env.local
 NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=your_walletconnect_id
 NEXT_PUBLIC_NETWORK=localhost
 NEXT_PUBLIC_CONTRACT_ADDRESS_LOCALHOST=0x...   # sau khi deploy
-NEXT_PUBLIC_PINATA_JWT=your_pinata_jwt
+PINATA_JWT=your_pinata_jwt   # server-side only, KHÔNG dùng NEXT_PUBLIC_
 NEXT_PUBLIC_AI_SERVICE_URL=http://localhost:8000
 ```
 

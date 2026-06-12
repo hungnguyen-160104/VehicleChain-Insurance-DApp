@@ -4,6 +4,7 @@ import json
 from datetime import datetime
 from pathlib import Path
 from fastapi import APIRouter, HTTPException, UploadFile, File, Depends
+from fastapi.concurrency import run_in_threadpool
 from models.schemas import DocumentListResponse, DocumentInfo, UploadResponse, DeleteResponse
 from services.pdf_service import process_document, SUPPORTED_EXTENSIONS
 from services.rag_service import rag_service
@@ -25,6 +26,10 @@ def _save_documents(docs: list):
         json.dump(docs, f, ensure_ascii=False, indent=2)
 
 # ─── Lấy danh sách tài liệu (admin only) ──────────────────────────────
+# Đăng ký cả "" và "/" để chấp nhận /documents lẫn /documents/ — vì
+# redirect_slashes=False (main.py) nên FastAPI KHÔNG tự redirect giữa 2 dạng,
+# client gọi thiếu/thừa slash sẽ bị 404 nếu chỉ đăng ký một dạng.
+@router.get("", response_model=DocumentListResponse, include_in_schema=False)
 @router.get("/", response_model=DocumentListResponse)
 async def list_documents(admin=Depends(require_admin)):
     # Nguồn sự thật = chunks thực có trong ChromaDB (gom theo doc_id),
@@ -70,20 +75,27 @@ async def upload_document(
     with open(file_path, "wb") as f:
         f.write(contents)
 
-    # Xử lý tài liệu (PDF/DOCX) → chunks
+    # Xử lý tài liệu (PDF/DOCX) → chunks.
+    # Chạy trong threadpool: đây là tác vụ I/O+CPU đồng bộ, nếu gọi thẳng trên
+    # event loop sẽ chặn mọi request khác (health/chat/list) suốt quá trình.
     try:
-        chunks = process_document(str(file_path))
+        chunks = await run_in_threadpool(process_document, str(file_path))
     except Exception as e:
         os.remove(file_path)
-        raise HTTPException(status_code=422, detail=f"Không thể đọc tài liệu: {str(e)}")
+        # Cắt ngắn message để không lộ đường dẫn/chi tiết nội bộ ra client
+        raise HTTPException(status_code=422, detail=f"Không thể đọc tài liệu: {str(e)[:150]}")
 
     if not chunks:
         os.remove(file_path)
         raise HTTPException(status_code=422, detail="Tài liệu không có nội dung văn bản")
 
-    # Thêm vào ChromaDB
+    # Thêm vào ChromaDB. Cũng chạy trong threadpool — add_documents có vòng lặp
+    # batch với time.sleep() chờ rate-limit (có thể vài phút với tài liệu lớn);
+    # offload để service vẫn phản hồi các request khác trong lúc index.
     try:
-        chunks_count = rag_service.add_documents(doc_id, file.filename, chunks)
+        chunks_count = await run_in_threadpool(
+            rag_service.add_documents, doc_id, file.filename, chunks
+        )
     except Exception as e:
         # Dọn sạch file và ChromaDB nếu embed thất bại
         if file_path.exists():

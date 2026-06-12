@@ -1,4 +1,9 @@
 {
+  "network": {
+    "wrongNetwork": "Wrong blockchain network. Please switch to {{network}}.",
+    "switchButton": "Switch network",
+    "switching": "Switching..."
+  },
   "nav": {
     "dashboard": "Dashboard",
     "vehicles": "Vehicles",

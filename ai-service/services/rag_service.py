@@ -91,31 +91,63 @@ class RAGService:
         print("[RAG] Khoi tao thanh cong!")
 
     def add_documents(self, doc_id: str, filename: str, chunks: List[str]) -> int:
-        """Embed và lưu chunks vào ChromaDB (batch để tránh rate limit)"""
+        """Embed và lưu chunks vào ChromaDB.
+
+        Tối ưu cho Gemini free tier khi upload tài liệu lớn:
+        - Gộp nhiều chunks mỗi request (1 batch = 1 API call) → ít request hơn,
+          giảm áp lực rate-limit. BATCH_SIZE giữ dưới ngưỡng ~20k token/request.
+        - Retry có backoff khi gặp 429/quota: chờ rồi thử lại CHÍNH batch đó thay vì
+          để cả upload thất bại — tránh việc 1 request lỗi làm hỏng toàn bộ tài liệu.
+        """
         import time
-        BATCH_SIZE = 5    # số chunks mỗi lần gửi Gemini (nhỏ để tránh rate limit)
-        BATCH_DELAY = 4.0  # giây chờ giữa các batch
+        BATCH_SIZE = 30      # chunks mỗi request (≈ <20k token → 1 API call/batch)
+        BATCH_DELAY = 2.0    # giây nghỉ giữa các batch thành công (đỡ RPM)
+        # Quota/phút (RPM/TPM) nạp lại sau ~60s. Kiên nhẫn hơn: thử nhiều lần với
+        # backoff chặn trần 60s — chờ >60s lặp lại gần như chắc qua throttle theo phút,
+        # nên 1 tài liệu lớn không bị bỏ cuộc giữa chừng (đây là lý do cũ upload fail).
+        MAX_RETRIES = 8      # số lần thử lại mỗi batch khi dính rate limit
+        MAX_BACKOFF = 60     # giây chờ tối đa mỗi lần thử (quota/phút reset sau ~60s)
 
         total_added = 0
-        for batch_start in range(0, len(chunks), BATCH_SIZE):
+        n = len(chunks)
+        num_batches = (n + BATCH_SIZE - 1) // BATCH_SIZE
+        for batch_start in range(0, n, BATCH_SIZE):
             batch = chunks[batch_start : batch_start + BATCH_SIZE]
-            batch_idx_start = batch_start
+            batch_no = batch_start // BATCH_SIZE + 1
 
             documents = [
                 Document(
                     page_content=chunk,
-                    metadata={"doc_id": doc_id, "filename": filename, "chunk_index": batch_idx_start + i}
+                    metadata={"doc_id": doc_id, "filename": filename, "chunk_index": batch_start + i}
                 )
                 for i, chunk in enumerate(batch)
             ]
-            ids = [f"{doc_id}_chunk_{batch_idx_start + i}" for i in range(len(batch))]
+            ids = [f"{doc_id}_chunk_{batch_start + i}" for i in range(len(batch))]
 
-            self.vectorstore.add_documents(documents=documents, ids=ids)
-            total_added += len(batch)
-            print(f"[RAG] Batch {batch_start//BATCH_SIZE + 1}: added {len(batch)} chunks ({total_added}/{len(chunks)})")
+            # Thử thêm batch — retry với backoff nếu Gemini trả rate limit.
+            # An toàn để retry: khi dính rate limit, lỗi xảy ra ở bước embed (gọi API)
+            # nên CHƯA có chunk nào được ghi vào Chroma → thử lại không tạo trùng.
+            for attempt in range(MAX_RETRIES + 1):
+                try:
+                    self.vectorstore.add_documents(documents=documents, ids=ids)
+                    total_added += len(batch)
+                    print(f"[RAG] Batch {batch_no}/{num_batches}: +{len(batch)} chunks ({total_added}/{n})")
+                    break
+                except Exception as e:
+                    msg = str(e).upper()
+                    is_rate_limit = any(
+                        kw in msg
+                        for kw in ["429", "QUOTA", "EXHAUSTED", "RESOURCE_EXHAUSTED", "RATE"]
+                    )
+                    if is_rate_limit and attempt < MAX_RETRIES:
+                        wait = min(MAX_BACKOFF, 20 * (attempt + 1))  # 20,40,60,60,...
+                        print(f"[RAG] Rate limit batch {batch_no} (lan {attempt + 1}/{MAX_RETRIES}), cho {wait}s roi thu lai...")
+                        time.sleep(wait)
+                        continue
+                    raise  # hết retry hoặc lỗi khác → để endpoint xử lý/dọn dẹp
 
-            # Chờ giữa các batch (tránh rate limit Gemini)
-            if batch_start + BATCH_SIZE < len(chunks):
+            # Nghỉ ngắn giữa các batch thành công để dàn đều request theo phút
+            if batch_start + BATCH_SIZE < n:
                 time.sleep(BATCH_DELAY)
 
         print(f"[RAG] Da them tong {total_added} chunks cho '{filename}'")

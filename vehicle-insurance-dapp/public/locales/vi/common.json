@@ -1,4 +1,9 @@
 {
+  "network": {
+    "wrongNetwork": "Sai mạng blockchain. Vui lòng chuyển sang {{network}}.",
+    "switchButton": "Chuyển mạng",
+    "switching": "Đang chuyển..."
+  },
   "nav": {
     "dashboard": "Trang chủ",
     "vehicles": "Phương tiện",

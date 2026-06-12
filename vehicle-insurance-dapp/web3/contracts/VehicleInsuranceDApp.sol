@@ -127,6 +127,7 @@ contract VehicleInsuranceDApp is ReentrancyGuard, Ownable, Pausable {
 
     mapping(address => bool) public authorizedGarages;       // Garage được ủy quyền giám định
     address[] private _garageList;                           // Danh sách địa chỉ garage đã từng được cấp quyền
+    mapping(address => bool) private _daTrongGarageList;     // Chống thêm trùng vào _garageList khi thu hồi rồi cấp lại
 
     // ═══════════════════════════════════════════
     // EVENTS
@@ -652,9 +653,10 @@ contract VehicleInsuranceDApp is ReentrancyGuard, Ownable, Pausable {
      */
     function capQuyenGarage(address _garage, bool _status) external onlyOwner {
         require(_garage != address(0), "Dia chi garage khong hop le");
-        // Thêm vào danh sách nếu là lần cấp quyền đầu tiên
-        if (_status && !authorizedGarages[_garage]) {
+        // Thêm vào danh sách nếu chưa từng có trong danh sách
+        if (_status && !_daTrongGarageList[_garage]) {
             _garageList.push(_garage);
+            _daTrongGarageList[_garage] = true;
         }
         authorizedGarages[_garage] = _status;
         emit GarageCapNhatQuyen(_garage, _status);

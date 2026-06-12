@@ -12,6 +12,7 @@ import i18n from "../i18n";
 
 import { config } from "../config/network";
 import ChatWidget from "../components/Chat/ChatWidget";
+import NetworkGuard from "../components/Layout/NetworkGuard";
 
 const client = new QueryClient();
 
@@ -36,6 +37,7 @@ export default function App({ Component, pageProps }) {
               content="width=device-width, initial-scale=1, viewport-fit=cover"
             />
           </Head>
+          <NetworkGuard />
           <Component {...pageProps} />
           {!isAdminPage && <ChatWidget />}
         </RainbowKitProvider>

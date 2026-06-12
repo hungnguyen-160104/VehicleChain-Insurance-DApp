@@ -4,8 +4,11 @@ from pathlib import Path
 from typing import List
 import re
 
-CHUNK_SIZE = 800       # ký tự mỗi chunk
-CHUNK_OVERLAP = 150    # overlap giữa các chunk
+# Chunk lớn hơn = ít chunk hơn = ít request embedding hơn → đỡ đụng quota Gemini
+# free tier. 1800 ký tự (≈ 500-700 token tiếng Việt) vẫn an toàn dưới trần
+# 2048 token của gemini-embedding-001. Tài liệu ~544 chunk@800 → còn ~240 chunk@1800.
+CHUNK_SIZE = 1800      # ký tự mỗi chunk
+CHUNK_OVERLAP = 200    # overlap giữa các chunk
 
 def extract_text_from_pdf(file_path: str) -> str:
     """Trích xuất toàn bộ text từ PDF, hỗ trợ tiếng Việt và bảng biểu"""

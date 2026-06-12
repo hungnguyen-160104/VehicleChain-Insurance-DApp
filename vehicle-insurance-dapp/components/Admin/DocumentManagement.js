@@ -194,7 +194,7 @@ const UploadZone = ({ token, onUploaded }) => {
         <div className="flex flex-col items-center gap-3">
           <FiLoader className="text-red-600 text-3xl animate-spin" />
           <p className="text-gray-600 text-sm">Đang xử lý tài liệu và tạo embedding...</p>
-          <p className="text-gray-400 text-xs">Có thể mất 15-30 giây</p>
+          <p className="text-gray-400 text-xs">Tài liệu nhỏ ~15-30 giây · tài liệu lớn (vài trăm trang) có thể mất 1-3 phút, vui lòng đừng đóng trang</p>
         </div>
       ) : (
         <div className="flex flex-col items-center gap-3">
