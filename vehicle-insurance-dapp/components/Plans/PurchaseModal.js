@@ -31,6 +31,7 @@ const PurchaseModal = ({
   onClose,
   selectedInsuranceType,
   userVehicles = [],
+  preselectedBienSo,
   onSuccess,
 }) => {
   const signer = useEthersSigner();
@@ -53,7 +54,7 @@ const PurchaseModal = ({
       setStep(1);
       setCalculatedPrice(null);
       setFormData({
-        bienSo: "",
+        bienSo: preselectedBienSo || "",
         paymentType: PAYMENT_TYPES.ONE_TIME,
         hoTen: "",
         soDienThoai: "",
@@ -77,16 +78,16 @@ const PurchaseModal = ({
     }
     try {
       setCalculatingPrice(true);
-      const result = await contractService.tinhPhiBaoHiem(
+      const fee = await contractService.tinhPhiBaoHiem(
         formData.bienSo,
         selectedInsuranceType,
         formData.paymentType,
         signer?.provider
       );
-      if (result.success) {
-        setCalculatedPrice(result.fee);
+      if (fee && fee !== "0") {
+        setCalculatedPrice(fee);
       } else {
-        throw new Error(result.error || "Không thể tính phí bảo hiểm");
+        throw new Error("Không thể tính phí bảo hiểm cho xe này");
       }
     } catch (error) {
       console.error("Error calculating price:", error);
@@ -307,7 +308,7 @@ const PurchaseModal = ({
                                 value={vehicle.bienSo || vehicle}
                               >
                                 {vehicle.bienSo || vehicle}
-                                {vehicle.vehicleTypeLabel ? ` - ${vehicle.vehicleTypeLabel}` : ""}
+                                {vehicle.loaiXeLabel ? ` - ${vehicle.loaiXeLabel}` : ""}
                               </option>
                             ))}
                           </select>

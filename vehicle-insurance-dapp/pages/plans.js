@@ -407,7 +407,7 @@ export default function InsurancePlans() {
                   >
                     {userVehicles.map((v) => (
                       <option key={v.bienSo} value={v.bienSo}>
-                        {v.bienSo} — {VEHICLE_TYPE_LABELS[v.vehicleType] || "Không xác định"}
+                        {v.bienSo} — {v.loaiXeLabel || VEHICLE_TYPE_LABELS[v.loaiXe] || "Không xác định"}
                       </option>
                     ))}
                   </select>
@@ -434,7 +434,7 @@ export default function InsurancePlans() {
               </div>
               <div className="flex items-center space-x-2 text-gray-600">
                 <span className="font-medium text-gray-400">Loại xe:</span>
-                <span className="font-semibold text-gray-800">{VEHICLE_TYPE_LABELS[selectedVehicle.vehicleType] || "Không xác định"}</span>
+                <span className="font-semibold text-gray-800">{selectedVehicle.loaiXeLabel || VEHICLE_TYPE_LABELS[selectedVehicle.loaiXe] || "Không xác định"}</span>
               </div>
               {loadingPrices && (
                 <div className="flex items-center space-x-2 text-red-500 animate-pulse">
@@ -526,10 +526,10 @@ export default function InsurancePlans() {
       <PurchaseModal
         isOpen={purchaseModalOpen}
         onClose={() => setPurchaseModalOpen(false)}
-        vehicle={selectedVehicle}
-        insuranceType={selectedInsuranceType}
-        prices={prices}
-        onSuccess={() => { setPurchaseModalOpen(false); }}
+        userVehicles={userVehicles}
+        preselectedBienSo={selectedVehicle?.bienSo}
+        selectedInsuranceType={selectedInsuranceType}
+        onSuccess={() => { setPurchaseModalOpen(false); loadVehicles(); }}
       />
     </Layout>
   );
