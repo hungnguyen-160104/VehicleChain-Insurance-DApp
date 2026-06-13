@@ -66,10 +66,10 @@ export default function Admin() {
     try {
       setLoading(true);
       const contractStats = await contractService.getContractStats(provider);
-      const allClaims = await contractService.fetchAllClaims(provider);
+      const claimsResult = await contractService.fetchAllClaims(provider);
       setAdminData({
         contractStats,
-        pendingClaims: allClaims,
+        pendingClaims: claimsResult.claims || [],
         authorizedGarages: [],
         contractBalance: contractStats.contractBalance || "0",
         totalPolicies: contractStats.totalPolicies || "0",
