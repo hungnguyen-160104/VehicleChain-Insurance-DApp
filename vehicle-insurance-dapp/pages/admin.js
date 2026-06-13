@@ -161,7 +161,7 @@ export default function Admin() {
       onRefresh={loadAdminData}
     >
       {activeTab === "overview" && (
-        <AdminStats data={adminData} loading={loading} onRefresh={loadAdminData} />
+        <AdminStats adminData={adminData} loading={loading} onRefresh={loadAdminData} />
       )}
       {activeTab === "claims" && (
         <ClaimManagement
