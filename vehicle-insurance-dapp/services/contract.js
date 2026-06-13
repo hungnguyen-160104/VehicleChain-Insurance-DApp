@@ -553,7 +553,7 @@ class ContractService {
         return { success: false, error: "Invalid address" };
       }
       const contract = this.initContract(signer, true);
-      const tx = await contract.capQuyenGarage(garageAddress, status, { gasLimit: 100000 });
+      const tx = await contract.capQuyenGarage(garageAddress, status, { gasLimit: 250000 });
       const action = status ? "Cấp quyền" : "Thu hồi quyền";
       toast.loading(`${action} garage...`, { id: "garage-auth" });
       const receipt = await tx.wait();
