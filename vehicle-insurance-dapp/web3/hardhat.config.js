@@ -23,6 +23,9 @@ module.exports = {
   networks: {
     hardhat: {
       chainId: 1337,
+      // Base fee = 0 để MetaMask không cảnh báo phí gas trên localhost
+      // (fix lỗi nút Confirm bị khóa / "Review alert" đỏ không bấm được)
+      initialBaseFeePerGas: 0,
     },
     holesky: {
       url: HOLESKY_RPC_URL,
